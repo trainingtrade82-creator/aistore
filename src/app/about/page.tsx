@@ -48,11 +48,11 @@ export default function AboutPage() {
         <section className="relative bg-secondary/30 py-20 md:py-24">
             <div className="absolute inset-0">
                  <Image 
-                    src="https://picsum.photos/1600/800"
-                    alt="Network of AI nodes"
+                    src="/super.png"
+                    alt="Abstract background"
                     fill
                     className="object-cover opacity-10"
-                    data-ai-hint="network nodes"
+                    data-ai-hint="abstract background"
                  />
                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
             </div>
