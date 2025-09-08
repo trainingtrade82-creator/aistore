@@ -1,4 +1,3 @@
-
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { aiTools } from '@/lib/data';
-import { ChevronRight, Star, CheckCircle, Heart, Share2 } from 'lucide-react';
+import { ChevronRight, Star, CheckCircle, Heart, Share2, Lock } from 'lucide-react';
 
 const tierColorMap = {
   Free: 'bg-green-600 hover:bg-green-700',
@@ -108,20 +107,28 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
               <Card className="sticky top-24 p-6 shadow-lg">
                 <div className="flex flex-col gap-4">
                   {isLocked ? (
-                    <Button size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                      Upgrade to Unlock
-                    </Button>
+                    <>
+                      <Button size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                        <Lock className="mr-2 h-5 w-5" />
+                        Upgrade to Unlock
+                      </Button>
+                      <div className="rounded-md bg-secondary/80 p-4 text-center">
+                        <p className="text-sm text-secondary-foreground">
+                          This tool requires a <Link href="/pricing" className="font-bold text-primary hover:underline">Pro or Exclusive</Link> membership.
+                        </p>
+                      </div>
+                    </>
                   ) : (
                     <Button size="lg" className="w-full">
                       Use Tool
                     </Button>
                   )}
                   <div className="flex flex-col sm:flex-row gap-2">
-                    <Button variant="outline" className="w-full">
+                    <Button variant="outline" className="w-full flex-1">
                       <Heart className="mr-2 h-4 w-4" />
-                      Add to Favorites
+                      Favorite
                     </Button>
-                    <Button variant="outline" className="w-full">
+                    <Button variant="outline" className="w-full flex-1">
                       <Share2 className="mr-2 h-4 w-4" />
                       Share
                     </Button>
