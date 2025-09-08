@@ -5,10 +5,11 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { app } from '@/firebase/clientApp';
 
-const AuthContext = createContext<{ user: User | null }>({ user: null });
+// We use undefined as the initial state to distinguish from "not logged in" (null)
+const AuthContext = createContext<{ user: User | null | undefined }>({ user: undefined });
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null | undefined>(undefined);
   const auth = getAuth(app);
 
   useEffect(() => {
