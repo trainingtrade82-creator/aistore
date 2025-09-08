@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { Aperture, Twitter, Github, Linkedin } from 'lucide-react';
 
@@ -6,7 +7,7 @@ export default function Footer() {
     { name: 'Features', href: '#features' },
     { name: 'Pricing', href: '#pricing' },
     { name: 'Testimonials', href: '#testimonials' },
-    { name: 'Privacy Policy', href: '#' },
+    { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Terms of Service', href: '#' },
   ];
 
