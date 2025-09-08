@@ -10,17 +10,15 @@ import { notFound } from 'next/navigation';
 
 interface ArticleLayoutProps {
     slug: string;
-    title: string;
-    intro: string;
-    topics: { title: string; content: string }[];
 }
 
-export default function ArticleLayout({ slug, title, intro, topics }: ArticleLayoutProps) {
+export default function ArticleLayout({ slug }: ArticleLayoutProps) {
     const article = supportArticles.find(a => a.slug === slug);
 
     if (!article) {
         return notFound();
     }
+    const { title, intro, topics } = article;
     const Icon = article.icon;
 
     return (

@@ -1,6 +1,4 @@
 
-'use client';
-
 import { notFound } from 'next/navigation';
 import Header from '@/components/landing/header';
 import Footer from '@/components/landing/footer';
@@ -21,9 +19,6 @@ export default function SupportArticlePage({ params }: { params: { slug: string 
         <div className="container px-4 md:px-6">
             <ArticleLayout 
                 slug={article.slug}
-                title={article.title}
-                intro={article.intro}
-                topics={article.topics}
             />
         </div>
       </main>
