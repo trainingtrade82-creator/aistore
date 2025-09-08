@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Hero() {
   return (
@@ -27,9 +28,8 @@ export default function Hero() {
           </div>
           <div className="relative hidden md:block">
             <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl"></div>
-            <img
-              src="https://picsum.photos/800/800"
-              data-ai-hint="abstract technology"
+            <Image
+              src="/image1.png"
               alt="AI Tools Showcase"
               className="relative rounded-full aspect-square object-cover shadow-2xl"
               width={500}
