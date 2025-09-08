@@ -35,7 +35,7 @@ export const categories: Category[] = [
     name: 'Productivity',
     description: 'Get more done in less time with smart productivity tools.',
     icon: Zap,
-    image: '/productivity.png',
+    image: '/productiv.png',
     aiHint: 'productivity charts',
   },
   {
