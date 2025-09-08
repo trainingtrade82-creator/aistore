@@ -30,9 +30,9 @@ export default function Hero() {
           <div className="relative hidden md:block">
             <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl"></div>
             <Image
-              src="https://picsum.photos/500/500"
+              src="https://picsum.photos/500/500?random=1"
               alt="AI Tools Showcase"
-              data-ai-hint="abstract technology"
+              data-ai-hint="digital brain"
               className="relative rounded-full aspect-square object-cover shadow-2xl"
               width={500}
               height={500}
