@@ -30,7 +30,7 @@ import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 function AuthProtection({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
@@ -38,15 +38,22 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
-    const checkAuth = () => {
-      if (user === null) {
+    const checkAuth = async () => {
+      if (user === undefined) {
         // Still checking
         setLoading(true);
-      } else {
-        // User is either logged in or we know they are not
+      } else if (user === null) {
+        // No user found, redirect to login
         setLoading(false);
-        if (!user) {
-          router.push('/login');
+        router.push('/login');
+      } else {
+        // User is logged in, check if email is verified
+        await user.reload(); // Refresh user data to get latest verification status
+        if (user.providerData.some(p => p.providerId === 'google.com') || user.emailVerified) {
+          setLoading(false);
+        } else {
+          // User exists but email is not verified
+          router.push('/auth/verify-email');
         }
       }
     };
@@ -65,11 +72,12 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!user) {
-    return null; // Render nothing while redirecting
+  // Only render children if user is authenticated and verified
+  if (user && (user.providerData.some(p => p.providerId === 'google.com') || user.emailVerified)) {
+    return <>{children}</>;
   }
 
-  return <>{children}</>;
+  return null; // Render nothing while redirecting
 }
 
 
