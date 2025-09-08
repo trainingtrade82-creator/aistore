@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { getAuth, createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, updateProfile, sendSignInLinkToEmail } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, sendSignInLinkToEmail } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -38,12 +38,10 @@ export default function SignupPage() {
   const onSubmit = async (data: SignupFormValues) => {
     setIsLoading(true);
     try {
-      // We can create a user record without a password.
-      // They will use the email link to sign in.
-      // This is a simplified approach. A more robust one might involve a temporary account state.
-      // For now, we'll just send the link.
       await sendSignInLinkToEmail(auth, data.email, actionCodeSettings);
       window.localStorage.setItem('emailForSignIn', data.email);
+      // We can't set the display name here, as the user doesn't exist yet.
+      // This would typically be handled after the user signs in for the first time.
       toast({
         title: 'Account Created & Sign-In Link Sent',
         description: 'We have created your account. Check your email for a link to sign in.',
@@ -66,7 +64,8 @@ export default function SignupPage() {
     try {
       await signInWithPopup(auth, provider);
       router.push('/dashboard');
-    } catch (error: any) {
+    } catch (error: any)
+{
       toast({
         variant: 'destructive',
         title: 'Google Sign-In Failed',
@@ -98,7 +97,7 @@ export default function SignupPage() {
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Account
+              Create Account & Send Link
             </Button>
           </form>
            <div className="relative my-4">
