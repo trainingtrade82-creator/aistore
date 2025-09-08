@@ -112,27 +112,27 @@ export type Testimonial = {
 
 export const testimonials: Testimonial[] = [
   {
-    name: 'Sarah L.',
-    title: 'Content Creator',
-    quote: 'AI Store has revolutionized my workflow. The writing tools are a game-changer for brainstorming and editing. I\'m producing content faster than ever!',
+    name: 'Aarav S.',
+    title: 'Class 11 Student',
+    quote: 'AI Store has made studying so much easier. The math solver and study buddy tools are game-changers. I can get instant explanations without waiting for a tutor.',
     avatar: 'https://picsum.photos/100/100?random=6',
   },
   {
-    name: 'Mark C.',
-    title: 'Startup Founder',
-    quote: 'The business and productivity tools are indispensable for my team. We\'ve automated so many tedious tasks, allowing us to focus on growth.',
+    name: 'Meera P.',
+    title: 'Freelance Writer',
+    quote: 'As a content writer, I used to juggle 4-5 different tools. With AI Store’s Pro plan, I have everything in one place — blogs, social captions, and even client pitch emails.',
     avatar: 'https://picsum.photos/100/100?random=7',
   },
   {
-    name: 'Jessica P.',
-    title: 'PhD Student',
-    quote: 'As a student, the education tools are incredible. From summarizing research papers to generating study guides, AI Store is my secret weapon for academic success.',
+    name: 'Rohan K.',
+    title: 'Startup Founder',
+    quote: 'The Exclusive Plan is a steal. The pitch deck generator saved me weeks of work while preparing for investors. Worth every rupee.',
     avatar: 'https://picsum.photos/100/100?random=8',
   },
   {
-    name: 'David H.',
-    title: 'Freelance Developer',
-    quote: 'The Pro plan is worth every penny. Access to the latest AI tools and the API has given me a competitive edge in my projects.',
+    name: 'Sophia M.',
+    title: 'Marketing Consultant (US)',
+    quote: 'I live outside India, and AI Store just works seamlessly. Billing through PayPal was smooth, and the tools are incredibly useful for my daily tasks.',
     avatar: 'https://picsum.photos/100/100?random=9',
   },
 ];
@@ -262,7 +262,7 @@ export const aiTools: AiTool[] = [
     tier: 'Pro',
     category: 'Lifestyle',
     shortDescription: 'Plan your perfect trip with personalized AI recommendations.',
-    description: 'From weekend getaways to globetrotting adventures, the AI Travel Planner is your ultimate companion. It curates personalized itineraries based on your interests, budget, and travel style. Discover hidden gems, book flights and hotels, and organize all your reservations in one place.',
+    description: 'From weekend getaways to globetrotting adventures, aistore is your ultimate companion. It curates personalized itineraries based on your interests, budget, and travel style. Discover hidden gems, book flights and hotels, and organize all your reservations in one place.',
     features: [
       'Personalized itinerary generation.',
       'Flight and hotel booking suggestions.',
