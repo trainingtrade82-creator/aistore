@@ -69,10 +69,18 @@ export default function TermsOfServicePage() {
             <h2>9. Privacy & Data</h2>
             <p>Your data is handled under our <Link href="/privacy" className="text-primary hover:underline">Privacy Policy</Link>. By using AI Store, you consent to our data practices.</p>
 
-            <h2>10. Changes to Terms</h2>
+            <h2>10. Cookies & Tracking</h2>
+            <ul>
+                <li>AI Store uses cookies to improve your browsing experience.</li>
+                <li>Cookies help us remember your login, analyze site usage, and personalize your experience.</li>
+                <li>By using AI Store, you consent to our use of cookies.</li>
+                <li>You can disable cookies in your browser settings, but some features may not work properly.</li>
+            </ul>
+
+            <h2>11. Changes to Terms</h2>
             <p>We may update these Terms from time to time. Continued use of AI Store means you accept the updated Terms.</p>
 
-            <h2>11. Contact Us</h2>
+            <h2>12. Contact Us</h2>
             <p>For questions about these Terms, contact us at: <a href="mailto:legal@aistore.com" className="text-primary hover:underline">legal@aistore.com</a></p>
           </div>
         </div>
