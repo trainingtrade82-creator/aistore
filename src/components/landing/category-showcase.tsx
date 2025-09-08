@@ -14,7 +14,7 @@ export default function CategoryShowcase() {
             Explore categories tailored to your specific needs, and find the perfect AI to get the job done.
           </p>
         </div>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.slice(0, 3).map((category) => (
             <Card key={category.name} className="overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
               <div className="aspect-video overflow-hidden">
@@ -37,7 +37,7 @@ export default function CategoryShowcase() {
             </Card>
           ))}
         </div>
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
             {categories.slice(3).map((category) => (
             <Card key={category.name} className="overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
               <div className="aspect-video overflow-hidden">
