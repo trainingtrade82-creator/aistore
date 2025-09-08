@@ -14,4 +14,10 @@ const firebaseConfig = {
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
-export { app, auth };
+const actionCodeSettings = {
+  url: 'http://localhost:9002/login', // Your redirect URL
+  handleCodeInApp: true, 
+};
+
+
+export { app, auth, actionCodeSettings };
