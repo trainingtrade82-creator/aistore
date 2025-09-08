@@ -83,9 +83,9 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
               </div>
 
               {/* Description */}
-              <div className="prose prose-lg max-w-none text-foreground/90 mb-8">
-                <h2 className="text-2xl font-semibold mb-2 font-headline">Description</h2>
-                <p>{tool.description}</p>
+              <div className="bg-secondary/50 rounded-lg p-6 mb-8">
+                <h2 className="text-2xl font-semibold mb-4 font-headline">Description</h2>
+                <p className="text-lg text-foreground/90">{tool.description}</p>
               </div>
 
               {/* Key Features */}
