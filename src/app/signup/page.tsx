@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -62,13 +62,12 @@ export default function SignupPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await updateProfile(user, { displayName: name });
-      await sendEmailVerification(user);
-
+      
       toast({
-        title: 'Verification Email Sent',
-        description: "We've sent a verification link to your email.",
+        title: 'Account Created',
+        description: 'Welcome to AI Store!',
       });
-      router.push('/auth/verify-email');
+      router.push('/dashboard');
 
     } catch (error: any) {
       console.error("Firebase Error:", error.code, error.message);

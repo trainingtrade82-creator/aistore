@@ -53,21 +53,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      await user.reload();
-      if (!user.emailVerified && user.providerData.every(p => p.providerId !== 'google.com')) {
-          toast({
-            variant: 'destructive',
-            title: 'Email Not Verified',
-            description: 'Please verify your email before logging in. Check your inbox (and spam folder) for the verification link.',
-          });
-          router.push('/auth/verify-email');
-          setIsLoading(false);
-          return;
-      }
-
+      await signInWithEmailAndPassword(auth, email, password);
       toast({
         title: 'Login Successful',
         description: 'Welcome back!',

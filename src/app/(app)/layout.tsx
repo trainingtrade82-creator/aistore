@@ -38,7 +38,7 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const checkAuth = async () => {
       // A small delay to prevent flicker if user state is resolved quickly
-      setTimeout(async () => {
+      setTimeout(() => {
         if (user === undefined) {
           // Still checking, do nothing
           return;
@@ -50,14 +50,8 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
           return;
         }
 
-        // User is logged in, check if email is verified
-        await user.reload(); // Refresh user data to get latest verification status
-        if (user.emailVerified || user.providerData.some(p => p.providerId === 'google.com')) {
-          setLoading(false);
-        } else {
-          // User exists but email is not verified
-          router.push('/auth/verify-email');
-        }
+        // User is logged in, no verification check needed for now
+        setLoading(false);
       }, 100);
     };
 
@@ -72,8 +66,8 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Only render children if user is authenticated and verified
-  if (user && (user.emailVerified || user.providerData.some(p => p.providerId === 'google.com'))) {
+  // Only render children if user is authenticated
+  if (user) {
     return <>{children}</>;
   }
 
