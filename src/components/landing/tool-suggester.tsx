@@ -47,7 +47,7 @@ export default function ToolSuggester() {
   }
 
   return (
-    <section className="py-20 sm:py-32 bg-secondary/50">
+    <section className="py-20 sm:py-32 bg-secondary/50 flex items-center">
       <div className="container max-w-4xl">
         <Card className="shadow-lg">
           <CardHeader className="text-center">
