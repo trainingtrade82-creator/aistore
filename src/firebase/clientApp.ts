@@ -15,7 +15,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
 const actionCodeSettings = {
-  url: 'http://localhost:9002/login',
+  url: typeof window !== 'undefined' ? window.location.href : 'http://localhost:9002/login',
   handleCodeInApp: true, 
 };
 
