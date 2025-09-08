@@ -44,9 +44,11 @@ export default function Header() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost">Log in</Button>
-            <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
-              Try Free
+            <Button variant="ghost" asChild>
+                <Link href="/login">Log in</Link>
+            </Button>
+            <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                <Link href="/signup">Try Free</Link>
             </Button>
           </div>
           <Sheet open={open} onOpenChange={setOpen}>
@@ -75,9 +77,11 @@ export default function Header() {
                   ))}
                 </nav>
                 <div className="mt-auto flex flex-col gap-4">
-                  <Button variant="outline">Log in</Button>
-                  <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
-                    Try Free
+                  <Button variant="outline" asChild>
+                    <Link href="/login">Log in</Link>
+                  </Button>
+                  <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                     <Link href="/signup">Try Free</Link>
                   </Button>
                 </div>
               </div>
