@@ -96,7 +96,12 @@ export const faqs = [
 type SupportTopic = {
     title: string;
     content: string;
-}
+};
+
+type FaqItem = {
+    question: string;
+    answer: string;
+};
 
 type SupportArticle = {
     slug: string;
@@ -104,7 +109,8 @@ type SupportArticle = {
     title: string;
     intro: string;
     topics: SupportTopic[];
-}
+    faq: FaqItem[];
+};
 
 export const supportArticles: SupportArticle[] = [
     {
@@ -117,6 +123,11 @@ export const supportArticles: SupportArticle[] = [
             { title: 'Choose a Plan', content: '<p>Start free with 30 AI tools.</p><p>Upgrade anytime to Pro (₹500) or Exclusive (₹700).</p>' },
             { title: 'Accessing AI Tools', content: '<p>Log in → Navigate to *AI Tools* page.</p><p>Select a tool → Read its description → Click **Use Now**.</p>' },
             { title: 'Managing Your Account', content: '<p>Update profile.</p><p>Change password.</p><p>View plan details.</p>' },
+        ],
+        faq: [
+            { question: 'Do I need to install anything?', answer: 'No. AI Store is 100% web-based — just log in from your browser.' },
+            { question: 'Can I use AI Store on my phone?', answer: 'Yes, it works on desktop, tablet, and mobile browsers.' },
+            { question: 'Can I try Pro before paying?', answer: 'You can start with Free → upgrade anytime.' },
         ]
     },
     {
@@ -129,6 +140,12 @@ export const supportArticles: SupportArticle[] = [
             { title: 'Accepted Payment Methods', content: '<p>India: UPI, Debit/Credit Cards.</p><p>Global: Stripe, PayPal.</p>' },
             { title: 'Billing Cycle', content: '<p>Monthly, auto-renewed.</p><p>Cancel anytime.</p>' },
             { title: 'Refund Policy', content: '<p>No refunds after billing.</p><p>Cancel before next cycle to avoid charges.</p>' },
+        ],
+        faq: [
+            { question: 'Can I cancel my subscription anytime?', answer: 'Yes. You’ll keep access until the end of your billing cycle.' },
+            { question: 'Do you offer yearly plans?', answer: 'Currently, we only offer monthly billing. (Yearly plan coming soon with discounts.)' },
+            { question: 'Do unused queries roll over?', answer: 'No. Limits reset monthly.' },
+            { question: 'What payment methods do you accept?', answer: 'UPI, Debit/Credit cards, Stripe, PayPal.' },
         ]
     },
     {
@@ -140,6 +157,12 @@ export const supportArticles: SupportArticle[] = [
             { title: 'How to Use', content: '<p>Select a tool → Read description → Click **Use Now**.</p><p>Input your query → Get instant results.</p>' },
             { title: 'Limits', content: '<p>Free: Limited access.</p><p>Pro: 5,000 queries/month.</p><p>Exclusive: 20,000 queries/month.</p>' },
             { title: 'Common Tool Categories', content: '<p>Writing & Content (blogs, resumes, social media).</p><p>Education (math solver, coding helper, study buddy).</p><p>Productivity (meeting notes, summaries, task manager).</p><p>Business (pitch deck maker, financial analysis, strategy AI).</p><p>Fun (chess AI, story generator, meme maker).</p>' },
+        ],
+        faq: [
+            { question: 'How many AI tools can I use in Free plan?', answer: '30 tools with limited access.' },
+            { question: 'Do all tools give full responses?', answer: 'Free → shorter outputs. Pro & Exclusive → full-length results.' },
+            { question: 'Which tools are Exclusive-only?', answer: 'Business AIs (Pitch Deck Maker, Finance Analyzer, Custom AI Agent Builder).' },
+            { question: 'Can I suggest a new AI tool?', answer: 'Yes! Contact us — we love feedback.' },
         ]
     },
     {
@@ -152,6 +175,12 @@ export const supportArticles: SupportArticle[] = [
             { title: 'Tool Not Loading', content: '<p>Check internet connection.</p><p>Refresh the page.</p><p>Make sure you’re within query limits.</p>' },
             { title: 'Slow Responses', content: '<p>Free users: Standard processing.</p><p>Pro/Exclusive: Faster speed. (Upgrade for priority.)</p>' },
             { title: 'Still Stuck?', content: '<p>Contact Support → provide screenshots/error messages.</p>' },
+        ],
+        faq: [
+            { question: 'I can’t log in, what should I do?', answer: 'Reset password → if still stuck, contact support.' },
+            { question: 'Why is AI slow for me?', answer: 'Free users get standard speed. Pro & Exclusive have priority servers.' },
+            { question: 'Why do I see “Query Limit Reached”?', answer: 'You’ve used your monthly queries. Upgrade or wait for reset.' },
+            { question: 'Do you support dark mode?', answer: 'Yes! Enable in account settings.' },
         ]
     },
     {
@@ -163,6 +192,12 @@ export const supportArticles: SupportArticle[] = [
             { title: 'Data Usage', content: '<p>We don’t sell or misuse your data.</p><p>Only used to improve your experience.</p>' },
             { title: 'Encryption', content: '<p>All chats encrypted in transit (SSL).</p><p>Payments handled securely via Stripe/UPI.</p>' },
             { title: 'Privacy Controls', content: '<p>Delete your account anytime.</p><p>Manage saved history in your dashboard.</p>' },
+        ],
+        faq: [
+            { question: 'Is my payment info safe?', answer: 'Yes, handled by trusted providers (Stripe/UPI/PayPal).' },
+            { question: 'Can I delete my data?', answer: 'Yes, request account deletion anytime from dashboard.' },
+            { question: 'Do you use my data to train AI models?', answer: 'No. Your chats stay private and are not shared with third parties.' },
+            { question: 'Where is my data stored?', answer: 'On secure, encrypted servers.' },
         ]
     },
     {
@@ -174,6 +209,12 @@ export const supportArticles: SupportArticle[] = [
             { title: 'Options', content: '<p>📧 **Email:** support@aistore.com</p><p>💬 **Live Chat:** Coming soon</p><p>🐦 **Twitter/X:** @AIStoreHelp (optional)</p>' },
             { title: 'Support Hours', content: '<p>Monday–Friday: 9 AM – 9 PM IST</p><p>Response time: Within 24 hours</p>' },
             { title: 'Before contacting us, check FAQs and Guides — your answer might already be there.', content: '' },
+        ],
+        faq: [
+            { question: 'What’s the fastest way to reach support?', answer: 'Email support@aistore.com — response within 24 hours.' },
+            { question: 'Do you offer live chat?', answer: 'Not yet, but it’s coming soon for Pro & Exclusive users.' },
+            { question: 'Can I talk to a human or is it all AI?', answer: 'You’ll always get a real human for support queries.' },
+            { question: 'Do you support 24/7 help?', answer: 'Currently Mon–Fri (9AM–9PM IST). Emergency issues are prioritized.' },
         ]
     }
 ];

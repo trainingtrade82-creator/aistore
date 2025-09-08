@@ -4,6 +4,7 @@
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { ArrowLeft } from 'lucide-react';
 import { supportArticles } from '@/lib/support-data';
 import { notFound } from 'next/navigation';
@@ -18,7 +19,7 @@ export default function ArticleLayout({ slug }: ArticleLayoutProps) {
     if (!article) {
         return notFound();
     }
-    const { title, intro, topics } = article;
+    const { title, intro, topics, faq } = article;
     const Icon = article.icon;
 
     return (
@@ -50,6 +51,26 @@ export default function ArticleLayout({ slug }: ArticleLayoutProps) {
                     </Card>
                 ))}
             </div>
+
+            {faq && faq.length > 0 && (
+                 <div className="mt-16">
+                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl font-headline text-center mb-8">
+                        Frequently Asked Questions
+                    </h2>
+                    <Accordion type="single" collapsible className="w-full">
+                        {faq.map((item, index) => (
+                            <AccordionItem value={`item-${index}`} key={index}>
+                                <AccordionTrigger className="text-lg font-semibold text-left">
+                                    {item.question}
+                                </AccordionTrigger>
+                                <AccordionContent className="text-base text-foreground/80 pt-2">
+                                    {item.answer}
+                                </AccordionContent>
+                            </AccordionItem>
+                        ))}
+                    </Accordion>
+                </div>
+            )}
         </div>
     );
 }
