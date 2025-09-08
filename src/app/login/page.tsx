@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -6,18 +7,17 @@ import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, isSignInWithEmailLink, signInWithEmailLink, sendSignInLinkToEmail } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, signInWithPopup, isSignInWithEmailLink, signInWithEmailLink, sendSignInLinkToEmail } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-import { actionCodeSettings } from '@/firebase/clientApp';
+import { actionCodeSettings, app } from '@/firebase/clientApp';
 
 const loginSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
-  password: z.string().min(6, { message: 'Password must be at least 6 characters' }).optional(),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -28,41 +28,41 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isEmailLinkSent, setIsEmailLinkSent] = useState(false);
-  const auth = getAuth();
+  const auth = getAuth(app);
 
   useEffect(() => {
-    const processEmailLink = async () => {
-      if (isSignInWithEmailLink(auth, window.location.href)) {
-        setIsLoading(true);
-        let email = window.localStorage.getItem('emailForSignIn');
-        if (!email) {
-          email = window.prompt('Please provide your email for confirmation');
-        }
-        if (email) {
-            try {
-                await signInWithEmailLink(auth, email, window.location.href);
-                window.localStorage.removeItem('emailForSignIn');
-                router.push('/dashboard');
-            } catch (error: any) {
-                 toast({
-                    variant: 'destructive',
-                    title: 'Login Failed',
-                    description: 'The sign-in link is invalid or has expired. Please try again.',
-                });
-            } finally {
-                setIsLoading(false);
-            }
-        } else {
-             toast({
-                variant: 'destructive',
-                title: 'Login Failed',
-                description: 'Email is required to complete sign-in.',
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      setIsLoading(true);
+      let email = window.localStorage.getItem('emailForSignIn');
+      if (!email) {
+        // User opened the link on a different device. To prevent session fixation
+        // attacks, ask the user to provide the email again. For example:
+        email = window.prompt('Please provide your email for confirmation');
+      }
+      
+      if (email) {
+        signInWithEmailLink(auth, email, window.location.href)
+          .then(() => {
+            window.localStorage.removeItem('emailForSignIn');
+            router.push('/dashboard');
+          })
+          .catch((error) => {
+            toast({
+              variant: 'destructive',
+              title: 'Login Failed',
+              description: 'The sign-in link is invalid or has expired. Please try again.',
             });
             setIsLoading(false);
-        }
+          });
+      } else {
+         toast({
+            variant: 'destructive',
+            title: 'Login Failed',
+            description: 'Email is required to complete sign-in.',
+        });
+        setIsLoading(false);
       }
-    };
-    processEmailLink();
+    }
   }, [auth, router, toast]);
 
 
@@ -85,7 +85,7 @@ export default function LoginPage() {
       toast({
         variant: 'destructive',
         title: 'Failed to send link',
-        description: error.message,
+        description: 'Please ensure you have enabled Email/Password and Email link sign-in providers in your Firebase console.',
       });
     } finally {
       setIsLoading(false);
@@ -119,7 +119,14 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {!isEmailLinkSent && (
+          {isLoading && (
+             <div className="flex justify-center items-center py-4">
+                <Loader2 className="mr-2 h-8 w-8 animate-spin" />
+                <p>Verifying your sign-in link...</p>
+             </div>
+          )}
+
+          {!isLoading && !isEmailLinkSent && (
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
@@ -133,9 +140,9 @@ export default function LoginPage() {
             </form>
           )}
 
-          {isEmailLinkSent && (
+          {!isLoading && isEmailLinkSent && (
              <div className="text-center">
-                <p>Waiting for you to click the link in your email...</p>
+                <p className="text-foreground/80">A sign-in link has been sent to your email. Click the link to log in.</p>
                 <Button variant="link" onClick={() => setIsEmailLinkSent(false)}>
                     Use a different email
                 </Button>
@@ -150,7 +157,7 @@ export default function LoginPage() {
               <span className="bg-background px-2 text-muted-foreground">Or continue with</span>
             </div>
           </div>
-          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading || isLoading}>
+          <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading || isLoading || isEmailLinkSent}>
             {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 126 23.4 172.9 62.3l-66.5 64.6C305.5 99.6 280.5 80 248 80c-82.3 0-148.2 66.3-148.2 147.4s65.9 147.4 148.2 147.4c87.7 0 129.2-61.2 135-95.2H248v-65.7h239.5c1.4 9.3 2.5 19.1 2.5 29.5z"></path></svg>}
             Google
           </Button>
