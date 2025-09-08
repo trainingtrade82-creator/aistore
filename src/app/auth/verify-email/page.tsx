@@ -6,8 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { MailCheck, Loader2 } from 'lucide-react';
-import { getAuth, signOut, sendEmailVerification } from 'firebase/auth';
-import { useToast } from '@/hooks/use-toast';
+import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { app } from '@/firebase/clientApp';
@@ -15,9 +14,7 @@ import { app } from '@/firebase/clientApp';
 export default function VerifyEmailPage() {
   const { user } = useAuth();
   const router = useRouter();
-  const { toast } = useToast();
   const auth = getAuth(app);
-  const [isResending, setIsResending] = useState(false);
   
   // If user is already verified and lands here, send them to the dashboard.
   useEffect(() => {
@@ -25,35 +22,6 @@ export default function VerifyEmailPage() {
       router.push('/dashboard');
     }
   }, [user, router]);
-
-
-  const handleResend = async () => {
-    if (!user) {
-      toast({
-        variant: 'destructive',
-        title: 'Not logged in',
-        description: 'You need to be logged in to resend a verification email.',
-      });
-      return;
-    }
-    setIsResending(true);
-    try {
-      await sendEmailVerification(auth.currentUser!);
-      
-      toast({
-        title: 'Email Sent',
-        description: 'A new verification email has been sent to your inbox.',
-      });
-    } catch (error: any) {
-      toast({
-        variant: 'destructive',
-        title: 'Failed to resend email',
-        description: error.message,
-      });
-    } finally {
-      setIsResending(false);
-    }
-  };
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -87,10 +55,9 @@ export default function VerifyEmailPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button onClick={handleResend} className="w-full" disabled={isResending}>
-            {isResending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-            Resend Verification Email
-          </Button>
+          <p className="text-sm text-muted-foreground">
+            Once you've verified, you'll be able to log in.
+          </p>
         </CardContent>
         <CardFooter className="flex justify-center">
             <Button variant="link" onClick={handleLogout}>
