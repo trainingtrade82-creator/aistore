@@ -67,7 +67,7 @@ export default function SignupPage() {
       const actionCodeSettings = {
         url: `${window.location.origin}/login`,
       };
-      const link = await generateEmailVerificationLink(auth, user.email!, actionCodeSettings);
+      const link = await generateEmailVerificationLink(auth, user.email!);
 
       // Send email via our reliable API route
       await fetch('/api/send-verification-email', {

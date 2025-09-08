@@ -41,7 +41,7 @@ export default function VerifyEmailPage() {
       const actionCodeSettings = {
          url: `${window.location.origin}/login`,
       };
-      const link = await generateEmailVerificationLink(auth, user.email!, actionCodeSettings);
+      const link = await generateEmailVerificationLink(auth.currentUser!, actionCodeSettings);
 
       // Log for developer to manually verify during testing
       console.log("Verification link:", link);
