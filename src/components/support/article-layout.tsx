@@ -1,24 +1,34 @@
 
-'use client'
-
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { ArrowLeft } from 'lucide-react';
-import { supportArticles } from '@/lib/support-data';
-import { notFound } from 'next/navigation';
+import { ArrowLeft, LucideIcon } from 'lucide-react';
+
+type SupportTopic = {
+    title: string;
+    content: string;
+};
+
+type FaqItem = {
+    question: string;
+    answer: string;
+};
+
+type SupportArticle = {
+    slug: string;
+    icon: LucideIcon;
+    title: string;
+    intro: string;
+    topics: SupportTopic[];
+    faq: FaqItem[];
+};
 
 interface ArticleLayoutProps {
-    slug: string;
+    article: SupportArticle;
 }
 
-export default function ArticleLayout({ slug }: ArticleLayoutProps) {
-    const article = supportArticles.find(a => a.slug === slug);
-
-    if (!article) {
-        return notFound();
-    }
+export default function ArticleLayout({ article }: ArticleLayoutProps) {
     const { title, intro, topics, faq } = article;
     const Icon = article.icon;
 
