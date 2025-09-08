@@ -52,7 +52,7 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
 
         // User is logged in, check if email is verified
         await user.reload(); // Refresh user data to get latest verification status
-        if (user.providerData.some(p => p.providerId === 'google.com') || user.emailVerified) {
+        if (user.emailVerified || user.providerData.some(p => p.providerId === 'google.com')) {
           setLoading(false);
         } else {
           // User exists but email is not verified
@@ -73,7 +73,7 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
   }
 
   // Only render children if user is authenticated and verified
-  if (user && (user.providerData.some(p => p.providerId === 'google.com') || user.emailVerified)) {
+  if (user && (user.emailVerified || user.providerData.some(p => p.providerId === 'google.com'))) {
     return <>{children}</>;
   }
 

@@ -61,7 +61,7 @@ export default function LoginPage() {
           toast({
             variant: 'destructive',
             title: 'Email Not Verified',
-            description: 'Please verify your email before logging in.',
+            description: 'Please verify your email before logging in. Check your inbox (and spam folder) for the verification link.',
           });
           router.push('/auth/verify-email');
           setIsLoading(false);
