@@ -1,7 +1,6 @@
 
 'use client';
 
-import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -48,7 +47,7 @@ export default function VerifyEmailPage() {
           <CardDescription className="mt-2">
             We've sent a verification link to{' '}
             <strong className="text-primary">{user?.email || 'your email'}</strong>. Please
-            click the link in the email to log in.
+            click the link in the email to complete your registration.
           </CardDescription>
            <CardDescription className="mt-4 bg-yellow-100 text-yellow-800 p-3 rounded-md border border-yellow-300">
               <strong>Can't find the email?</strong> Please check your Spam or Junk folder. It might take a minute to arrive.
@@ -56,7 +55,7 @@ export default function VerifyEmailPage() {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">
-            Once you've verified, you'll be able to log in.
+            Once you've verified, you can log in.
           </p>
         </CardContent>
         <CardFooter className="flex justify-center">
