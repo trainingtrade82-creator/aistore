@@ -48,7 +48,7 @@ export default function AboutPage() {
         <section className="relative bg-secondary/30 py-20 md:py-24">
             <div className="absolute inset-0">
                  <Image 
-                    src="/super.png"
+                    src="https://picsum.photos/1920/1080"
                     alt="Abstract background"
                     fill
                     className="object-cover opacity-10"

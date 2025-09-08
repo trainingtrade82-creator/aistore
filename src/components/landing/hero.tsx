@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -29,8 +30,9 @@ export default function Hero() {
           <div className="relative hidden md:block">
             <div className="absolute inset-0 bg-primary/10 rounded-full blur-3xl"></div>
             <Image
-              src="/image1.png"
+              src="https://picsum.photos/500/500"
               alt="AI Tools Showcase"
+              data-ai-hint="abstract technology"
               className="relative rounded-full aspect-square object-cover shadow-2xl"
               width={500}
               height={500}
