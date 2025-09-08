@@ -8,6 +8,7 @@ export default function Footer() {
     { name: 'Pricing', href: '#pricing' },
     { name: 'Testimonials', href: '#testimonials' },
     { name: 'Privacy Policy', href: '/privacy' },
+    { name: 'Refund Policy', href: '/refund-policy' },
     { name: 'Terms of Service', href: '#' },
   ];
 
