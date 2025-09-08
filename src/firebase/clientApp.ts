@@ -15,7 +15,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
 const actionCodeSettings = {
-  url: 'http://localhost:9002/login', // Your redirect URL
+  url: 'http://localhost:9002/login',
   handleCodeInApp: true, 
 };
 
