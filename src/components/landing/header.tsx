@@ -14,6 +14,7 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   const navLinks = [
+    { name: 'Home', href: '/' },
     { name: 'AI Tools', href: '/ai-tools' },
     { name: 'Pricing', href: '/pricing' },
     { name: 'About Us', href: '/about' },
