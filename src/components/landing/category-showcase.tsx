@@ -47,7 +47,7 @@ export default function CategoryShowcase() {
                   data-ai-hint={category.aiHint}
                   width={600}
                   height={400}
-                  className="object-cover object-center w-full h-full transition-transform duration-300 group-hover:scale-105"
+                  className="object-cover object-top w-full h-full transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
               <CardHeader>
