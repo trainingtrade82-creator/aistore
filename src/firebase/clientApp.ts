@@ -1,6 +1,6 @@
 
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getAuth, onIdTokenChanged } from "firebase/auth";
 
 const firebaseConfig = {
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -14,15 +14,31 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
-const googleProvider = new GoogleAuthProvider();
 
-const actionCodeSettings = {
-  // URL you want to redirect back to. The domain (www.example.com) for this
-  // URL must be whitelisted in the Firebase Console.
-  url: typeof window !== 'undefined' ? window.location.href : 'http://localhost:9002/login',
-  // This must be true.
-  handleCodeInApp: true,
-};
+// Function to set a cookie
+const setCookie = (name: string, value: string, days: number) => {
+  let expires = "";
+  if (days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    expires = "; expires=" + date.toUTCString();
+  }
+  document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
 
+// Function to erase a cookie
+const eraseCookie = (name: string) => {
+  document.cookie = name+'=; Max-Age=-99999999;';
+}
 
-export { app, auth, googleProvider, actionCodeSettings };
+// Listen for token changes and update the cookie
+onIdTokenChanged(auth, async (user) => {
+  if (user) {
+    const token = await user.getIdToken();
+    setCookie('token', token, 1); // Set cookie for 1 day
+  } else {
+    eraseCookie('token');
+  }
+});
+
+export { app, auth };

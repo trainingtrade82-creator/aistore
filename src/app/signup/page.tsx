@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, signInWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -13,41 +13,47 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { app } from '@/firebase/clientApp';
 
-export default function LoginPage() {
+export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const auth = getAuth(app);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (password.length < 6) {
+        toast({
+            variant: 'destructive',
+            title: 'Password is too weak',
+            description: 'Password must be at least 6 characters long.',
+        });
+        return;
+    }
     setIsLoading(true);
-    setError(null);
-
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      if (user.emailVerified) {
-        toast({
-          title: 'Login Successful',
-          description: 'Welcome back!',
-        });
-        router.push('/dashboard');
-      } else {
-        setError('Please verify your email before logging in. A new verification link has been sent.');
-        await sendEmailVerification(user);
-        await auth.signOut();
-      }
+      // Update user profile with display name
+      await updateProfile(user, { displayName: name });
+      
+      // Send verification email
+      await sendEmailVerification(user);
+
+      // Sign out the user until they verify
+      await auth.signOut();
+
+      // Redirect to a page telling them to check their email
+      router.push('/auth/verify-email');
+
     } catch (error: any) {
-      console.error('Firebase Error:', error.code, error.message);
-       setError(error.message || 'An unexpected error occurred.');
+      console.error("Firebase Error:", error.code, error.message);
       toast({
         variant: 'destructive',
-        title: 'Login Failed',
+        title: 'Signup Failed',
         description: error.message.replace('Firebase: ', '').split(' (')[0],
       });
     } finally {
@@ -58,14 +64,26 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-secondary/40 p-4">
       <Card className="w-full max-w-sm">
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSignup}>
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Welcome Back</CardTitle>
+            <CardTitle className="text-2xl">Create an Account</CardTitle>
             <CardDescription>
-              Enter your credentials to access your account.
+              Enter your details to get started.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="space-y-2">
+                <Label htmlFor="name">Name</Label>
+                <Input
+                    id="name"
+                    type="text"
+                    placeholder="Your Name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    disabled={isLoading}
+                />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -83,23 +101,23 @@ export default function LoginPage() {
               <Input
                 id="password"
                 type="password"
+                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 disabled={isLoading}
               />
             </div>
-             {error && <p className="text-sm text-destructive">{error}</p>}
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Log In
+              Create Account
             </Button>
-             <CardDescription>
-                Don't have an account?{' '}
-                <Link href="/signup" className="text-primary hover:underline">
-                    Sign Up
+            <CardDescription>
+                Already have an account?{' '}
+                <Link href="/login" className="text-primary hover:underline">
+                    Log In
                 </Link>
             </CardDescription>
           </CardFooter>
