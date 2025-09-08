@@ -7,7 +7,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { testimonials } from '@/lib/data';
 
-export default function Testimonials() {
+export default function SuccessStories() {
   const plugin = React.useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
 
   return (
