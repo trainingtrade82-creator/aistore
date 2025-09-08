@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -63,21 +63,14 @@ export default function SignupPage() {
       const user = userCredential.user;
       await updateProfile(user, { displayName: name });
       
-      // Call the new API route to send email via Resend
-      await fetch('/api/send-verification-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: user.email }),
-      });
-      
-      toast({
-        title: 'Account Created',
-        description: 'A verification email has been sent to your inbox. Please verify to log in.',
-      });
-      
-      router.push('/auth/verify-email');
+      if(auth.currentUser){
+          await sendEmailVerification(auth.currentUser);
+          toast({
+            title: 'Account Created',
+            description: 'A verification email has been sent to your inbox. Please verify to log in.',
+          });
+          router.push('/auth/verify-email');
+      }
 
     } catch (error: any) {
       console.error("Firebase Error:", error.code, error.message);
@@ -108,7 +101,6 @@ export default function SignupPage() {
   };
 
   const handleGoogleSignUp = async () => {
-    // This part remains the same, as Google users are verified by default.
     setGoogleIsLoading(true);
     const provider = new (await import('firebase/auth')).GoogleAuthProvider();
     try {
