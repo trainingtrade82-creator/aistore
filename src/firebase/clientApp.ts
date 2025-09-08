@@ -1,6 +1,6 @@
 
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -14,14 +14,15 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 const actionCodeSettings = {
   // URL you want to redirect back to. The domain (www.example.com) for this
   // URL must be whitelisted in the Firebase Console.
-  url: typeof window !== 'undefined' ? `${window.location.origin}/login` : 'http://localhost:9002/login',
+  url: typeof window !== 'undefined' ? window.location.href : 'http://localhost:9002/login',
   // This must be true.
   handleCodeInApp: true,
 };
 
 
-export { app, auth, actionCodeSettings };
+export { app, auth, googleProvider, actionCodeSettings };
