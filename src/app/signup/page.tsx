@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -62,9 +62,11 @@ export default function SignupPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await updateProfile(user, { displayName: name });
-      await sendEmailVerification(user);
-      await auth.signOut();
-      router.push('/auth/verify-email');
+      toast({
+        title: 'Account Created',
+        description: "Welcome! You're now logged in.",
+      });
+      router.push('/dashboard');
 
     } catch (error: any) {
       console.error("Firebase Error:", error.code, error.message);
@@ -104,7 +106,7 @@ export default function SignupPage() {
         description: 'Welcome to AI Store!',
       });
       router.push('/dashboard');
-    } catch (error: any) {
+    } catch (error: any) => {
       console.error('Firebase Error:', error.code, error.message);
       toast({
         variant: 'destructive',

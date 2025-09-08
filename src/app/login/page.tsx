@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, signInWithEmailAndPassword, sendEmailVerification, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -53,20 +53,12 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      if (user.emailVerified) {
-        toast({
-          title: 'Login Successful',
-          description: 'Welcome back!',
-        });
-        router.push('/dashboard');
-      } else {
-        setError('Please verify your email before logging in. A new verification link has been sent.');
-        await sendEmailVerification(user);
-        await auth.signOut();
-      }
+      await signInWithEmailAndPassword(auth, email, password);
+      toast({
+        title: 'Login Successful',
+        description: 'Welcome back!',
+      });
+      router.push('/dashboard');
     } catch (error: any) {
       console.error('Firebase Error:', error.code, error.message);
        let errorMessage = error.message.replace('Firebase: ', '').split(' (')[0];
@@ -95,7 +87,7 @@ export default function LoginPage() {
         description: 'Welcome back!',
       });
       router.push('/dashboard');
-    } catch (error: any) {
+    } catch (error: any) => {
       console.error('Firebase Error:', error.code, error.message);
       toast({
         variant: 'destructive',
