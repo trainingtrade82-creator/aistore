@@ -1,11 +1,15 @@
 'use client';
 
+import React from 'react';
+import Autoplay from 'embla-carousel-autoplay';
 import { Card, CardContent } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { testimonials } from '@/lib/data';
 
 export default function Testimonials() {
+  const plugin = React.useRef(Autoplay({ delay: 2000, stopOnInteraction: true }));
+
   return (
     <section id="testimonials" className="py-20 sm:py-32 bg-secondary/50">
       <div className="container">
@@ -18,11 +22,14 @@ export default function Testimonials() {
           </p>
         </div>
         <Carousel
+          plugins={[plugin.current]}
           opts={{
             align: 'start',
             loop: true,
           }}
           className="w-full max-w-4xl mx-auto"
+          onMouseEnter={plugin.current.stop}
+          onMouseLeave={plugin.current.reset}
         >
           <CarouselContent>
             {testimonials.map((testimonial, index) => (
