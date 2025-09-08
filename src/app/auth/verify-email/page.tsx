@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { MailCheck, Loader2 } from 'lucide-react';
 import { getAuth, signOut, generateEmailVerificationLink } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { app } from '@/firebase/clientApp';
 
