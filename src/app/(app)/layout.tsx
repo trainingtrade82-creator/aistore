@@ -50,7 +50,13 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
           return;
         }
 
-        // User is logged in, no verification check needed for now
+        // User is logged in, but check for email verification
+        // Google users are verified by default
+        if (!user.emailVerified && user.providerData.some(p => p.providerId === 'password')) {
+            router.push('/auth/verify-email');
+            return;
+        }
+        
         setLoading(false);
       }, 100);
     };
@@ -66,7 +72,7 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Only render children if user is authenticated
+  // Only render children if user is authenticated and verified
   if (user) {
     return <>{children}</>;
   }

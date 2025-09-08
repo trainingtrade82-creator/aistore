@@ -44,16 +44,27 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setGoogleIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const auth = getAuth(app);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError(null);
 
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      if (user && !user.emailVerified) {
+        toast({
+            variant: 'destructive',
+            title: 'Email Not Verified',
+            description: 'Please verify your email before logging in.',
+        });
+        router.push('/auth/verify-email');
+        setIsLoading(false);
+        return;
+      }
+
       toast({
         title: 'Login Successful',
         description: 'Welcome back!',
@@ -65,7 +76,9 @@ export default function LoginPage() {
       if (error.code === 'auth/too-many-requests') {
         errorMessage = 'Access temporarily disabled due to too many requests. Please try again later.';
       }
-      setError(errorMessage);
+       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        errorMessage = 'Invalid email or password. Please try again.';
+      }
       toast({
         variant: 'destructive',
         title: 'Login Failed',
@@ -78,7 +91,6 @@ export default function LoginPage() {
 
   const handleGoogleSignIn = async () => {
     setGoogleIsLoading(true);
-    setError(null);
     const provider = new GoogleAuthProvider();
     try {
       await signInWithPopup(auth, provider);
@@ -133,7 +145,6 @@ export default function LoginPage() {
                 disabled={isLoading || isGoogleLoading}
               />
             </div>
-             {error && <p className="text-sm text-destructive">{error}</p>}
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading || isGoogleLoading}>
