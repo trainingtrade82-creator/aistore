@@ -9,7 +9,7 @@ export default function Footer() {
     { name: 'Testimonials', href: '#testimonials' },
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Refund Policy', href: '/refund-policy' },
-    { name: 'Terms of Service', href: '#' },
+    { name: 'Terms of Service', href: '/terms-of-service' },
   ];
 
   const socialLinks = [
