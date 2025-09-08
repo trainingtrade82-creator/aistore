@@ -5,7 +5,7 @@ import { categories } from '@/lib/data';
 export default function CategoryShowcase() {
   return (
     <section id="features" className="py-20 sm:py-32">
-      <div className="container">
+      <div className="container px-4 md:px-6">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl font-headline">
             AI for Every Task
