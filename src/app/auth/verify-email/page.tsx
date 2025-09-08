@@ -5,7 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { MailCheck, Loader2 } from 'lucide-react';
-import { getAuth, signOut } from 'firebase/auth';
+import { getAuth, signOut, sendEmailVerification } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -16,6 +16,7 @@ export default function VerifyEmailPage() {
   const router = useRouter();
   const auth = getAuth(app);
   const { toast } = useToast();
+  const [isSending, setIsSending] = useState(false);
 
   // If user is already verified and lands here, send them to the dashboard.
   useEffect(() => {
@@ -23,6 +24,38 @@ export default function VerifyEmailPage() {
       router.push('/dashboard');
     }
   }, [user, router]);
+  
+  const handleResendVerificationEmail = async () => {
+    if (!user) {
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: 'You must be logged in to resend a verification email.',
+      });
+      return;
+    }
+
+    setIsSending(true);
+    console.log('Attempting to resend verification email for user:', user.email);
+    try {
+      await sendEmailVerification(user);
+      console.log('Firebase sendEmailVerification call successful.');
+      toast({
+        title: 'Email Sent',
+        description: 'A new verification email has been sent to your inbox.',
+      });
+    } catch (error: any) {
+      console.error('Error resending verification email:', error);
+      toast({
+        variant: 'destructive',
+        title: 'Resend Failed',
+        description: error.message.replace('Firebase: ', '').split(' (')[0],
+      });
+    } finally {
+      setIsSending(false);
+    }
+  };
+
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -52,9 +85,19 @@ export default function VerifyEmailPage() {
             click the link in the email to complete your registration.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <p className="text-sm text-muted-foreground">
-            Once you've verified, you can log in to your account.
+        <CardContent className="space-y-4">
+           <Button onClick={handleResendVerificationEmail} disabled={isSending} className="w-full">
+            {isSending ? (
+                <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Sending...
+                </>
+            ) : (
+              'Resend Verification Email'
+            )}
+          </Button>
+          <p className="text-sm text-muted-foreground px-4">
+            Can't find the email? Please check your Spam or Junk folder. It might take a minute to arrive.
           </p>
         </CardContent>
         <CardFooter className="flex justify-center">
