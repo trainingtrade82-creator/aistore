@@ -14,7 +14,7 @@ export const categories: Category[] = [
     name: 'Education',
     description: 'Enhance learning and teaching with AI-powered tools.',
     icon: School,
-    image: 'https://picsum.photos/600/400?random=1',
+    image: '/education.png',
     aiHint: 'education learning',
   },
   {
