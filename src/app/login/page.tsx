@@ -87,7 +87,7 @@ export default function LoginPage() {
         description: 'Welcome back!',
       });
       router.push('/dashboard');
-    } catch (error: any) => {
+    } catch (error: any) {
       console.error('Firebase Error:', error.code, error.message);
       toast({
         variant: 'destructive',

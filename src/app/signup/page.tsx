@@ -62,6 +62,7 @@ export default function SignupPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await updateProfile(user, { displayName: name });
+      
       toast({
         title: 'Account Created',
         description: "Welcome! You're now logged in.",
@@ -106,7 +107,7 @@ export default function SignupPage() {
         description: 'Welcome to AI Store!',
       });
       router.push('/dashboard');
-    } catch (error: any) => {
+    } catch (error: any) {
       console.error('Firebase Error:', error.code, error.message);
       toast({
         variant: 'destructive',
