@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, sendEmailVerification, generateEmailVerificationLink } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -63,15 +63,26 @@ export default function SignupPage() {
       const user = userCredential.user;
       await updateProfile(user, { displayName: name });
 
-      // Send verification email
-      await sendEmailVerification(user);
+      // Generate verification link
+      const actionCodeSettings = {
+        url: `${window.location.origin}/login`,
+      };
+      const link = await generateEmailVerificationLink(auth, user.email!, actionCodeSettings);
+
+      // Send email via our reliable API route
+      await fetch('/api/send-verification-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: user.email, name: name, link }),
+      });
       
       toast({
         title: 'Account Created',
-        description: 'A verification email has been sent to your inbox.',
+        description: 'A verification email has been sent to your inbox. Please verify to log in.',
       });
       
-      router.push('/auth/verify-email');
+      await auth.signOut();
+      router.push('/login');
 
     } catch (error: any) {
       console.error("Firebase Error:", error.code, error.message);
