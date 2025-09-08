@@ -1,3 +1,4 @@
+
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { aiTools, categories } from '@/lib/data';
@@ -20,7 +21,7 @@ export default function DashboardPage() {
           <CardContent className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {aiTools.slice(0, 5).map(tool => (
               <Link href={`/ai-tools/${tool.id}`} key={tool.id}>
-                <div className="flex flex-col items-center text-center p-4 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors cursor-pointer">
+                <div className="flex flex-col items-center text-center p-4 rounded-lg bg-secondary/50 hover:bg-secondary transition-colors cursor-pointer h-full">
                   <tool.icon className="w-8 h-8 text-primary mb-2" />
                   <span className="text-sm font-medium">{tool.name}</span>
                 </div>

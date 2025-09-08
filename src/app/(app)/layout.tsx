@@ -10,11 +10,6 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuBadge,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-  SidebarInset,
 } from '@/components/ui/sidebar';
 import {
     LayoutGrid,
@@ -23,7 +18,9 @@ import {
     User,
     Wand2,
     Aperture,
-    Loader2
+    Loader2,
+    Save,
+    Rocket
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { getAuth, signOut } from 'firebase/auth';
@@ -39,14 +36,19 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (user === undefined) {
-        // Still checking
-        setLoading(true);
-      } else if (user === null) {
-        // No user found, redirect to login
-        setLoading(false);
-        router.push('/login');
-      } else {
+      // A small delay to prevent flicker if user state is resolved quickly
+      setTimeout(async () => {
+        if (user === undefined) {
+          // Still checking, do nothing
+          return;
+        }
+        
+        if (user === null) {
+          // No user found, redirect to login
+          router.push('/login');
+          return;
+        }
+
         // User is logged in, check if email is verified
         await user.reload(); // Refresh user data to get latest verification status
         if (user.providerData.some(p => p.providerId === 'google.com') || user.emailVerified) {
@@ -55,13 +57,10 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
           // User exists but email is not verified
           router.push('/auth/verify-email');
         }
-      }
+      }, 100);
     };
-    
-    // A small delay to prevent flicker if user state is resolved quickly
-    const timer = setTimeout(checkAuth, 100);
 
-    return () => clearTimeout(timer);
+    checkAuth();
   }, [user, router]);
 
   if (loading) {
@@ -108,40 +107,55 @@ export default function AppLayout({
             <SidebarContent>
             <SidebarMenu>
                 <SidebarMenuItem>
-                <SidebarMenuButton href="/dashboard" left={<LayoutGrid />}>
-                    Dashboard
-                </SidebarMenuButton>
+                    <SidebarMenuButton href="/dashboard" left={<LayoutGrid />}>
+                        Dashboard
+                    </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                <SidebarMenuButton href="/ai-tools" left={<Wand2 />}>
-                    AI Tools
-                </SidebarMenuButton>
+                    <SidebarMenuButton href="/ai-tools" left={<Wand2 />}>
+                        AI Tools
+                    </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="/settings" left={<Settings />}>
-                        Settings
+                    <SidebarMenuButton href="#" left={<Save />}>
+                        Saved Projects
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+                 <SidebarMenuItem>
+                    <SidebarMenuButton href="/pricing" left={<Rocket />}>
+                        Upgrade Plan
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
             </SidebarContent>
             <SidebarFooter>
-                <div className="flex items-center gap-3 p-2 rounded-md transition-colors hover:bg-sidebar-accent">
-                    <Avatar className="h-9 w-9">
-                        <AvatarImage src={user?.photoURL || undefined} />
-                        <AvatarFallback>{user?.displayName?.[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="overflow-hidden">
-                        <p className="font-semibold text-sm truncate">{user?.displayName}</p>
-                        <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
-                    </div>
-                </div>
                 <SidebarMenu>
+                     <SidebarMenuItem>
+                        <SidebarMenuButton href="/settings" left={<Settings />}>
+                            Settings
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton href="#" left={<User />}>
+                            Profile
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
                     <SidebarMenuItem>
                         <SidebarMenuButton onClick={handleSignOut} left={<LogOut />}>
                             Logout
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
+                 <div className="flex items-center gap-3 p-2 mt-4 rounded-md transition-colors border">
+                    <Avatar className="h-9 w-9">
+                        <AvatarImage src={user?.photoURL || undefined} />
+                        <AvatarFallback>{user?.displayName?.[0] || 'U'}</AvatarFallback>
+                    </Avatar>
+                    <div className="overflow-hidden">
+                        <p className="font-semibold text-sm truncate">{user?.displayName || 'User'}</p>
+                        <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                    </div>
+                </div>
             </SidebarFooter>
         </Sidebar>
         <SidebarInset>
