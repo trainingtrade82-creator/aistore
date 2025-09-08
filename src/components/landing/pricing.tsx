@@ -29,7 +29,7 @@ export default function Pricing() {
                   Most Popular
                 </Badge>
               )}
-              <CardHeader>
+              <CardHeader className="text-center">
                 <CardTitle className="text-2xl font-semibold">{plan.name}</CardTitle>
                 <CardDescription>{plan.description}</CardDescription>
                 <div>
