@@ -86,6 +86,9 @@ export default function VerifyEmailPage() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground bg-secondary/70 p-3 rounded-md">
+            Can't find the email? Please check your Spam or Junk folder. It might take a minute to arrive.
+          </p>
            <Button onClick={handleResendVerificationEmail} disabled={isSending} className="w-full">
             {isSending ? (
                 <>
@@ -96,9 +99,6 @@ export default function VerifyEmailPage() {
               'Resend Verification Email'
             )}
           </Button>
-          <p className="text-sm text-muted-foreground px-4">
-            Can't find the email? Please check your Spam or Junk folder. It might take a minute to arrive.
-          </p>
         </CardContent>
         <CardFooter className="flex justify-center">
           <Button variant="link" onClick={handleLogout}>
