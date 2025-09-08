@@ -1,6 +1,6 @@
 
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth, onIdTokenChanged } from "firebase/auth";
+import { getAuth, onIdTokenChanged, GoogleAuthProvider } from "firebase/auth";
 
 const firebaseConfig = {
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
@@ -14,6 +14,7 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 // Function to set a cookie
 const setCookie = (name: string, value: string, days: number) => {
@@ -41,4 +42,4 @@ onIdTokenChanged(auth, async (user) => {
   }
 });
 
-export { app, auth };
+export { app, auth, googleProvider };
