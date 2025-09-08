@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -63,8 +63,14 @@ export default function SignupPage() {
       const user = userCredential.user;
       await updateProfile(user, { displayName: name });
       
-      // Send verification email using the correct method
-      await sendEmailVerification(user);
+      // Call the new API route to send email via Resend
+      await fetch('/api/send-verification-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: user.email }),
+      });
       
       toast({
         title: 'Account Created',
@@ -102,10 +108,11 @@ export default function SignupPage() {
   };
 
   const handleGoogleSignUp = async () => {
+    // This part remains the same, as Google users are verified by default.
     setGoogleIsLoading(true);
-    const provider = new GoogleAuthProvider();
+    const provider = new (await import('firebase/auth')).GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      await (await import('firebase/auth')).signInWithPopup(auth, provider);
       toast({
         title: 'Account Created',
         description: 'Welcome to AI Store!',
