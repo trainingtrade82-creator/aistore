@@ -6,7 +6,7 @@ import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { MailCheck, Loader2 } from 'lucide-react';
-import { getAuth, signOut, generateEmailVerificationLink } from 'firebase/auth';
+import { getAuth, signOut, sendEmailVerification } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -38,19 +38,7 @@ export default function VerifyEmailPage() {
     }
     setIsResending(true);
     try {
-      const actionCodeSettings = {
-         url: `${window.location.origin}/login`,
-      };
-      const link = await generateEmailVerificationLink(auth.currentUser!, actionCodeSettings);
-
-      // Log for developer to manually verify during testing
-      console.log("Verification link:", link);
-
-      await fetch('/api/send-verification-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: user.email, name: user.displayName, link }),
-      });
+      await sendEmailVerification(auth.currentUser!);
       
       toast({
         title: 'Email Sent',

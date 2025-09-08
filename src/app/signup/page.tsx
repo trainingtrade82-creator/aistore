@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, generateEmailVerificationLink } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup, sendEmailVerification } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -62,26 +62,15 @@ export default function SignupPage() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
       await updateProfile(user, { displayName: name });
-
-      // Generate verification link
-      const actionCodeSettings = {
-        url: `${window.location.origin}/login`,
-      };
-      const link = await generateEmailVerificationLink(auth, user.email!);
-
-      // Send email via our reliable API route
-      await fetch('/api/send-verification-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: user.email, name: name, link }),
-      });
+      
+      // Send verification email using the correct method
+      await sendEmailVerification(user);
       
       toast({
         title: 'Account Created',
         description: 'A verification email has been sent to your inbox. Please verify to log in.',
       });
       
-      // Don't sign out, just redirect to the verify page
       router.push('/auth/verify-email');
 
     } catch (error: any) {
