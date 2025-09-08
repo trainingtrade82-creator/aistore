@@ -14,7 +14,7 @@ export default function Home() {
         <Hero />
         <CategoryShowcase />
         <ToolSuggester />
-        <Pricing />
+        <Pricing showTable={false} />
         <SuccessStories />
       </main>
       <Footer />

@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { pricingPlans } from '@/lib/data';
 import PricingTable from './pricing-table';
 
-export default function Pricing() {
+export default function Pricing({ showTable = true }: { showTable?: boolean }) {
   return (
     <section id="pricing" className="py-20 sm:py-32">
       <div className="container px-4 md:px-6">
@@ -64,7 +64,7 @@ export default function Pricing() {
           ))}
         </div>
 
-        <PricingTable />
+        {showTable && <PricingTable />}
       </div>
     </section>
   );
