@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { pricingPlans } from '@/lib/data';
+import PricingTable from './pricing-table';
 
 export default function Pricing() {
   return (
@@ -62,6 +63,8 @@ export default function Pricing() {
             </Card>
           ))}
         </div>
+
+        <PricingTable />
       </div>
     </section>
   );
