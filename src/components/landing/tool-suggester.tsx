@@ -10,7 +10,6 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from '@/component
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Wand2, Loader2, AlertCircle, Award } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '../ui/skeleton';
 
 const FormSchema = z.object({
@@ -47,8 +46,8 @@ export default function ToolSuggester() {
   }
 
   return (
-    <section className="py-20 sm:py-32 bg-secondary/50 flex items-center">
-      <div className="container max-w-4xl">
+    <section className="py-20 sm:py-32 bg-secondary/50 flex items-center justify-center">
+      <div className="container max-w-4xl px-4 md:px-6">
         <Card className="shadow-lg">
           <CardHeader className="text-center">
             <Wand2 className="mx-auto h-12 w-12 text-primary" />

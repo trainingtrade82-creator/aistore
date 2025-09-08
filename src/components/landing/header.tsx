@@ -1,10 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { Aperture } from 'lucide-react';
+import { Aperture, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@/components/ui/sheet"
+import { useState } from 'react';
 
 export default function Header() {
+  const [open, setOpen] = useState(false);
+
   const navLinks = [
     { name: 'Features', href: '#features' },
     { name: 'Pricing', href: '#pricing' },
@@ -31,11 +39,47 @@ export default function Header() {
             ))}
           </nav>
         </div>
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <Button variant="ghost">Log in</Button>
-          <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
-            Sign Up
-          </Button>
+        <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
+          <div className="hidden md:flex items-center space-x-4">
+            <Button variant="ghost">Log in</Button>
+            <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
+              Sign Up
+            </Button>
+          </div>
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="md:hidden">
+                <Menu />
+                <span className="sr-only">Toggle Menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left">
+              <div className="flex flex-col h-full py-6">
+                <Link href="/" className="mb-8 flex items-center space-x-2">
+                  <Aperture className="h-6 w-6 text-primary" />
+                  <span className="font-bold">AI Store</span>
+                </Link>
+                <nav className="flex flex-col gap-4">
+                  {navLinks.map((link) => (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => setOpen(false)}
+                      className="text-foreground/80 transition-colors hover:text-foreground text-lg"
+                    >
+                      {link.name}
+                    </Link>
+                  ))}
+                </nav>
+                <div className="mt-auto flex flex-col gap-4">
+                  <Button variant="outline">Log in</Button>
+                  <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
+                    Sign Up
+                  </Button>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
     </header>
