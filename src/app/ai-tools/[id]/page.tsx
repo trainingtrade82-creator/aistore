@@ -30,7 +30,7 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
   return (
     <div className="flex flex-col min-h-screen bg-secondary/30">
       <Header />
-      <main className="flex-grow py-12">
+      <main className="flex-grow py-8 sm:py-12">
         <div className="container px-4 md:px-6">
           {/* Breadcrumbs */}
           <div className="flex items-center text-sm text-foreground/70 mb-6">
@@ -39,16 +39,16 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
             <span>{tool.name}</span>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-12">
+          <div className="grid md:grid-cols-3 gap-8 md:gap-12">
             {/* Left Column: Details */}
             <div className="md:col-span-2">
               {/* Header */}
-              <div className="flex items-start justify-between mb-6">
+              <div className="flex flex-col sm:flex-row items-start justify-between mb-6">
                 <div className="flex items-center gap-4">
-                  <tool.icon className="w-16 h-16 text-primary" />
+                  <tool.icon className="w-12 h-12 sm:w-16 sm:h-16 text-primary" />
                   <div>
-                    <h1 className="text-4xl font-bold font-headline">{tool.name}</h1>
-                    <div className="flex items-center gap-4 mt-2">
+                    <h1 className="text-3xl sm:text-4xl font-bold font-headline">{tool.name}</h1>
+                    <div className="flex flex-wrap items-center gap-4 mt-2">
                       <Badge className={`text-sm text-primary-foreground ${tierColorMap[tool.tier]}`}>{tool.tier}</Badge>
                       <div className="flex items-center gap-1">
                         <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
@@ -79,8 +79,8 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious className="ml-16"/>
-                  <CarouselNext className="mr-16" />
+                  <CarouselPrevious className="ml-12 sm:ml-16"/>
+                  <CarouselNext className="mr-12 sm:mr-16" />
                 </Carousel>
               </div>
 
@@ -117,7 +117,7 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
                       Use Tool
                     </Button>
                   )}
-                  <div className="flex gap-2">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     <Button variant="outline" className="w-full">
                       <Heart className="mr-2 h-4 w-4" />
                       Add to Favorites
