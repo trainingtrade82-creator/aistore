@@ -20,10 +20,10 @@ export default function SupportArticlePage({ params }: { params: { slug: string 
       <main className="flex-grow py-12 sm:py-16">
         <div className="container px-4 md:px-6">
             <ArticleLayout 
+                slug={article.slug}
                 title={article.title}
                 intro={article.intro}
                 topics={article.topics}
-                icon={article.icon}
             />
         </div>
       </main>

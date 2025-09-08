@@ -5,16 +5,24 @@ import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
-import type { LucideIcon } from 'lucide-react';
+import { supportArticles } from '@/lib/support-data';
+import { notFound } from 'next/navigation';
 
 interface ArticleLayoutProps {
-    icon: LucideIcon;
+    slug: string;
     title: string;
     intro: string;
     topics: { title: string; content: string }[];
 }
 
-export default function ArticleLayout({ icon: Icon, title, intro, topics }: ArticleLayoutProps) {
+export default function ArticleLayout({ slug, title, intro, topics }: ArticleLayoutProps) {
+    const article = supportArticles.find(a => a.slug === slug);
+
+    if (!article) {
+        return notFound();
+    }
+    const Icon = article.icon;
+
     return (
         <div className="max-w-4xl mx-auto">
             <Button asChild variant="ghost" className="mb-8">
