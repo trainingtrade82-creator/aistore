@@ -69,11 +69,15 @@ export default function LoginPage() {
       }
     } catch (error: any) {
       console.error('Firebase Error:', error.code, error.message);
-       setError(error.message || 'An unexpected error occurred.');
+       let errorMessage = error.message.replace('Firebase: ', '').split(' (')[0];
+      if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Access temporarily disabled due to too many requests. Please try again later.';
+      }
+      setError(errorMessage);
       toast({
         variant: 'destructive',
         title: 'Login Failed',
-        description: error.message.replace('Firebase: ', '').split(' (')[0],
+        description: errorMessage,
       });
     } finally {
       setIsLoading(false);
@@ -148,7 +152,7 @@ export default function LoginPage() {
                 <Separator />
                 <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-card px-2 text-sm text-muted-foreground">OR</span>
             </div>
-            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading || isGoogleLoading}>
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading || isGoogleLoading} type="button">
               {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
               Continue with Google
             </Button>
