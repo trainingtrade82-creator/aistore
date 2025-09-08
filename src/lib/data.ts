@@ -59,15 +59,15 @@ export type PricingPlan = {
 export const pricingPlans: PricingPlan[] = [
   {
     name: 'Free',
-    price: '$0',
+    price: '₹0',
     description: 'Get started with our basic features.',
     features: ['Access to 5 AI tools', '10 requests per day', 'Basic support'],
     isPopular: false,
-    cta: 'Get Started',
+    cta: 'Try Free',
   },
   {
     name: 'Pro',
-    price: '$29',
+    price: '₹500',
     description: 'Unlock the full potential of AI.',
     features: ['Access to 50+ AI tools', 'Unlimited requests', 'Priority support', 'Exclusive new tools'],
     isPopular: true,
@@ -75,7 +75,7 @@ export const pricingPlans: PricingPlan[] = [
   },
   {
     name: 'Exclusive',
-    price: '$99',
+    price: '₹1000',
     description: 'For power users and teams.',
     features: ['All Pro features', 'Dedicated account manager', 'API access', 'Team collaboration'],
     isPopular: false,

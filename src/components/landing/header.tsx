@@ -14,9 +14,10 @@ export default function Header() {
   const [open, setOpen] = useState(false);
 
   const navLinks = [
-    { name: 'Features', href: '#features' },
-    { name: 'Pricing', href: '#pricing' },
-    { name: 'Testimonials', href: '#testimonials' },
+    { name: 'AI Tools', href: '/ai-tools' },
+    { name: 'Pricing', href: '/pricing' },
+    { name: 'About Us', href: '/about' },
+    { name: 'Support', href: '/support' },
   ];
 
   return (
@@ -43,7 +44,7 @@ export default function Header() {
           <div className="hidden md:flex items-center space-x-4">
             <Button variant="ghost">Log in</Button>
             <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
-              Sign Up
+              Try Free
             </Button>
           </div>
           <Sheet open={open} onOpenChange={setOpen}>
@@ -74,7 +75,7 @@ export default function Header() {
                 <div className="mt-auto flex flex-col gap-4">
                   <Button variant="outline">Log in</Button>
                   <Button className="bg-accent text-accent-foreground hover:bg-accent/90">
-                    Sign Up
+                    Try Free
                   </Button>
                 </div>
               </div>
