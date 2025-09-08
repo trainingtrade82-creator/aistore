@@ -4,8 +4,8 @@ import { Aperture, Twitter, Github, Linkedin } from 'lucide-react';
 
 export default function Footer() {
   const navLinks = [
-    { name: 'Features', href: '#features' },
-    { name: 'Pricing', href: '#pricing' },
+    { name: 'Features', href: '/features' },
+    { name: 'Pricing', href: '/pricing' },
     { name: 'Testimonials', href: '#testimonials' },
     { name: 'Privacy Policy', href: '/privacy' },
     { name: 'Refund Policy', href: '/refund-policy' },
