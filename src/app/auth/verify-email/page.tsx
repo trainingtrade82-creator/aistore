@@ -43,6 +43,9 @@ export default function VerifyEmailPage() {
       };
       const link = await generateEmailVerificationLink(auth, user.email!, actionCodeSettings);
 
+      // Log for developer to manually verify during testing
+      console.log("Verification link:", link);
+
       await fetch('/api/send-verification-email', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },

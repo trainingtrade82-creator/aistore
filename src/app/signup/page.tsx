@@ -81,8 +81,8 @@ export default function SignupPage() {
         description: 'A verification email has been sent to your inbox. Please verify to log in.',
       });
       
-      await auth.signOut();
-      router.push('/login');
+      // Don't sign out, just redirect to the verify page
+      router.push('/auth/verify-email');
 
     } catch (error: any) {
       console.error("Firebase Error:", error.code, error.message);
