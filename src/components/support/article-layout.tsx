@@ -11,7 +11,7 @@ interface ArticleLayoutProps {
     icon: LucideIcon;
     title: string;
     intro: string;
-    topics: { title: string; content: React.ReactNode }[];
+    topics: { title: string; content: string }[];
 }
 
 export default function ArticleLayout({ icon: Icon, title, intro, topics }: ArticleLayoutProps) {
@@ -39,7 +39,7 @@ export default function ArticleLayout({ icon: Icon, title, intro, topics }: Arti
                             <CardTitle>{topic.title}</CardTitle>
                         </CardHeader>
                         <CardContent className="prose prose-lg max-w-none text-foreground/90">
-                           {topic.content}
+                           <div dangerouslySetInnerHTML={{ __html: topic.content }} />
                         </CardContent>
                     </Card>
                 ))}

@@ -95,7 +95,7 @@ export const faqs = [
 
 type SupportTopic = {
     title: string;
-    content: React.ReactNode;
+    content: string;
 }
 
 type SupportArticle = {
@@ -113,10 +113,10 @@ export const supportArticles: SupportArticle[] = [
         title: 'Getting Started with AI Store',
         intro: 'Welcome to AI Store! Follow these steps to set up your account and start exploring 50+ powerful AI tools.',
         topics: [
-            { title: 'Create an Account', content: <><p>Go to [Sign Up].</p><p>Enter your email + password OR use Google login.</p><p>Verify your email.</p></> },
-            { title: 'Choose a Plan', content: <><p>Start free with 30 AI tools.</p><p>Upgrade anytime to Pro (₹500) or Exclusive (₹700).</p></> },
-            { title: 'Accessing AI Tools', content: <><p>Log in → Navigate to *AI Tools* page.</p><p>Select a tool → Read its description → Click **Use Now**.</p></> },
-            { title: 'Managing Your Account', content: <><p>Update profile.</p><p>Change password.</p><p>View plan details.</p></> },
+            { title: 'Create an Account', content: '<p>Go to [Sign Up].</p><p>Enter your email + password OR use Google login.</p><p>Verify your email.</p>' },
+            { title: 'Choose a Plan', content: '<p>Start free with 30 AI tools.</p><p>Upgrade anytime to Pro (₹500) or Exclusive (₹700).</p>' },
+            { title: 'Accessing AI Tools', content: '<p>Log in → Navigate to *AI Tools* page.</p><p>Select a tool → Read its description → Click **Use Now**.</p>' },
+            { title: 'Managing Your Account', content: '<p>Update profile.</p><p>Change password.</p><p>View plan details.</p>' },
         ]
     },
     {
@@ -125,10 +125,10 @@ export const supportArticles: SupportArticle[] = [
         title: 'Plans, Payments & Billing',
         intro: 'Here’s everything you need to know about subscriptions and payments.',
         topics: [
-            { title: 'Plans Overview', content: <><p>Free → 30 tools, limited queries.</p><p>Pro → All 50 tools, 5,000 queries/month, file uploads.</p><p>Exclusive → All tools, premium AIs, 20,000 queries, early access.</p></> },
-            { title: 'Accepted Payment Methods', content: <><p>India: UPI, Debit/Credit Cards.</p><p>Global: Stripe, PayPal.</p></> },
-            { title: 'Billing Cycle', content: <><p>Monthly, auto-renewed.</p><p>Cancel anytime.</p></> },
-            { title: 'Refund Policy', content: <><p>No refunds after billing.</p><p>Cancel before next cycle to avoid charges.</p></> },
+            { title: 'Plans Overview', content: '<p>Free → 30 tools, limited queries.</p><p>Pro → All 50 tools, 5,000 queries/month, file uploads.</p><p>Exclusive → All tools, premium AIs, 20,000 queries, early access.</p>' },
+            { title: 'Accepted Payment Methods', content: '<p>India: UPI, Debit/Credit Cards.</p><p>Global: Stripe, PayPal.</p>' },
+            { title: 'Billing Cycle', content: '<p>Monthly, auto-renewed.</p><p>Cancel anytime.</p>' },
+            { title: 'Refund Policy', content: '<p>No refunds after billing.</p><p>Cancel before next cycle to avoid charges.</p>' },
         ]
     },
     {
@@ -137,9 +137,9 @@ export const supportArticles: SupportArticle[] = [
         title: 'Using AI Tools',
         intro: 'AI Store offers 50+ AI tools across categories. Here’s how to get the best out of them.',
         topics: [
-            { title: 'How to Use', content: <><p>Select a tool → Read description → Click **Use Now**.</p><p>Input your query → Get instant results.</p></> },
-            { title: 'Limits', content: <><p>Free: Limited access.</p><p>Pro: 5,000 queries/month.</p><p>Exclusive: 20,000 queries/month.</p></> },
-            { title: 'Common Tool Categories', content: <><p>Writing & Content (blogs, resumes, social media).</p><p>Education (math solver, coding helper, study buddy).</p><p>Productivity (meeting notes, summaries, task manager).</p><p>Business (pitch deck maker, financial analysis, strategy AI).</p><p>Fun (chess AI, story generator, meme maker).</p></> },
+            { title: 'How to Use', content: '<p>Select a tool → Read description → Click **Use Now**.</p><p>Input your query → Get instant results.</p>' },
+            { title: 'Limits', content: '<p>Free: Limited access.</p><p>Pro: 5,000 queries/month.</p><p>Exclusive: 20,000 queries/month.</p>' },
+            { title: 'Common Tool Categories', content: '<p>Writing & Content (blogs, resumes, social media).</p><p>Education (math solver, coding helper, study buddy).</p><p>Productivity (meeting notes, summaries, task manager).</p><p>Business (pitch deck maker, financial analysis, strategy AI).</p><p>Fun (chess AI, story generator, meme maker).</p>' },
         ]
     },
     {
@@ -148,10 +148,10 @@ export const supportArticles: SupportArticle[] = [
         title: 'Fixing Technical Issues',
         intro: 'Run into problems? Here are quick solutions.',
         topics: [
-            { title: 'Login Issues', content: <><p>Reset your password.</p><p>Clear browser cache.</p><p>Try a different browser.</p></> },
-            { title: 'Tool Not Loading', content: <><p>Check internet connection.</p><p>Refresh the page.</p><p>Make sure you’re within query limits.</p></> },
-            { title: 'Slow Responses', content: <><p>Free users: Standard processing.</p><p>Pro/Exclusive: Faster speed. (Upgrade for priority.)</p></> },
-            { title: 'Still Stuck?', content: <p>Contact Support → provide screenshots/error messages.</p> },
+            { title: 'Login Issues', content: '<p>Reset your password.</p><p>Clear browser cache.</p><p>Try a different browser.</p>' },
+            { title: 'Tool Not Loading', content: '<p>Check internet connection.</p><p>Refresh the page.</p><p>Make sure you’re within query limits.</p>' },
+            { title: 'Slow Responses', content: '<p>Free users: Standard processing.</p><p>Pro/Exclusive: Faster speed. (Upgrade for priority.)</p>' },
+            { title: 'Still Stuck?', content: '<p>Contact Support → provide screenshots/error messages.</p>' },
         ]
     },
     {
@@ -160,9 +160,9 @@ export const supportArticles: SupportArticle[] = [
         title: 'Security & Privacy at AI Store',
         intro: 'Your trust matters. Here’s how we keep your data safe.',
         topics: [
-            { title: 'Data Usage', content: <><p>We don’t sell or misuse your data.</p><p>Only used to improve your experience.</p></> },
-            { title: 'Encryption', content: <><p>All chats encrypted in transit (SSL).</p><p>Payments handled securely via Stripe/UPI.</p></> },
-            { title: 'Privacy Controls', content: <><p>Delete your account anytime.</p><p>Manage saved history in your dashboard.</p></> },
+            { title: 'Data Usage', content: '<p>We don’t sell or misuse your data.</p><p>Only used to improve your experience.</p>' },
+            { title: 'Encryption', content: '<p>All chats encrypted in transit (SSL).</p><p>Payments handled securely via Stripe/UPI.</p>' },
+            { title: 'Privacy Controls', content: '<p>Delete your account anytime.</p><p>Manage saved history in your dashboard.</p>' },
         ]
     },
     {
@@ -171,9 +171,9 @@ export const supportArticles: SupportArticle[] = [
         title: 'Contact Support',
         intro: 'Need help? Reach us anytime.',
         topics: [
-            { title: 'Options', content: <><p>📧 **Email:** support@aistore.com</p><p>💬 **Live Chat:** Coming soon</p><p>🐦 **Twitter/X:** @AIStoreHelp (optional)</p></> },
-            { title: 'Support Hours', content: <><p>Monday–Friday: 9 AM – 9 PM IST</p><p>Response time: Within 24 hours</p></> },
-            { title: 'Before contacting us, check FAQs and Guides — your answer might already be there.', content: <></> },
+            { title: 'Options', content: '<p>📧 **Email:** support@aistore.com</p><p>💬 **Live Chat:** Coming soon</p><p>🐦 **Twitter/X:** @AIStoreHelp (optional)</p>' },
+            { title: 'Support Hours', content: '<p>Monday–Friday: 9 AM – 9 PM IST</p><p>Response time: Within 24 hours</p>' },
+            { title: 'Before contacting us, check FAQs and Guides — your answer might already be there.', content: '' },
         ]
     }
 ];
