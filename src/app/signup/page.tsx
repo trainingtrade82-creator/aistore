@@ -68,11 +68,27 @@ export default function SignupPage() {
 
     } catch (error: any) {
       console.error("Firebase Error:", error.code, error.message);
-      toast({
-        variant: 'destructive',
-        title: 'Signup Failed',
-        description: error.message.replace('Firebase: ', '').split(' (')[0],
-      });
+      if (error.code === 'auth/email-already-in-use') {
+        toast({
+          variant: 'destructive',
+          title: 'Email Already Registered',
+          description: (
+            <span>
+              This email is already in use. Please{' '}
+              <Link href="/login" className="underline">
+                log in
+              </Link>{' '}
+              instead.
+            </span>
+          ),
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Signup Failed',
+          description: error.message.replace('Firebase: ', '').split(' (')[0],
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -157,7 +173,7 @@ export default function SignupPage() {
                 <Separator />
                 <span className="absolute left-1/2 -translate-x-1/2 -top-3 bg-card px-2 text-sm text-muted-foreground">OR</span>
             </div>
-            <Button variant="outline" className="w-full" onClick={handleGoogleSignUp} disabled={isLoading || isGoogleLoading}>
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignUp} disabled={isLoading || isGoogleLoading} type="button">
               {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
               Continue with Google
             </Button>
