@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  const isPublicPath = path === '/login' || path === '/signup' || path === '/';
+  const isPublicPath = path === '/login' || path === '/';
 
   // Attempt to get the token from cookies
   const token = request.cookies.get('firebase-auth-token')?.value || '';
@@ -21,7 +21,6 @@ export const config = {
   matcher: [
     '/dashboard/:path*',
     '/login',
-    '/signup',
     '/account'
   ],
 };

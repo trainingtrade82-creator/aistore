@@ -1,3 +1,4 @@
+
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
@@ -15,8 +16,11 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 
 const actionCodeSettings = {
-  url: typeof window !== 'undefined' ? window.location.href : 'http://localhost:9002/login',
-  handleCodeInApp: true, 
+  // URL you want to redirect back to. The domain (www.example.com) for this
+  // URL must be whitelisted in the Firebase Console.
+  url: typeof window !== 'undefined' ? `${window.location.origin}/login` : 'http://localhost:9002/login',
+  // This must be true.
+  handleCodeInApp: true,
 };
 
 

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -48,7 +49,7 @@ export default function Header() {
                 <Link href="/login">Log in</Link>
             </Button>
             <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                <Link href="/signup">Try Free</Link>
+                <Link href="/login">Try Free</Link>
             </Button>
           </div>
           <Sheet open={open} onOpenChange={setOpen}>
@@ -81,7 +82,7 @@ export default function Header() {
                     <Link href="/login">Log in</Link>
                   </Button>
                   <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                     <Link href="/signup">Try Free</Link>
+                     <Link href="/login">Try Free</Link>
                   </Button>
                 </div>
               </div>
