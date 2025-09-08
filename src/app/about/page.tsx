@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -44,7 +45,7 @@ export default function AboutPage() {
       <Header />
       <main className="flex-grow">
         {/* Hero Section */}
-        <section className="relative bg-secondary/30 py-20 md:py-32">
+        <section className="relative bg-secondary/30 py-20 md:py-24">
             <div className="absolute inset-0">
                  <Image 
                     src="https://picsum.photos/1600/800"
@@ -55,20 +56,20 @@ export default function AboutPage() {
                  />
                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
             </div>
-          <div className="container relative text-center">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl font-headline">
+          <div className="container relative text-center px-4">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl font-headline">
               We’re building the world’s AI marketplace for everyone.
             </h1>
-            <p className="mt-6 max-w-3xl mx-auto text-foreground/80 md:text-xl">
+            <p className="mt-6 max-w-3xl mx-auto text-foreground/80 text-lg md:text-xl">
               AI Store isn’t just another AI website — it’s a platform where **50+ powerful AI tools** come together under one subscription. Our mission is to make AI as essential and accessible as food — a daily necessity for learning, working, creating, and living smarter.
             </p>
           </div>
         </section>
 
         {/* Story, Mission & Vision Section */}
-        <section className="py-20 sm:py-32">
-          <div className="container max-w-5xl mx-auto">
-            <div className="grid md:grid-cols-2 gap-16 items-center">
+        <section className="py-20 sm:py-24">
+          <div className="container max-w-5xl mx-auto px-4">
+            <div className="grid md:grid-cols-2 gap-12 md:gap-16 items-center">
               <div className="space-y-8">
                 <div>
                     <h2 className="text-3xl font-bold text-primary mb-4 font-headline flex items-center gap-3"><Users className="w-8 h-8" /> Our Story</h2>
@@ -77,14 +78,14 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="space-y-8">
-                <Card className="p-8 bg-secondary/50 border-primary/20 border-2 shadow-lg animate-fade-in">
+                <Card className="p-6 md:p-8 bg-secondary/50 border-primary/20 border-2 shadow-lg animate-fade-in">
                     <h3 className="text-2xl font-bold text-primary font-headline flex items-center gap-3"><Target className="w-7 h-7" /> Our Mission</h3>
-                    <p className="mt-3 text-2xl font-semibold">"To put the power of AI in everyone’s hands, every day."</p>
+                    <p className="mt-3 text-xl md:text-2xl font-semibold">"To put the power of AI in everyone’s hands, every day."</p>
                     <p className="mt-2 text-foreground/80">We believe AI should not be a luxury for a few, but a daily tool for everyone — students, creators, professionals, and businesses.</p>
                 </Card>
-                 <Card className="p-8 bg-secondary/50 border-primary/20 border-2 shadow-lg animate-fade-in animation-delay-200">
+                 <Card className="p-6 md:p-8 bg-secondary/50 border-primary/20 border-2 shadow-lg animate-fade-in animation-delay-200">
                     <h3 className="text-2xl font-bold text-primary font-headline flex items-center gap-3"><Eye className="w-7 h-7" /> Our Vision</h3>
-                    <p className="mt-3 text-2xl font-semibold">"AI Store will be the global standard for how people access AI."</p>
+                    <p className="mt-3 text-xl md:text-2xl font-semibold">"AI Store will be the global standard for how people access AI."</p>
                     <p className="mt-2 text-foreground/80">We see a future where AI Store becomes as natural as opening your browser — a single place where every AI you need is already there.</p>
                 </Card>
               </div>
@@ -93,17 +94,17 @@ export default function AboutPage() {
         </section>
 
         {/* Values Section */}
-        <section className="py-20 sm:py-32 bg-secondary/30">
-            <div className="container">
+        <section className="py-20 sm:py-24 bg-secondary/30">
+            <div className="container px-4">
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl font-headline">
+                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl font-headline">
                         Our Core Values
                     </h2>
                     <p className="mt-4 max-w-2xl mx-auto text-foreground/80 md:text-xl">
                         The principles that guide our mission and shape our culture.
                     </p>
                 </div>
-                <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
                     {values.map((value) => (
                         <Card key={value.title} className="p-8 text-center flex flex-col items-center">
                             <value.icon className="w-12 h-12 text-primary mb-4" />
@@ -117,22 +118,22 @@ export default function AboutPage() {
 
 
         {/* Team Section */}
-        <section className="py-20 sm:py-32">
-            <div className="container">
+        <section className="py-20 sm:py-24">
+            <div className="container px-4">
                  <div className="text-center mb-12">
-                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl font-headline">
+                    <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl font-headline">
                        Meet the Team
                     </h2>
                     <p className="mt-4 max-w-2xl mx-auto text-foreground/80 md:text-xl">
                         Built by dreamers who believe execution is everything.
                     </p>
                 </div>
-                <div className="max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
                     {teamMembers.map((member) => (
                         <div key={member.name} className="text-center">
-                            <Image src={member.avatar} alt={member.name} width={150} height={150} className="rounded-full mx-auto mb-4 shadow-lg" />
+                            <Image src={member.avatar} alt={member.name} width={120} height={120} className="rounded-full mx-auto mb-4 shadow-lg" />
                             <h4 className="text-lg font-bold">{member.name}</h4>
-                            <p className="text-primary">{member.role}</p>
+                            <p className="text-primary text-sm">{member.role}</p>
                         </div>
                     ))}
                 </div>
@@ -141,8 +142,8 @@ export default function AboutPage() {
 
         {/* CTA Section */}
         <section className="py-20 bg-secondary/30">
-            <div className="container text-center">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl font-headline">
+            <div className="container text-center px-4">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl font-headline">
                     This is just the beginning.
                 </h2>
                 <p className="mt-4 max-w-xl mx-auto text-foreground/80 md:text-xl">
