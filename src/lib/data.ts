@@ -1,3 +1,4 @@
+
 import type { LucideIcon } from 'lucide-react';
 import { Briefcase, PenSquare, School, Smile, Zap, FileText, Bot, Share2, Star, Heart } from 'lucide-react';
 
@@ -60,26 +61,45 @@ export const pricingPlans: PricingPlan[] = [
   {
     name: 'Free',
     price: '₹0',
-    description: 'Get started with our basic features.',
-    features: ['Access to 5 AI tools', '10 requests per day', 'Basic support'],
+    description: 'Great for testing & casual use.',
+    features: [
+      'Access to 30 AI tools',
+      'Limited access to features',
+      'No file uploads or analysis',
+      'Basic processing speed',
+    ],
     isPopular: false,
-    cta: 'Try Free',
+    cta: 'Start Free',
   },
   {
     name: 'Pro',
     price: '₹500',
-    description: 'Unlock the full potential of AI.',
-    features: ['Access to 50+ AI tools', 'Unlimited requests', 'Priority support', 'Exclusive new tools'],
+    description: 'For professionals and creators.',
+    features: [
+      'All 50 AI tools unlocked',
+      '5,000 queries/month',
+      'Upload & analyze documents',
+      'Export & save results',
+      'Full-length, smarter responses',
+      'Priority processing speed',
+    ],
     isPopular: true,
     cta: 'Upgrade to Pro',
   },
   {
     name: 'Exclusive',
-    price: '₹1000',
+    price: '₹700',
     description: 'For power users and teams.',
-    features: ['All Pro features', 'Dedicated account manager', 'API access', 'Team collaboration'],
+    features: [
+      'Everything in Pro',
+      'Access to premium exclusive AIs',
+      '20,000 queries/month',
+      'Build your own Custom AI Agent',
+      'Early access to new tools',
+      'Premium support',
+    ],
     isPopular: false,
-    cta: 'Contact Sales',
+    cta: 'Go Exclusive',
   },
 ];
 
