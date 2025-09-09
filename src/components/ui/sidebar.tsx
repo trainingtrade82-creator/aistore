@@ -1,3 +1,4 @@
+
 "use client"
 
 import * as React from "react"
@@ -18,6 +19,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import Link from 'next/link'
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -539,6 +541,7 @@ const SidebarMenuButton = React.forwardRef<
     asChild?: boolean
     isActive?: boolean
     tooltip?: string | React.ComponentProps<typeof TooltipContent>
+    href?: string;
   } & VariantProps<typeof sidebarMenuButtonVariants>
 >(
   (
@@ -549,23 +552,30 @@ const SidebarMenuButton = React.forwardRef<
       size = "default",
       tooltip,
       className,
+      href,
       ...props
     },
     ref
   ) => {
-    const Comp = asChild ? Slot : "button"
+    // The component can be a button, a link, or a custom component.
+    const Comp = asChild ? Slot : href ? 'a' : "button"
     const { isMobile, state } = useSidebar()
-
-    const button = (
-      <Comp
-        ref={ref}
-        data-sidebar="menu-button"
-        data-size={size}
-        data-active={isActive}
-        className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
-        {...props}
-      />
+    
+    const buttonContent = (
+        <Comp
+          data-sidebar="menu-button"
+          data-size={size}
+          data-active={isActive}
+          className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+          {...props}
+        />
     )
+
+    const button = href ? (
+        <Link href={href} passHref legacyBehavior>
+            {buttonContent}
+        </Link>
+    ) : buttonContent;
 
     if (!tooltip) {
       return button
@@ -591,6 +601,7 @@ const SidebarMenuButton = React.forwardRef<
   }
 )
 SidebarMenuButton.displayName = "SidebarMenuButton"
+
 
 const SidebarMenuAction = React.forwardRef<
   HTMLButtonElement,
