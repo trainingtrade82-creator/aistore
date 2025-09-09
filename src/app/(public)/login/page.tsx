@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState } from 'react';
@@ -50,7 +51,7 @@ export default function LoginPage() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      // The redirect is handled by the AppLayout's useEffect
+      router.push('/dashboard');
     } catch (error: any) {
       console.error('Firebase Login Error:', error);
       toast({
