@@ -7,6 +7,9 @@ import { Button } from '@/components/ui/button';
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { useState } from 'react';
@@ -60,6 +63,12 @@ export default function Header() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left">
+               <SheetHeader className="sr-only">
+                  <SheetTitle>Mobile Menu</SheetTitle>
+                  <SheetDescription>
+                    Navigation links for AI Store.
+                  </SheetDescription>
+                </SheetHeader>
               <div className="flex flex-col h-full py-6">
                 <Link href="/" className="mb-8 flex items-center space-x-2">
                   <Aperture className="h-6 w-6 text-primary" />
