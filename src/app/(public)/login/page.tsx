@@ -144,7 +144,7 @@ export default function LoginPage() {
             <Separator className="my-2" />
             <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
                 <GoogleIcon />
-                Sign in with Google
+                Continue with Google
             </Button>
              <CardDescription>
                 Don't have an account?{' '}
