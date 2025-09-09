@@ -11,7 +11,7 @@ import { aiTools, categories } from '@/lib/data';
 import type { AiTool } from '@/lib/data';
 import { ArrowRight, Star } from 'lucide-react';
 
-const tierColorMap = {
+const tierColorMap: { [key: string]: string } = {
   Free: 'bg-green-600 hover:bg-green-700',
   Pro: 'bg-blue-600 hover:bg-blue-700',
   Exclusive: 'bg-purple-600 hover:bg-purple-700',
