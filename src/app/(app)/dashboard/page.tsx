@@ -1,10 +1,59 @@
 
+'use client';
+
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { aiTools, categories } from '@/lib/data';
 import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
 
-export default function DashboardPage() {
+function AuthProtection({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth();
+  const router = useRouter();
+  const [loading, setLoading] = React.useState(true);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      if (user === undefined) {
+        // Still checking, do nothing
+        return;
+      }
+      
+      if (user === null) {
+        // No user found, redirect to login
+        router.push('/login');
+        return;
+      }
+      
+      setLoading(false);
+    };
+
+    // A small delay to prevent a flicker while auth state resolves
+    const timer = setTimeout(checkAuth, 100);
+
+    return () => clearTimeout(timer);
+  }, [user, router]);
+
+  if (loading) {
+    return (
+        <div className="flex h-screen w-full items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+    );
+  }
+
+  // Only render children if user is authenticated
+  if (user) {
+    return <>{children}</>;
+  }
+
+  return null; // Render nothing while redirecting
+}
+
+function DashboardContent() {
   return (
     <div className="p-4 sm:p-6">
       <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">Dashboard</h1>
@@ -71,4 +120,12 @@ export default function DashboardPage() {
       </div>
     </div>
   );
+}
+
+export default function DashboardPage() {
+  return (
+    <AuthProtection>
+      <DashboardContent />
+    </AuthProtection>
+  )
 }

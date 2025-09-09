@@ -19,60 +19,15 @@ import {
     User,
     Wand2,
     Aperture,
-    Loader2,
-    Save,
-    Rocket
+    Rocket,
+    Save
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
-
-function AuthProtection({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
-  const router = useRouter();
-  const [loading, setLoading] = React.useState(true);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      // A small delay to prevent flicker if user state is resolved quickly
-      setTimeout(() => {
-        if (user === undefined) {
-          // Still checking, do nothing
-          return;
-        }
-        
-        if (user === null) {
-          // No user found, redirect to login
-          router.push('/login');
-          return;
-        }
-        
-        setLoading(false);
-      }, 100);
-    };
-
-    checkAuth();
-  }, [user, router]);
-
-  if (loading) {
-    return (
-        <div className="flex h-screen w-full items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-    );
-  }
-
-  // Only render children if user is authenticated
-  if (user) {
-    return <>{children}</>;
-  }
-
-  return null; // Render nothing while redirecting
-}
-
+import React from 'react';
 
 export default function AppLayout({
   children,
@@ -89,80 +44,78 @@ export default function AppLayout({
   };
 
   return (
-    <AuthProtection>
-        <SidebarProvider>
-        <Sidebar>
-            <SidebarHeader>
-            <div className="flex items-center gap-2">
-                <Aperture className="w-6 h-6 text-primary" />
-                <h1 className="text-xl font-semibold">AI Store</h1>
-            </div>
-            </SidebarHeader>
-            <SidebarContent>
+    <SidebarProvider>
+    <Sidebar>
+        <SidebarHeader>
+        <div className="flex items-center gap-2">
+            <Aperture className="w-6 h-6 text-primary" />
+            <h1 className="text-xl font-semibold">AI Store</h1>
+        </div>
+        </SidebarHeader>
+        <SidebarContent>
+        <SidebarMenu>
+            <SidebarMenuItem>
+                <SidebarMenuButton href="/dashboard" left={<LayoutGrid />}>
+                    Dashboard
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+                <SidebarMenuButton href="/ai-tools" left={<Wand2 />}>
+                    AI Tools
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+                <SidebarMenuButton href="#" left={<Save />}>
+                    Saved Projects
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/pricing" left={<Rocket />}>
+                    Upgrade Plan
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        </SidebarMenu>
+        </SidebarContent>
+        <SidebarFooter>
             <SidebarMenu>
-                <SidebarMenuItem>
-                    <SidebarMenuButton href="/dashboard" left={<LayoutGrid />}>
-                        Dashboard
+                  <SidebarMenuItem>
+                    <SidebarMenuButton href="/settings" left={<Settings />}>
+                        Settings
                     </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="/ai-tools" left={<Wand2 />}>
-                        AI Tools
+                    <SidebarMenuButton href="#" left={<User />}>
+                        Profile
                     </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="#" left={<Save />}>
-                        Saved Projects
-                    </SidebarMenuButton>
-                </SidebarMenuItem>
-                 <SidebarMenuItem>
-                    <SidebarMenuButton href="/pricing" left={<Rocket />}>
-                        Upgrade Plan
+                    <SidebarMenuButton onClick={handleSignOut} left={<LogOut />}>
+                        Logout
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
-            </SidebarContent>
-            <SidebarFooter>
-                <SidebarMenu>
-                     <SidebarMenuItem>
-                        <SidebarMenuButton href="/settings" left={<Settings />}>
-                            Settings
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton href="#" left={<User />}>
-                            Profile
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton onClick={handleSignOut} left={<LogOut />}>
-                            Logout
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
-                </SidebarMenu>
-                 <div className="flex items-center gap-3 p-2 mt-4 rounded-md transition-colors border">
-                    <Avatar className="h-9 w-9">
-                        <AvatarImage src={user?.photoURL || undefined} />
-                        <AvatarFallback>{user?.displayName?.[0] || 'U'}</AvatarFallback>
-                    </Avatar>
-                    <div className="overflow-hidden">
-                        <p className="font-semibold text-sm truncate">{user?.displayName || 'User'}</p>
-                        <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
-                    </div>
+              <div className="flex items-center gap-3 p-2 mt-4 rounded-md transition-colors border">
+                <Avatar className="h-9 w-9">
+                    <AvatarImage src={user?.photoURL || undefined} />
+                    <AvatarFallback>{user?.displayName?.[0] || 'U'}</AvatarFallback>
+                </Avatar>
+                <div className="overflow-hidden">
+                    <p className="font-semibold text-sm truncate">{user?.displayName || 'User'}</p>
+                    <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
                 </div>
-            </SidebarFooter>
-        </Sidebar>
-        <SidebarInset>
-            <header className="flex items-center justify-between p-2 border-b md:hidden">
-                <Link href="/dashboard" className="flex items-center gap-2">
-                    <Aperture className="h-6 w-6 text-primary" />
-                    <span className="font-semibold">AI Store</span>
-                </Link>
-                <SidebarTrigger />
-            </header>
-            <div className="overflow-auto">{children}</div>
-        </SidebarInset>
-        </SidebarProvider>
-    </AuthProtection>
+            </div>
+        </SidebarFooter>
+    </Sidebar>
+    <SidebarInset>
+        <header className="flex items-center justify-between p-2 border-b md:hidden">
+            <Link href="/dashboard" className="flex items-center gap-2">
+                <Aperture className="h-6 w-6 text-primary" />
+                <span className="font-semibold">AI Store</span>
+            </Link>
+            <SidebarTrigger />
+        </header>
+        <div className="overflow-auto">{children}</div>
+    </SidebarInset>
+    </SidebarProvider>
   );
 }
