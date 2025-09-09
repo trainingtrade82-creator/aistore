@@ -9,7 +9,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { aiTools, categories } from '@/lib/data';
 import type { AiTool } from '@/lib/data';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
 
 const tierColorMap = {
   Free: 'bg-green-600 hover:bg-green-700',
@@ -33,8 +33,9 @@ const ToolCard = ({ tool }: { tool: AiTool }) => (
             </CardHeader>
             <CardContent className="flex flex-col flex-grow">
                 <CardDescription className="flex-grow">{tool.shortDescription}</CardDescription>
-                <div className="mt-4">
-                     <Button variant="outline" className="w-full">Use <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                <div className="mt-4 flex flex-col sm:flex-row gap-2">
+                     <Button variant="outline" className="w-full flex-1">Use <ArrowRight className="ml-2 h-4 w-4" /></Button>
+                     <Button variant="secondary" className="w-full flex-1"><Star className="mr-2 h-4 w-4" /> Add to Dashboard</Button>
                 </div>
             </CardContent>
         </Card>
