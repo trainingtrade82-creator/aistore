@@ -59,42 +59,55 @@ export default function SignupPage() {
     }
     setIsLoading(true);
     try {
+      // Step 1: Create the user
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      
-      // Update profile and send verification email using the returned user object
+      console.log('User created successfully:', user.uid);
+
+      // Step 2: Update the user's profile
       await updateProfile(user, { displayName: name });
-      await sendEmailVerification(user);
-      
-      toast({
-        title: 'Account Created',
-        description: 'A verification email has been sent to your inbox. Please verify to log in.',
-      });
+      console.log('User profile updated with display name.');
+
+      // Step 3: Send the verification email (this is the critical part)
+      try {
+        await sendEmailVerification(user);
+        console.log('Verification email sent successfully.');
+        toast({
+          title: 'Account Created & Verification Email Sent',
+          description: 'A verification link has been sent to your inbox. Please verify to log in.',
+        });
+      } catch (emailError: any) {
+        console.error('Error sending verification email:', emailError);
+        // This toast is important. It tells the user that the account was created but the email failed.
+        toast({
+          variant: 'destructive',
+          title: 'Account Created, but...',
+          description: 'We created your account, but failed to send a verification email. Please try logging in to resend it.',
+        });
+      }
+
+      // Step 4: Redirect to the verification page
       router.push('/auth/verify-email');
 
     } catch (error: any) {
-      console.error("Firebase Error:", error.code, error.message);
+      console.error("Firebase Signup Error:", error.code, error.message);
+      let description: React.ReactNode = error.message.replace('Firebase: ', '').split(' (')[0];
       if (error.code === 'auth/email-already-in-use') {
-        toast({
-          variant: 'destructive',
-          title: 'Email Already Registered',
-          description: (
+        description = (
             <span>
-              This email is already in use. Please{' '}
+              This email is already registered. Please{' '}
               <Link href="/login" className="underline">
                 log in
               </Link>{' '}
               instead.
             </span>
-          ),
-        });
-      } else {
-        toast({
-          variant: 'destructive',
-          title: 'Signup Failed',
-          description: error.message.replace('Firebase: ', '').split(' (')[0],
-        });
+          );
       }
+      toast({
+        variant: 'destructive',
+        title: 'Signup Failed',
+        description: description,
+      });
     } finally {
       setIsLoading(false);
     }
