@@ -26,7 +26,8 @@ export default function VerifyEmailPage() {
   }, [user, router]);
   
   const handleResendVerificationEmail = async () => {
-    if (!user) {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
       toast({
         variant: 'destructive',
         title: 'Error',
@@ -36,9 +37,9 @@ export default function VerifyEmailPage() {
     }
 
     setIsSending(true);
-    console.log('Attempting to resend verification email for user:', user.email);
+    console.log('Attempting to resend verification email for user:', currentUser.email);
     try {
-      await sendEmailVerification(user);
+      await sendEmailVerification(currentUser);
       console.log('Firebase sendEmailVerification call successful.');
       toast({
         title: 'Email Sent',
@@ -83,7 +84,7 @@ export default function VerifyEmailPage() {
             We've sent a verification link to{' '}
             <strong className="text-primary">{user?.email || 'your email'}</strong>. Please
             click the link in the email to complete your registration.
-          </CardDescription>
+          </dCardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-sm text-muted-foreground bg-secondary/70 p-3 rounded-md">
