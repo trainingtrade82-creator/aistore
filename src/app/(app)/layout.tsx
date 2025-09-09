@@ -80,13 +80,8 @@ export default function AppLayout({
         <SidebarContent>
         <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton href="/dashboard" left={<Mail />}>
-                    Email Writer
-                </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-                <SidebarMenuButton href="/meeting-notes-ai" left={<ClipboardList />}>
-                    Meeting Notes
+                <SidebarMenuButton href="/dashboard" left={<LayoutGrid />}>
+                    Dashboard
                 </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>

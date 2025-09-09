@@ -1,188 +1,244 @@
 
 'use client';
 
+import {
+  Activity,
+  ArrowRight,
+  CreditCard,
+  LayoutGrid,
+  Loader2,
+  Mail,
+  PlusCircle,
+  Sparkles,
+  Star,
+  Users,
+  ClipboardList
+} from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
-import { Mail, PenSquare, Inbox, Sparkles, Wand2, Loader2, Lock, ListChecks, Bot, Send, Minimize2 } from 'lucide-react';
-import React, { useState } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Progress } from '@/components/ui/progress';
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '@/components/ui/chart';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { useAuth } from '@/context/AuthContext';
+import Link from 'next/link';
 
-
-const tones = ['Formal', 'Friendly', 'Persuasive', 'Concise', 'Assertive'];
-
-const templates = [
-    'Job Application', 
-    'Meeting Request', 
-    'Complaint', 
-    'Sales Pitch', 
-    'Thank You', 
-    'Apology'
+const pinnedTools = [
+  { name: 'Email Writer', icon: Mail, href: '/dashboard/email-writer-placeholder' },
+  { name: 'Meeting Notes AI', icon: ClipboardList, href: '/meeting-notes-ai' },
+  { name: 'Resume Builder', icon: Users, href: '#' },
 ];
 
+const quickActions = [
+    { name: 'Write Email', icon: Mail },
+    { name: 'Summarize Meeting', icon: ClipboardList },
+    { name: 'Generate Report', icon: LayoutGrid },
+    { name: 'Analyze Data', icon: Sparkles },
+]
 
-export default function EmailWriterPage() {
-  const [generatedEmail, setGeneratedEmail] = useState('');
-  const [isGenerating, setIsGenerating] = useState(false);
-  const { toast } = useToast();
-  const { user } = useAuth();
-  
-  const handleGenerate = async () => {
-    setIsGenerating(true);
-    // Placeholder for AI generation logic
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setGeneratedEmail(
-`Subject: Meeting Request: Exploring a Potential Collaboration
+const recentActivities = [
+  {
+    description: 'Generated a sales pitch email',
+    time: '10:45 AM',
+    icon: Mail,
+  },
+  {
+    description: 'Uploaded "Q3 Planning Session" for transcription',
+    time: 'Yesterday',
+    icon: ClipboardList,
+  },
+  {
+    description: 'Generated a new blog post draft',
+    time: '2 days ago',
+    icon: LayoutGrid,
+  },
+];
 
-Hi Jane,
+const chartData = [
+  { month: 'January', desktop: 186, mobile: 80 },
+  { month: 'February', desktop: 305, mobile: 200 },
+  { month: 'March', desktop: 237, mobile: 120 },
+  { month: 'April', desktop: 73, mobile: 190 },
+  { month: 'May', desktop: 209, mobile: 130 },
+  { month: 'June', desktop: 214, mobile: 140 },
+];
 
-I hope this email finds you well.
+const chartConfig = {
+  desktop: {
+    label: 'Desktop',
+    color: 'hsl(var(--primary))',
+  },
+  mobile: {
+    label: 'Mobile',
+    color: 'hsl(var(--secondary))',
+  },
+} satisfies ChartConfig;
 
-My name is John Doe, and I'm reaching out from Innovate Corp. We specialize in providing cutting-edge solutions for project management, and I was particularly impressed with your work at Tech Solutions Inc.
+export default function DashboardPage() {
+    const { user } = useAuth();
+    const displayName = user?.displayName?.split(' ')[0] || 'User';
 
-I would love to schedule a brief 15-minute call with you next week to explore how we might be able to help streamline your team's workflow.
-
-Please let me know what time works best for you.
-
-Best regards,
-
-John Doe
-Founder, Innovate Corp`
-    );
-    setIsGenerating(false);
-  };
+    if (!user) {
+        return (
+            <div className="flex h-screen w-full items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
+    }
   
   return (
-    <div className="flex-grow bg-secondary/40">
-        <div className="container mx-auto p-4 sm:p-6 lg:p-8">
-            <header className="mb-8">
-                <div className="flex items-center gap-4">
-                    <div className="p-3 bg-primary/10 rounded-lg">
-                        <Mail className="w-10 h-10 text-primary" />
-                    </div>
-                    <div>
-                        <h1 className="text-3xl sm:text-4xl font-bold font-headline">Email Writer</h1>
-                        <p className="text-lg text-foreground/80 mt-1">Write and reply to emails smarter, faster, and more professionally.</p>
-                    </div>
-                </div>
-            </header>
-
-            <Tabs defaultValue="compose" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 md:w-[400px]">
-                    <TabsTrigger value="compose"><PenSquare className="mr-2 h-4 w-4" /> Write New Email</TabsTrigger>
-                    <TabsTrigger value="reply" disabled><Lock className="mr-2 h-4 w-4" /> Reply to Email</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="compose" className="mt-6">
-                    <Card>
-                        <CardHeader className="bg-secondary/50 rounded-t-lg border-b">
-                            <CardTitle>Compose a New Email</CardTitle>
-                            <CardDescription>Provide the context, choose a tone, and let the AI draft the perfect email for you.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6 pt-6">
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <Label htmlFor="context">Context / Prompt</Label>
-                                    <Textarea 
-                                        id="context"
-                                        placeholder="e.g., Write an email to my boss asking for a raise, mentioning my recent successful projects."
-                                        className="min-h-[150px]"
-                                    />
-                                </div>
-                                <div className="space-y-6">
-                                     <div className="space-y-2">
-                                        <Label htmlFor="tone">Tone</Label>
-                                        <Select>
-                                            <SelectTrigger id="tone">
-                                                <SelectValue placeholder="Select a tone" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {tones.map(tone => <SelectItem key={tone} value={tone}>{tone}</SelectItem>)}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="template">Use a Template (Optional)</Label>
-                                        <Select>
-                                            <SelectTrigger id="template">
-                                                <SelectValue placeholder="Select a template" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                {templates.map(template => <SelectItem key={template} value={template}>{template}</SelectItem>)}
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </div>
-                            </div>
-                           
-                            <div className="text-center">
-                                <Button size="lg" onClick={handleGenerate} disabled={isGenerating} className="shadow-lg">
-                                    {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
-                                    Generate Email
-                                </Button>
-                            </div>
-
-                            {generatedEmail && (
-                                <div className="pt-6">
-                                    <h3 className="text-xl font-semibold mb-4 font-headline flex items-center gap-2">
-                                        <Wand2 className="text-primary" />
-                                        Generated Email
-                                    </h3>
-                                    <Card className="bg-secondary/50 p-4 shadow-inner">
-                                         <pre className="whitespace-pre-wrap font-sans text-sm">{generatedEmail}</pre>
-                                    </Card>
-                                    <div className="mt-4 flex gap-2">
-                                        <Button variant="outline">Copy</Button>
-                                        <Button variant="secondary">Save Draft</Button>
-                                    </div>
-                                </div>
-                            )}
-
-                        </CardContent>
-                    </Card>
-                </TabsContent>
-
-                <TabsContent value="reply" className="mt-6">
-                     <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Sparkles className="text-primary" />
-                                Smarter Inbox: Coming Soon!
-                            </CardTitle>
-                            <CardDescription>Our team is working hard to integrate with your favorite email clients.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                            <h4 className="font-semibold text-foreground">Upcoming Features:</h4>
-                             <ul className="space-y-3 text-sm text-foreground/80">
-                                <li className="flex items-start gap-3">
-                                    <ListChecks className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                                    <span>**AI-Powered Categorization**: Automatically sort your emails into categories like Important, Promotions, and Spam.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <Bot className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                                    <span>**One-Click Replies**: Generate context-aware replies that match the tone of the original email.</span>
-                                </li>
-                                <li className="flex items-start gap-3">
-                                    <Minimize2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                                    <span>**Email Summaries**: Instantly shorten long email threads into concise summaries.</span>
-                                </li>
-                                 <li className="flex items-start gap-3">
-                                    <Send className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                                    <span>**Draft & Send**: Create drafts or send emails directly from the AI interface.</span>
-                                </li>
-                            </ul>
-                            <div className="pt-4 text-center">
-                                <p className="text-sm text-muted-foreground">We're working hard to get this verified and released!</p>
-                            </div>
-                        </CardContent>
-                     </Card>
-                </TabsContent>
-            </Tabs>
+    <div className="flex-grow bg-secondary/40 p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-7xl space-y-8">
+        {/* Header */}
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight font-headline">
+              Good Morning, {displayName} 👋
+            </h1>
+            <p className="text-muted-foreground">
+              Here's your personal AI control center.
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="text-lg py-1 px-4">
+              <Star className="mr-2 h-4 w-4 text-yellow-400" /> Pro Plan
+            </Badge>
+          </div>
         </div>
+
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+          {/* Main Content */}
+          <div className="grid auto-rows-min grid-cols-1 gap-8 lg:col-span-2">
+            
+            {/* Pinned Tools */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Pinned Tools</CardTitle>
+                <CardDescription>
+                  Your favorite AI tools for quick access.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                {pinnedTools.map((tool) => (
+                  <Card key={tool.name} className="flex flex-col items-center justify-center p-4 text-center hover:shadow-md transition-shadow">
+                     <div className="mb-4 rounded-full bg-primary/10 p-3 text-primary">
+                        <tool.icon className="h-8 w-8" />
+                    </div>
+                    <h3 className="font-semibold">{tool.name}</h3>
+                    <Button asChild variant="ghost" size="sm" className="mt-2">
+                        <Link href={tool.href}>Use Tool</Link>
+                    </Button>
+                  </Card>
+                ))}
+                 <Card className="flex flex-col items-center justify-center p-4 text-center border-dashed hover:border-primary hover:shadow-md transition-all">
+                     <PlusCircle className="h-8 w-8 text-muted-foreground mb-2" />
+                    <h3 className="font-semibold text-muted-foreground">Add Tool</h3>
+                     <Button asChild variant="link" size="sm" className="mt-1">
+                        <Link href="/ai-tools">Browse Tools</Link>
+                    </Button>
+                  </Card>
+              </CardContent>
+            </Card>
+            
+            {/* Quick Actions & Usage */}
+             <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Quick Actions</CardTitle>
+                        <CardDescription>Get started with a common task.</CardDescription>
+                    </CardHeader>
+                     <CardContent className="grid grid-cols-2 gap-4">
+                        {quickActions.map(action => (
+                            <Button key={action.name} variant="outline" className="h-16 flex-col gap-1">
+                                <action.icon className="h-6 w-6 text-primary" />
+                                <span>{action.name}</span>
+                            </Button>
+                        ))}
+                    </CardContent>
+                </Card>
+
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Usage & Analytics</CardTitle>
+                        <CardDescription>Your AI activity this month.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ChartContainer config={chartConfig} className="h-[150px] w-full">
+                            <BarChart accessibilityLayer data={chartData}>
+                                <CartesianGrid vertical={false} />
+                                <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} tickFormatter={(value) => value.slice(0, 3)} />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <ChartLegend content={<ChartLegendContent />} />
+                                <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
+                            </BarChart>
+                        </ChartContainer>
+                    </CardContent>
+                </Card>
+             </div>
+          </div>
+          
+          {/* Right Sidebar */}
+          <div className="space-y-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Upgrade Plan</CardTitle>
+                <CardDescription>
+                  Unlock premium features and higher limits.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                        <span className="font-medium">Monthly Usage</span>
+                        <span className="text-muted-foreground">1,234 / 5,000 queries</span>
+                    </div>
+                    <Progress value={25} />
+                </div>
+                 <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                    <Sparkles className="mr-2 h-4 w-4" /> Upgrade to Exclusive
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Recent Activity</CardTitle>
+                <CardDescription>Pick up where you left off.</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-4">
+                  {recentActivities.map((activity, i) => (
+                    <li key={i} className="flex items-start gap-4">
+                      <div className="rounded-full bg-secondary p-2">
+                        <activity.icon className="h-5 w-5 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">{activity.description}</p>
+                        <p className="text-xs text-muted-foreground">{activity.time}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
