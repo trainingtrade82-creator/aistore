@@ -12,7 +12,8 @@ import {
   Sparkles,
   Star,
   Users,
-  ClipboardList
+  ClipboardList,
+  CheckCircle
 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -115,8 +116,8 @@ export default function DashboardPage() {
             </p>
           </div>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-lg py-1 px-4">
-              <Star className="mr-2 h-4 w-4 text-yellow-400" /> Pro Plan
+            <Badge variant="outline" className="text-lg py-1 px-4 border-accent text-accent">
+              <Sparkles className="mr-2 h-4 w-4" /> Exclusive Plan
             </Badge>
           </div>
         </div>
@@ -196,21 +197,21 @@ export default function DashboardPage() {
           <div className="space-y-8">
             <Card>
               <CardHeader>
-                <CardTitle>Upgrade Plan</CardTitle>
+                <CardTitle>Current Plan</CardTitle>
                 <CardDescription>
-                  Unlock premium features and higher limits.
+                  You have access to all premium features.
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                         <span className="font-medium">Monthly Usage</span>
-                        <span className="text-muted-foreground">1,234 / 5,000 queries</span>
+                        <span className="text-muted-foreground">4,512 / 20,000 queries</span>
                     </div>
-                    <Progress value={25} />
+                    <Progress value={22} />
                 </div>
-                 <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                    <Sparkles className="mr-2 h-4 w-4" /> Upgrade to Exclusive
+                 <Button className="w-full" variant="outline" disabled>
+                    <CheckCircle className="mr-2 h-4 w-4" /> You're on the best plan!
                 </Button>
               </CardContent>
             </Card>
