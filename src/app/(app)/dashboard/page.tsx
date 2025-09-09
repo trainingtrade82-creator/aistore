@@ -189,7 +189,7 @@ export default function EmailWriterPage() {
     // We check if the user object exists to determine if we should "fetch" emails.
     if (user) {
       // In a real app, you would make an API call here to fetch emails.
-      // For now, we'll use mock data.
+      // For now, we'll use mock data to simulate the inbox.
       setEmails(mockEmails);
       if (mockEmails.length > 0) {
           setSelectedEmail(mockEmails[0]);
@@ -352,7 +352,7 @@ Founder, Innovate Corp`
                                 <div className="md:col-span-2 h-full overflow-hidden flex flex-col">
                                      <EmailView 
                                         email={selectedEmail}
-                                        onGenerateReply={() => { /* Placeholder */ }}
+                                        onGenerateReply={() => { /* Placeholder for AI reply generation */ }}
                                         isGenerating={isGenerating}
                                      />
                                 </div>
