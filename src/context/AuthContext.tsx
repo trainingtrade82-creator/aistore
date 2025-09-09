@@ -13,10 +13,8 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const auth = getAuth(app);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        await user.reload(); // Always reload to get the latest user state
-      }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      // No longer calling user.reload() here to speed up auth state changes
       setUser(user);
     });
 
