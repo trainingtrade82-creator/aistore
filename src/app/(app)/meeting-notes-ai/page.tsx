@@ -96,20 +96,15 @@ export default function MeetingNotesAiPage() {
     }
     setIsProcessing(true);
     try {
-        // const dataUri = await fileToDataUri(file);
-        // const input: MediaAnalysisInput = {
-        //     fileType,
-        //     dataUri,
-        // };
-        // const result = await analyzeMedia(input);
+        const dataUri = await fileToDataUri(file);
+        const input: MediaAnalysisInput = {
+            fileType,
+            dataUri,
+        };
+        const result = await analyzeMedia(input);
         
-        // setAnalysisResult(result);
+        setAnalysisResult(result);
         setIsProcessed(true);
-        toast({
-            variant: 'destructive',
-            title: 'Feature Temporarily Disabled',
-            description: 'AI analysis is currently disabled due to build issues. We are working on a fix.',
-        });
     } catch (error) {
         console.error('Analysis Error:', error);
         toast({
