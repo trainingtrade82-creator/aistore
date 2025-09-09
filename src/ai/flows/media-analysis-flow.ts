@@ -9,6 +9,8 @@
  */
 
 import { z } from 'zod';
+// import { ai } from '@/ai/genkit';
+
 // We will remove pdf-lib for now to simplify dependencies and fix the build.
 // A more robust PDF processing solution can be added later.
 // import { PDFDocument } from 'pdf-lib';
@@ -64,7 +66,7 @@ export type MediaAnalysisOutput = z.infer<typeof MediaAnalysisOutputSchema>;
 //       promptParts.push({ media: { url: input.dataUri } });
 //     }
 
-//     const result = await ai.generate({
+//     const { output } = await ai.generate({
 //       model: model,
 //       prompt: promptParts,
 //       output: {
@@ -72,34 +74,31 @@ export type MediaAnalysisOutput = z.infer<typeof MediaAnalysisOutputSchema>;
 //       },
 //     });
 
-//     return result.output!;
+//     return output!;
 //   }
 // );
 
 // Exported wrapper function to be called by the frontend
 export async function analyzeMedia(input: MediaAnalysisInput): Promise<MediaAnalysisOutput> {
-  // return await analysisFlow(input);
   console.log('Media analysis called with input:', input);
-  // Return dummy data since AI functionality is temporarily disabled
+  // Return a dummy response since the AI functionality is disabled
   await new Promise(resolve => setTimeout(resolve, 1000));
   if (input.fileType === 'audio/video') {
     return {
-      transcript: 'This is a dummy transcript as AI functionality is temporarily disabled.',
+      transcript: 'AI analysis is temporarily disabled. This is a placeholder transcript.',
       summary: {
-        decisions: ['Decision 1: Postpone project deadline.'],
-        actionItems: ['Action Item 1: John to reschedule meeting.'],
-        deadlines: ['Deadline 1: New project plan due next Friday.'],
+        decisions: ['Decision A: Placeholder.', 'Decision B: Placeholder.'],
+        actionItems: ['Action Item 1: Re-enable AI analysis.'],
+        deadlines: ['Deadline 1: Immediately.'],
       },
     };
-  }
-  if (input.fileType === 'image') {
+  } else if (input.fileType === 'image') {
     return {
-      description: 'This is a dummy image description as AI functionality is temporarily disabled.',
+      description: 'AI analysis is temporarily disabled. This is a placeholder image description.',
     };
-  }
-  if (input.fileType === 'pdf') {
+  } else if (input.fileType === 'pdf') {
     return {
-      pdfSummary: 'This is a dummy PDF summary as AI functionality is temporarily disabled.',
+      pdfSummary: 'AI analysis is temporarily disabled. This is a placeholder PDF summary.',
     };
   }
   return {};
