@@ -3,6 +3,9 @@ import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/ca
 import { categories } from '@/lib/data';
 
 export default function CategoryShowcase() {
+  if (categories.length === 0) {
+    return null;
+  }
   return (
     <section id="features" className="py-20 sm:py-32">
       <div className="container px-4 md:px-6">
@@ -37,29 +40,31 @@ export default function CategoryShowcase() {
             </Card>
           ))}
         </div>
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-            {categories.slice(3).map((category) => (
-            <Card key={category.name} className="overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
-              <div className="aspect-video overflow-hidden">
-                <Image
-                  src={category.image}
-                  alt={category.name}
-                  data-ai-hint={category.aiHint}
-                  width={600}
-                  height={400}
-                  className="object-cover object-center w-full h-full transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <CardHeader>
-                <div className="flex items-center gap-3">
-                  <category.icon className="w-8 h-8 text-primary" />
-                  <CardTitle className="text-2xl font-semibold">{category.name}</CardTitle>
+        {categories.length > 3 && 
+          <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+              {categories.slice(3).map((category) => (
+              <Card key={category.name} className="overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2">
+                <div className="aspect-video overflow-hidden">
+                  <Image
+                    src={category.image}
+                    alt={category.name}
+                    data-ai-hint={category.aiHint}
+                    width={600}
+                    height={400}
+                    className="object-cover object-center w-full h-full transition-transform duration-300 group-hover:scale-105"
+                  />
                 </div>
-                <CardDescription className="pt-2">{category.description}</CardDescription>
-              </CardHeader>
-            </Card>
-          ))}
-        </div>
+                <CardHeader>
+                  <div className="flex items-center gap-3">
+                    <category.icon className="w-8 h-8 text-primary" />
+                    <CardTitle className="text-2xl font-semibold">{category.name}</CardTitle>
+                  </div>
+                  <CardDescription className="pt-2">{category.description}</CardDescription>
+                </CardHeader>
+              </Card>
+            ))}
+          </div>
+        }
       </div>
     </section>
   );

@@ -18,7 +18,7 @@ export default function Pricing({ showTable = true }: { showTable?: boolean }) {
             Choose the plan that fits you. Start free, upgrade anytime.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto items-stretch">
+        {pricingPlans.length > 0 && <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto items-stretch">
           {pricingPlans.map((plan) => (
             <Card
               key={plan.name}
@@ -62,9 +62,9 @@ export default function Pricing({ showTable = true }: { showTable?: boolean }) {
               </CardFooter>
             </Card>
           ))}
-        </div>
+        </div>}
 
-        {showTable && <PricingTable />}
+        {showTable && pricingPlans.length > 0 && <PricingTable />}
       </div>
     </section>
   );

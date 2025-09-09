@@ -33,7 +33,7 @@ export default function AiToolsPage() {
           Explore AI Tools
         </h1>
         <p className="mt-4 max-w-2xl mx-auto text-foreground/80 md:text-xl">
-          50+ AIs designed for your work, study, and life — all in one place.
+          Discover a world of AI possibilities.
         </p>
       </div>
 
@@ -63,28 +63,10 @@ export default function AiToolsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {filteredTools.map((tool: AiTool) => (
-          <Link key={tool.id} href={`/ai-tools/${tool.id}`} passHref>
-            <Card className="h-full flex flex-col overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-2 cursor-pointer">
-              <CardHeader className="flex flex-row items-start justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <tool.icon className="w-10 h-10 text-primary" />
-                  <CardTitle className="text-xl font-semibold">{tool.name}</CardTitle>
-                </div>
-                 <Badge className={`text-xs text-primary-foreground ${tierColorMap[tool.tier]}`}>{tool.tier}</Badge>
-              </CardHeader>
-              <CardContent className="flex-grow">
-                <CardDescription>{tool.shortDescription}</CardDescription>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
-      </div>
       {filteredTools.length === 0 && (
         <div className="text-center py-16 text-foreground/60">
           <p className="text-lg">No tools found.</p>
-          <p>Try adjusting your search or filter.</p>
+          <p>The application is being rebuilt. New tools coming soon!</p>
         </div>
       )}
     </div>
