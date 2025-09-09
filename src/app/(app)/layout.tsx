@@ -21,6 +21,7 @@ import {
     Rocket,
     Save,
     Power,
+    ClipboardList,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -80,6 +81,11 @@ export default function AppLayout({
             <SidebarMenuItem>
                 <SidebarMenuButton href="/dashboard" left={<LayoutGrid />}>
                     Dashboard
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            <SidebarMenuItem>
+                <SidebarMenuButton href="/meeting-notes-ai" left={<ClipboardList />}>
+                    Meeting Notes
                 </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>

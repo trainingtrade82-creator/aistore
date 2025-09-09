@@ -1,6 +1,6 @@
 
 import type { LucideIcon } from 'lucide-react';
-import { Briefcase, PenSquare, School, Smile, Zap, FileText, Bot, Share2, Star, Heart, Mail, Image, Film, Mic } from 'lucide-react';
+import { Briefcase, PenSquare, School, Smile, Zap, FileText, Bot, Share2, Star, Heart, Mail, Image, Film, Mic, ClipboardList } from 'lucide-react';
 
 export type Category = {
   name: string;
@@ -133,6 +133,27 @@ export const aiTools: AiTool[] = [
     rating: 4.7,
     images: [
         'https://picsum.photos/1280/720?random=23',
+    ]
+  },
+    {
+    id: 'meeting-notes-ai',
+    name: 'Meeting Notes AI',
+    icon: ClipboardList,
+    category: 'Productivity',
+    shortDescription: 'Transcribe, summarize, and organize every discussion effortlessly.',
+    description: 'Your personal meeting assistant. Upload audio/video to get accurate transcriptions, key decisions, action items, and shareable summaries. Integrates with Zoom, Google Meet, and Teams for real-time notes.',
+    features: [
+      'Accurate transcription with speaker labels and timestamps.',
+      'AI-powered summaries with key decisions, action items, and deadlines.',
+      'Real-time transcription for live meetings (Exclusive).',
+      'Export notes to PDF, DOCX, or share via email.',
+      'Integration with Trello, Asana, & Notion for task management.',
+      'Secure, private, with an option to auto-delete recordings.',
+    ],
+    rating: 4.9,
+    images: [
+      'https://picsum.photos/1280/720?random=28',
+      'https://picsum.photos/1280/720?random=29',
     ]
   },
   {
