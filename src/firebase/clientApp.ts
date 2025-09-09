@@ -18,4 +18,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
 
+// Request permission to read the user's emails.
+googleProvider.addScope('https://www.googleapis.com/auth/gmail.readonly');
+
 export { app, auth, googleProvider };
