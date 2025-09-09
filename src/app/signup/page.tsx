@@ -33,27 +33,42 @@ export default function SignupPage() {
 
       // 2. Update their profile with the name
       await updateProfile(user, { displayName: name });
-
+      
       // 3. Send the verification email
       await sendEmailVerification(user);
-      
-      // 4. Reload the user to ensure their profile is updated client-side
-      await user.reload();
 
       toast({
         title: 'Account Created!',
         description: 'A verification link has been sent to your email. Please check your inbox to activate your account.',
       });
 
-      // 5. Redirect to the verification page
+      // 4. Redirect to the verification page
       router.push('/auth/verify-email');
 
     } catch (error: any) {
         console.error("Firebase Signup Error:", error);
+        
+        let errorMessage = 'An unexpected error occurred during signup.';
+        if (error.code) {
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    errorMessage = 'This email is already in use. Please log in or use a different email.';
+                    break;
+                case 'auth/weak-password':
+                    errorMessage = 'The password is too weak. Please use at least 6 characters.';
+                    break;
+                case 'auth/invalid-email':
+                    errorMessage = 'Please enter a valid email address.';
+                    break;
+                default:
+                    errorMessage = error.message.replace('Firebase: ', '').split(' (')[0];
+            }
+        }
+
         toast({
             variant: 'destructive',
             title: 'Signup Failed',
-            description: error.message.replace('Firebase: ', '').split(' (')[0],
+            description: errorMessage,
         });
     } finally {
         setIsLoading(false);
@@ -102,7 +117,7 @@ export default function SignupPage() {
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.g.value)}
                 required
                 minLength={6}
                 disabled={isLoading}
@@ -112,7 +127,7 @@ export default function SignupPage() {
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Send Verification Email
+              Create Account & Send Verification
             </Button>
             <CardDescription>
                 Already have an account?{' '}
