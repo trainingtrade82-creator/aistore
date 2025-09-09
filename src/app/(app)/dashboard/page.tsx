@@ -7,10 +7,8 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { Mail, PenSquare, Inbox, Sparkles, Wand2, Loader2, Lock } from 'lucide-react';
+import { Mail, PenSquare, Inbox, Sparkles, Wand2, Loader2, Lock, ListChecks, Bot, Send, Minimize2 } from 'lucide-react';
 import React, { useState } from 'react';
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '@/firebase/clientApp';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/context/AuthContext';
 
@@ -26,35 +24,12 @@ const templates = [
     'Apology'
 ];
 
-const GoogleIcon = () => (
-    <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
-        <path
-            d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-            fill="#4285F4"
-        />
-        <path
-            d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-            fill="#34A853"
-        />
-        <path
-            d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
-            fill="#FBBC05"
-        />
-        <path
-            d="M12 5.16c1.61 0 3.06.55 4.2 1.69l3.15-3.15C17.45 1.99 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-            fill="#EA4335"
-        />
-        <path d="M1 1h22v22H1z" fill="none" />
-    </svg>
-);
-
 
 export default function EmailWriterPage() {
   const [generatedEmail, setGeneratedEmail] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   
   const handleGenerate = async () => {
     setIsGenerating(true);
@@ -81,27 +56,6 @@ Founder, Innovate Corp`
     setIsGenerating(false);
   };
   
-    const handleGoogleConnect = async () => {
-        setIsGoogleLoading(true);
-        try {
-            await signInWithPopup(auth, googleProvider);
-            toast({
-                title: "Connected!",
-                description: "Your Google account has been successfully connected."
-            })
-        } catch (error: any) {
-            console.error("Google Connect Error:", error);
-            toast({
-                variant: "destructive",
-                title: "Connection Failed",
-                description: "Could not connect your Google account. Please try again."
-            });
-        } finally {
-            setIsGoogleLoading(false);
-        }
-    };
-
-
   return (
     <div className="flex-grow bg-secondary/40">
         <div className="container mx-auto p-4 sm:p-6 lg:p-8">
@@ -195,21 +149,34 @@ Founder, Innovate Corp`
                 <TabsContent value="reply" className="mt-6">
                      <Card>
                         <CardHeader>
-                            <CardTitle>Reply to an Email</CardTitle>
-                            <CardDescription>Connect your inbox to let AI draft replies instantly.</CardDescription>
+                            <CardTitle className="flex items-center gap-2">
+                                <Sparkles className="text-primary" />
+                                Smarter Inbox: Coming Soon!
+                            </CardTitle>
+                            <CardDescription>Our team is working on integrating with Gmail and other providers to bring you a powerful AI-assisted inbox. This feature is currently in development.</CardDescription>
                         </CardHeader>
-                        <CardContent className="text-center p-12">
-                            <Inbox className="mx-auto h-12 w-12 text-foreground/30" />
-                            <p className="mt-4 text-foreground/60">Connect your Gmail account to start replying with AI.</p>
-                            <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                                <Button variant="outline" onClick={handleGoogleConnect} disabled={isGoogleLoading}>
-                                    {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
-                                    Connect Gmail
-                                </Button>
-                                <Button variant="outline" disabled>
-                                    <Lock className="mr-2 h-4 w-4" />
-                                    Connect Outlook (Soon)
-                                </Button>
+                        <CardContent className="space-y-4">
+                            <h4 className="font-semibold text-foreground">Upcoming Features:</h4>
+                             <ul className="space-y-3 text-sm text-foreground/80">
+                                <li className="flex items-start gap-3">
+                                    <ListChecks className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                                    <span>**AI-Powered Categorization**: Automatically sort your emails into categories like Important, Promotions, and Spam.</span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <Bot className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                                    <span>**One-Click Replies**: Generate context-aware replies that match the tone of the original email.</span>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <Minimize2 className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                                    <span>**Email Summaries**: Instantly shorten long email threads into concise summaries.</span>
+                                </li>
+                                 <li className="flex items-start gap-3">
+                                    <Send className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                                    <span>**Draft & Send**: Create drafts or send emails directly from the AI interface.</span>
+                                </li>
+                            </ul>
+                            <div className="pt-4 text-center">
+                                <p className="text-sm text-muted-foreground">We're working hard to get this verified and released!</p>
                             </div>
                         </CardContent>
                      </Card>
