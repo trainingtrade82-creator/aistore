@@ -16,25 +16,20 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
-    const checkAuth = () => {
-      if (user === undefined) {
-        // Still checking, do nothing
-        return;
-      }
-      
-      if (user === null) {
-        // No user found, redirect to login
-        router.push('/login');
-        return;
-      }
-      
+    // This check runs after the initial render.
+    // If the auth state is still resolving, `user` will be `undefined`.
+    if (user === undefined) {
+      // We're still waiting for the auth state, so we show a loader.
+      return;
+    }
+
+    if (user === null) {
+      // If the user is not logged in, redirect them to the login page.
+      router.push('/login');
+    } else {
+      // If the user is logged in, stop loading and show the content.
       setLoading(false);
-    };
-
-    // A small delay to prevent a flicker while auth state resolves
-    const timer = setTimeout(checkAuth, 100);
-
-    return () => clearTimeout(timer);
+    }
   }, [user, router]);
 
   if (loading) {
@@ -45,12 +40,13 @@ function AuthProtection({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Only render children if user is authenticated
+  // Only render children if user is authenticated and loading is false
   if (user) {
     return <>{children}</>;
   }
 
-  return null; // Render nothing while redirecting
+  // Render nothing while redirecting or if the user is null.
+  return null;
 }
 
 function DashboardContent() {
