@@ -14,7 +14,7 @@ import { ArrowRight } from 'lucide-react';
 const tierColorMap = {
   Free: 'bg-green-600 hover:bg-green-700',
   Pro: 'bg-blue-600 hover:bg-blue-700',
-  Exclusive: 'bg-yellow-500 hover:bg-yellow-600 text-black',
+  Exclusive: 'bg-purple-600 hover:bg-purple-700',
 };
 
 const ToolCard = ({ tool }: { tool: AiTool }) => (
@@ -28,7 +28,7 @@ const ToolCard = ({ tool }: { tool: AiTool }) => (
                     <div className="flex-grow">
                          <CardTitle className="text-xl font-bold">{tool.name}</CardTitle>
                     </div>
-                     <Badge className={`text-sm text-primary-foreground ${tierColorMap[tool.tier]}`}>{tool.tier}</Badge>
+                     <Badge className={`text-sm text-white ${tierColorMap[tool.tier]}`}>{tool.tier}</Badge>
                 </div>
             </CardHeader>
             <CardContent className="flex flex-col flex-grow">
@@ -99,7 +99,7 @@ export default function AiToolsPage() {
       {filteredTools.length === 0 && (
         <div className="text-center py-16 text-foreground/60">
           <p className="text-lg">No tools found.</p>
-          <p>The application is being rebuilt. New tools coming soon!</p>
+          <p>Try a different search term or category.</p>
         </div>
       )}
     </div>

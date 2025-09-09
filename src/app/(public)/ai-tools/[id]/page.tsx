@@ -47,7 +47,7 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
                   <h1 className="text-3xl sm:text-4xl font-bold font-headline">{tool.name}</h1>
                   <p className="text-lg text-foreground/80 mt-1">{tool.shortDescription}</p>
                    <div className="flex flex-wrap items-center gap-4 mt-3">
-                    <Badge className={`text-sm text-primary-foreground ${tierColorMap[tool.tier]}`}>{tool.tier}</Badge>
+                    <Badge className={`text-sm text-white ${tierColorMap[tool.tier]}`}>{tool.tier}</Badge>
                     <div className="flex items-center gap-1">
                       <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
                       <span className="font-semibold">{tool.rating}</span>
