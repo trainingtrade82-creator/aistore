@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, sendSignInLinkToEmail, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -40,76 +40,37 @@ const GoogleIcon = () => (
 export default function SignupPage() {
   const router = useRouter();
   const { toast } = useToast();
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setGoogleIsLoading] = useState(false);
   const auth = getAuth(app);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.length < 6) {
+    setIsLoading(true);
+
+    const actionCodeSettings = {
+        url: `${window.location.origin}/auth/action`,
+        handleCodeInApp: true,
+    };
+
+    try {
+        await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+        window.localStorage.setItem('emailForSignIn', email);
+        toast({
+            title: 'Check your email',
+            description: `We've sent a sign-up link to ${email}. Click it to complete your registration.`,
+        });
+        setEmail('');
+    } catch (error: any) {
+        console.error("Firebase Signup Error:", error.code, error.message);
         toast({
             variant: 'destructive',
-            title: 'Password is too weak',
-            description: 'Password must be at least 6 characters long.',
+            title: 'Signup Failed',
+            description: error.message.replace('Firebase: ', '').split(' (')[0],
         });
-        return;
-    }
-    setIsLoading(true);
-    try {
-      // Step 1: Create the user
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      console.log('User created successfully:', user.uid);
-
-      // Step 2: Update the user's profile
-      await updateProfile(user, { displayName: name });
-      console.log('User profile updated with display name.');
-
-      // Step 3: Send the verification email (this is the critical part)
-      try {
-        await sendEmailVerification(user);
-        console.log('Verification email sent successfully.');
-        toast({
-          title: 'Account Created & Verification Email Sent',
-          description: 'A verification link has been sent to your inbox. Please verify to log in.',
-        });
-      } catch (emailError: any) {
-        console.error('Error sending verification email:', emailError);
-        // This toast is important. It tells the user that the account was created but the email failed.
-        toast({
-          variant: 'destructive',
-          title: 'Account Created, but...',
-          description: 'We created your account, but failed to send a verification email. Please try logging in to resend it.',
-        });
-      }
-
-      // Step 4: Redirect to the verification page
-      router.push('/auth/verify-email');
-
-    } catch (error: any) {
-      console.error("Firebase Signup Error:", error.code, error.message);
-      let description: React.ReactNode = error.message.replace('Firebase: ', '').split(' (')[0];
-      if (error.code === 'auth/email-already-in-use') {
-        description = (
-            <span>
-              This email is already registered. Please{' '}
-              <Link href="/login" className="underline">
-                log in
-              </Link>{' '}
-              instead.
-            </span>
-          );
-      }
-      toast({
-        variant: 'destructive',
-        title: 'Signup Failed',
-        description: description,
-      });
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
   };
 
@@ -142,22 +103,10 @@ export default function SignupPage() {
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Create an Account</CardTitle>
             <CardDescription>
-              Enter your details to get started.
+              Enter your email to get started with a magic link.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                <Input
-                    id="name"
-                    type="text"
-                    placeholder="Your Name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                    disabled={isLoading || isGoogleLoading}
-                />
-            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -170,23 +119,11 @@ export default function SignupPage() {
                 disabled={isLoading || isGoogleLoading}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={isLoading || isGoogleLoading}
-              />
-            </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading || isGoogleLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Account
+              Sign Up with Email
             </Button>
              <div className="relative w-full">
                 <Separator />

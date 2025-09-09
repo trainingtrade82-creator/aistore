@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { getAuth, sendSignInLinkToEmail, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -41,7 +41,6 @@ export default function LoginPage() {
   const router = useRouter();
   const { toast } = useToast();
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setGoogleIsLoading] = useState(false);
   const auth = getAuth(app);
@@ -50,39 +49,25 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
 
+    const actionCodeSettings = {
+        url: `${window.location.origin}/auth/action`,
+        handleCodeInApp: true,
+    };
+
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      if (user && !user.emailVerified) {
-        toast({
-            variant: 'destructive',
-            title: 'Email Not Verified',
-            description: 'Please verify your email before logging in.',
-        });
-        router.push('/auth/verify-email');
-        setIsLoading(false);
-        return;
-      }
-
+      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
+      window.localStorage.setItem('emailForSignIn', email);
       toast({
-        title: 'Login Successful',
-        description: 'Welcome back!',
+        title: 'Check your email',
+        description: `We've sent a login link to ${email}.`,
       });
-      router.push('/dashboard');
+      setEmail('');
     } catch (error: any) {
       console.error('Firebase Error:', error.code, error.message);
-       let errorMessage = error.message.replace('Firebase: ', '').split(' (')[0];
-      if (error.code === 'auth/too-many-requests') {
-        errorMessage = 'Access temporarily disabled due to too many requests. Please try again later.';
-      }
-       if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
-        errorMessage = 'Invalid email or password. Please try again.';
-      }
       toast({
         variant: 'destructive',
         title: 'Login Failed',
-        description: errorMessage,
+        description: error.message.replace('Firebase: ', '').split(' (')[0],
       });
     } finally {
       setIsLoading(false);
@@ -118,7 +103,7 @@ export default function LoginPage() {
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Welcome Back</CardTitle>
             <CardDescription>
-              Enter your credentials to access your account.
+              Sign in with a magic link or Google.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -134,22 +119,11 @@ export default function LoginPage() {
                 disabled={isLoading || isGoogleLoading}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                disabled={isLoading || isGoogleLoading}
-              />
-            </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading || isGoogleLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Log In
+              Send Magic Link
             </Button>
             <div className="relative w-full">
                 <Separator />

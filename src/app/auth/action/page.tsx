@@ -2,8 +2,8 @@
 'use client';
 
 import { useEffect, useState, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { getAuth, applyActionCode } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+import { getAuth, isSignInWithEmailLink, signInWithEmailLink } from 'firebase/auth';
 import { app } from '@/firebase/clientApp';
 import { useToast } from '@/hooks/use-toast';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -13,50 +13,52 @@ import Link from 'next/link';
 
 function EmailActionHandler() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const { toast } = useToast();
   const [status, setStatus] = useState<'loading' | 'success' | 'error'>('loading');
-  const [message, setMessage] = useState('Verifying your email...');
-
-  const mode = searchParams.get('mode');
-  const actionCode = searchParams.get('oobCode');
+  const [message, setMessage] = useState('Verifying your sign-in link...');
 
   useEffect(() => {
-    if (!mode || !actionCode) {
-        setStatus('error');
-        setMessage('Invalid verification link. Please try again.');
-        return;
-    }
-
     const auth = getAuth(app);
-    
-    const handleAction = async () => {
+
+    const handleSignIn = async () => {
+      if (!isSignInWithEmailLink(auth, window.location.href)) {
+        setStatus('error');
+        setMessage('Invalid or expired sign-in link. Please request a new one.');
+        return;
+      }
+
+      let email = window.localStorage.getItem('emailForSignIn');
+      if (!email) {
+        // User opened the link on a different device. To prevent session fixation
+        // attacks, ask the user to provide the associated email again.
+        email = window.prompt('Please provide your email for confirmation');
+      }
+
+      if (!email) {
+         setStatus('error');
+         setMessage('Email is required to complete sign-in. Please try again.');
+         return;
+      }
+
       try {
-        switch (mode) {
-          case 'verifyEmail':
-            await applyActionCode(auth, actionCode);
-            setStatus('success');
-            setMessage('Your email has been successfully verified! You can now log in.');
-            toast({
-              title: 'Success',
-              description: 'Email verified! Please log in.',
-            });
-            // Optional: Redirect to login after a delay
-            setTimeout(() => router.push('/login'), 3000);
-            break;
-          // You can add cases for 'resetPassword' or 'recoverEmail' here
-          default:
-            throw new Error('Invalid action mode.');
-        }
+        await signInWithEmailLink(auth, email, window.location.href);
+        window.localStorage.removeItem('emailForSignIn');
+        setStatus('success');
+        setMessage('You have been successfully signed in! Redirecting to your dashboard...');
+        toast({
+          title: 'Success',
+          description: 'Welcome to AI Store!',
+        });
+        setTimeout(() => router.push('/dashboard'), 2000);
       } catch (error) {
         setStatus('error');
-        setMessage('Invalid or expired verification link. Please request a new one.');
-        console.error('Firebase Action Error:', error);
+        setMessage('Invalid or expired sign-in link. Please request a new one.');
+        console.error('Firebase Sign-In Error:', error);
       }
     };
 
-    handleAction();
-  }, [mode, actionCode, router, toast]);
+    handleSignIn();
+  }, [router, toast]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-secondary/40 p-4">
@@ -66,14 +68,14 @@ function EmailActionHandler() {
           {status === 'success' && <CheckCircle className="mx-auto h-12 w-12 text-green-500" />}
           {status === 'error' && <XCircle className="mx-auto h-12 w-12 text-destructive" />}
           <CardTitle className="mt-4 text-2xl">
-            {status === 'loading' && 'Verifying...'}
+            {status === 'loading' && 'Signing In...'}
             {status === 'success' && 'Success!'}
             {status === 'error' && 'Error'}
           </CardTitle>
           <CardDescription className="mt-2">{message}</CardDescription>
         </CardHeader>
         <CardContent>
-          {status !== 'loading' && (
+          {(status === 'error') && (
             <Button asChild>
               <Link href="/login">Go to Login</Link>
             </Button>
