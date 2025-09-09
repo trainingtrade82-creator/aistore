@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
@@ -19,8 +18,10 @@ export default function VerifyEmailPage() {
     const [status, setStatus] = useState<'loading' | 'verified' | 'unverified'>('loading');
     const [isResending, setIsResending] = useState(false);
 
-    const handleVerification = useCallback(() => {
+    const handleVerification = useCallback(async () => {
         if (user) {
+            // Manually reload the user object to get the latest emailVerified status
+            await user.reload();
             if (user.emailVerified) {
                 setStatus('verified');
                 toast({
@@ -40,23 +41,26 @@ export default function VerifyEmailPage() {
     }, [user, router, toast]);
 
     useEffect(() => {
-        // Run initial check
-        if (handleVerification()) {
-            return;
-        }
-
-        // Set up interval to check for verification
-        const interval = setInterval(async () => {
-            if (auth.currentUser) {
-                await auth.currentUser.reload();
-                if (auth.currentUser.emailVerified) {
-                    clearInterval(interval);
-                    handleVerification();
-                }
+        const checkVerification = async () => {
+            if (await handleVerification()) {
+                return;
             }
-        }, 3000); // Check every 3 seconds
 
-        return () => clearInterval(interval);
+            const interval = setInterval(async () => {
+                if (auth.currentUser) {
+                    await auth.currentUser.reload();
+                    if (auth.currentUser.emailVerified) {
+                        clearInterval(interval);
+                        await handleVerification();
+                    }
+                }
+            }, 3000);
+
+            return () => clearInterval(interval);
+        };
+
+        checkVerification();
+
     }, [user, auth, handleVerification]);
 
     const handleResendVerificationEmail = async () => {

@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import Link from 'next/link';
@@ -14,9 +12,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const { user } = useAuth();
 
   const navLinks = [
     { name: 'Home', href: '/' },
@@ -49,9 +49,20 @@ export default function Header() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
           <div className="hidden md:flex items-center space-x-4">
-            <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                <Link href="/dashboard">Go to App</Link>
-            </Button>
+             {user ? (
+                <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                    <Link href="/dashboard">Go to App</Link>
+                </Button>
+            ) : (
+                <>
+                <Button variant="ghost" asChild>
+                    <Link href="/login">Login</Link>
+                </Button>
+                <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                    <Link href="/signup">Sign Up</Link>
+                </Button>
+                </>
+            )}
           </div>
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -85,9 +96,16 @@ export default function Header() {
                   ))}
                 </nav>
                 <div className="mt-auto flex flex-col gap-4">
-                  <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                     <Link href="/dashboard">Go to App</Link>
-                  </Button>
+                    {user ? (
+                        <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
+                            <Link href="/dashboard">Go to App</Link>
+                        </Button>
+                    ) : (
+                        <>
+                            <Button variant="outline" asChild><Link href="/login">Login</Link></Button>
+                            <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild><Link href="/signup">Sign Up</Link></Button>
+                        </>
+                    )}
                 </div>
               </div>
             </SheetContent>

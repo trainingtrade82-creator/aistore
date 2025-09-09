@@ -1,5 +1,3 @@
-
-
 'use client';
 import {
   SidebarProvider,
@@ -26,18 +24,51 @@ import {
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { Loader2 } from 'lucide-react';
+import { getAuth, signOut } from 'firebase/auth';
 
 export default function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { user } = useAuth();
   const router = useRouter();
+  const auth = getAuth();
 
-  const handleSignOut = () => {
-    router.push('/');
+  useEffect(() => {
+    if (user === null) {
+      router.push('/login');
+    }
+  }, [user, router]);
+  
+  const handleSignOut = async () => {
+    try {
+        await signOut(auth);
+        router.push('/');
+    } catch (error) {
+        console.error('Sign out error', error);
+    }
   };
+
+  if (user === undefined) {
+    return (
+        <div className="flex h-screen w-full items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+    );
+  }
+
+  if (user === null) {
+    return null; // Don't render anything while redirecting
+  }
+  
+  if (!user.emailVerified) {
+    router.push('/auth/verify-email');
+    return null; // Don't render anything while redirecting
+  }
 
   return (
     <SidebarProvider>
@@ -86,18 +117,18 @@ export default function AppLayout({
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                     <SidebarMenuButton onClick={handleSignOut} left={<Power />}>
-                        Exit to Home
+                        Sign Out
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
               <div className="flex items-center gap-3 p-2 mt-4 rounded-md transition-colors border">
                 <Avatar className="h-9 w-9">
-                    <AvatarImage src={'https://picsum.photos/100/100?random=42'} />
-                    <AvatarFallback>U</AvatarFallback>
+                    <AvatarImage src={user.photoURL ?? `https://picsum.photos/100/100?random=42`} />
+                    <AvatarFallback>{user.displayName?.charAt(0) || 'U'}</AvatarFallback>
                 </Avatar>
                 <div className="overflow-hidden">
-                    <p className="font-semibold text-sm truncate">Guest User</p>
-                    <p className="text-xs text-muted-foreground truncate">guest@aistore.com</p>
+                    <p className="font-semibold text-sm truncate">{user.displayName || 'Guest User'}</p>
+                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                 </div>
             </div>
         </SidebarFooter>

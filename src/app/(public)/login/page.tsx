@@ -1,10 +1,8 @@
-
-
 'use client';
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -44,29 +42,15 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
-      if (user.emailVerified) {
-        toast({
-            title: 'Login Successful',
-            description: 'Welcome back!',
-        });
-        router.push('/dashboard');
-      } else {
-        toast({
-            variant: 'destructive',
-            title: 'Email Not Verified',
-            description: 'Please verify your email before logging in.',
-        });
-        router.push('/auth/verify-email');
-      }
+      await signInWithEmailAndPassword(auth, email, password);
+      // The redirect is handled by the AppLayout's useEffect
     } catch (error: any) {
       console.error('Firebase Login Error:', error);
       toast({
@@ -80,7 +64,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = async () => {
-    setIsLoading(true);
+    setIsGoogleLoading(true);
     try {
         await signInWithPopup(auth, googleProvider);
         router.push('/dashboard');
@@ -92,13 +76,13 @@ export default function LoginPage() {
             description: "Could not sign in with Google. Please try again."
         });
     } finally {
-        setIsLoading(false);
+        setIsGoogleLoading(false);
     }
   };
 
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-secondary/40 p-4">
+    <div className="flex min-h-[calc(100vh-56px)] items-center justify-center bg-background p-4">
       <Card className="w-full max-w-sm">
         <form onSubmit={handleLogin}>
           <CardHeader className="text-center">
@@ -117,7 +101,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                disabled={isLoading}
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
              <div className="space-y-2">
@@ -128,18 +112,18 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                disabled={isLoading}
+                disabled={isLoading || isGoogleLoading}
               />
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isLoading || isGoogleLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Log In
             </Button>
             <Separator className="my-2" />
-            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
-                <GoogleIcon />
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading || isGoogleLoading}>
+                {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
                 Continue with Google
             </Button>
              <CardDescription>
