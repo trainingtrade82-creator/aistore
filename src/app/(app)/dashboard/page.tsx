@@ -74,16 +74,16 @@ Founder, Innovate Corp`
             <Tabs defaultValue="compose" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 md:w-[400px]">
                     <TabsTrigger value="compose"><PenSquare className="mr-2 h-4 w-4" /> Write New Email</TabsTrigger>
-                    <TabsTrigger value="reply"><Inbox className="mr-2 h-4 w-4"/> Reply to Email</TabsTrigger>
+                    <TabsTrigger value="reply" disabled><Lock className="mr-2 h-4 w-4" /> Reply to Email</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="compose" className="mt-6">
                     <Card>
-                        <CardHeader>
+                        <CardHeader className="bg-secondary/50 rounded-t-lg border-b">
                             <CardTitle>Compose a New Email</CardTitle>
                             <CardDescription>Provide the context, choose a tone, and let the AI draft the perfect email for you.</CardDescription>
                         </CardHeader>
-                        <CardContent className="space-y-6">
+                        <CardContent className="space-y-6 pt-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className="space-y-2">
                                     <Label htmlFor="context">Context / Prompt</Label>
@@ -153,7 +153,7 @@ Founder, Innovate Corp`
                                 <Sparkles className="text-primary" />
                                 Smarter Inbox: Coming Soon!
                             </CardTitle>
-                            <CardDescription>Our team is working on integrating with Gmail and other providers to bring you a powerful AI-assisted inbox. This feature is currently in development.</CardDescription>
+                            <CardDescription>Our team is working hard to integrate with your favorite email clients.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <h4 className="font-semibold text-foreground">Upcoming Features:</h4>
