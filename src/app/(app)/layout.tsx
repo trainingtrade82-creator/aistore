@@ -65,11 +65,6 @@ export default function AppLayout({
   if (user === null) {
     return null; // Don't render anything while redirecting
   }
-  
-  if (!user.emailVerified) {
-    router.push('/auth/verify-email');
-    return null; // Don't render anything while redirecting
-  }
 
   return (
     <SidebarProvider>

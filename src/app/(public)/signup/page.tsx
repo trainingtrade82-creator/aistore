@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile, signInWithPopup } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -56,14 +56,12 @@ export default function SignupPage() {
         displayName: name,
       });
 
-      await sendEmailVerification(userCredential.user);
-
       toast({
         title: 'Account Created',
-        description: 'A verification email has been sent. Please check your inbox.',
+        description: "Welcome! You're now logged in.",
       });
 
-      router.push('/auth/verify-email');
+      router.push('/dashboard');
 
     } catch (error: any) {
       console.error('Firebase Signup Error:', error);
@@ -149,7 +147,7 @@ export default function SignupPage() {
               Sign Up
             </Button>
             <Separator className="my-2" />
-            <Button variant="outline" type="button" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading || isGoogleLoading}>
+            <Button variant="outline" type="button" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading}>
               {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
               Continue with Google
             </Button>
