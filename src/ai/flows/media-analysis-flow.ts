@@ -11,10 +11,6 @@
 import { z } from 'zod';
 // import { ai } from '@/ai/genkit';
 
-// We will remove pdf-lib for now to simplify dependencies and fix the build.
-// A more robust PDF processing solution can be added later.
-// import { PDFDocument } from 'pdf-lib';
-
 // Define Input Schema
 const MediaAnalysisInputSchema = z.object({
   fileType: z.enum(['audio/video', 'pdf', 'image']),
@@ -45,32 +41,48 @@ export type MediaAnalysisOutput = z.infer<typeof MediaAnalysisOutputSchema>;
 //     outputSchema: MediaAnalysisOutputSchema,
 //   },
 //   async (input) => {
-//     let promptText = '';
 //     let model = 'googleai/gemini-1.5-flash';
-//     let promptParts: any[] = [];
+//     let prompt: any[] = [];
+//     let outputSchema = MediaAnalysisOutputSchema;
 
 //     const basePrompt = `You are an expert AI assistant. Your task is to analyze the provided content based on its type.`;
 
 //     if (input.fileType === 'pdf') {
-//       // Simplified PDF handling without pdf-lib
-//       promptText = `${basePrompt}\n\nFile Type: PDF\nContent: The user has uploaded a PDF file. Please provide a concise summary of what a typical document of this nature might contain.`
-//       promptParts.push({ text: promptText });
+//        prompt = [
+//          {text: `${basePrompt}\n\nFile Type: PDF\nContent: The user has uploaded a PDF file. Please provide a concise summary of its content.`},
+//          {media: {url: input.dataUri}}
+//        ];
+//        // Redefine output schema for PDF summary only
+//        outputSchema = z.object({ pdfSummary: z.string().optional().describe('AI-generated summary for PDF files.') });
 //     } else if (input.fileType === 'image') {
-//       promptText = `${basePrompt}\n\nFile Type: Image\nContent: Please provide a detailed description of what you see in the image.`
-//       promptParts.push({ text: promptText });
-//       promptParts.push({ media: { url: input.dataUri } });
+//        prompt = [
+//          {text: `${basePrompt}\n\nFile Type: Image\nContent: Please provide a detailed description of what you see in the image.`},
+//          {media: {url: input.dataUri}}
+//        ];
+//        // Redefine output schema for image description only
+//         outputSchema = z.object({ description: z.string().optional().describe('Detailed description for image files.') });
 //     } else { // audio/video
 //       model = 'googleai/gemini-1.5-pro'; // Use a more powerful model for transcription and summary
-//       promptText = `${basePrompt}\n\nFile Type: Audio/Video\nContent: Provide a full transcript and then a summary including key decisions, action items with assigned owners, and deadlines.`;
-//       promptParts.push({ text: promptText });
-//       promptParts.push({ media: { url: input.dataUri } });
+//       prompt = [
+//           {text: `${basePrompt}\n\nFile Type: Audio/Video\nContent: Provide a full transcript and then a summary including key decisions, action items with assigned owners, and deadlines.`},
+//           {media: {url: input.dataUri}}
+//       ];
+//       // Redefine output schema for transcription and summary
+//       outputSchema = z.object({
+//         transcript: z.string().optional().describe('Full transcript for audio/video files.'),
+//         summary: z.object({
+//             decisions: z.array(z.string()).describe("List of key decisions made in the meeting."),
+//             actionItems: z.array(z.string()).describe("List of action items with assigned owners."),
+//             deadlines: z.array(z.string()).describe("List of important deadlines mentioned."),
+//         }).optional().describe('AI-generated summary for audio/video files.'),
+//       });
 //     }
 
 //     const { output } = await ai.generate({
 //       model: model,
-//       prompt: promptParts,
+//       prompt: prompt,
 //       output: {
-//         schema: MediaAnalysisOutputSchema,
+//         schema: outputSchema,
 //       },
 //     });
 
@@ -80,26 +92,20 @@ export type MediaAnalysisOutput = z.infer<typeof MediaAnalysisOutputSchema>;
 
 // Exported wrapper function to be called by the frontend
 export async function analyzeMedia(input: MediaAnalysisInput): Promise<MediaAnalysisOutput> {
-  console.log('Media analysis called with input:', input);
-  // Return a dummy response since the AI functionality is disabled
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  if (input.fileType === 'audio/video') {
-    return {
-      transcript: 'AI analysis is temporarily disabled. This is a placeholder transcript.',
-      summary: {
-        decisions: ['Decision A: Placeholder.', 'Decision B: Placeholder.'],
-        actionItems: ['Action Item 1: Re-enable AI analysis.'],
-        deadlines: ['Deadline 1: Immediately.'],
-      },
-    };
-  } else if (input.fileType === 'image') {
-    return {
-      description: 'AI analysis is temporarily disabled. This is a placeholder image description.',
-    };
-  } else if (input.fileType === 'pdf') {
-    return {
-      pdfSummary: 'AI analysis is temporarily disabled. This is a placeholder PDF summary.',
-    };
-  }
-  return {};
+  console.log('Media analysis called with input:', input.fileType);
+  // return await analysisFlow(input);
+  return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({
+            description: "AI analysis is temporarily disabled due to a build issue. This is a placeholder description.",
+            pdfSummary: "AI analysis is temporarily disabled due to a build issue. This is a placeholder summary.",
+            transcript: "AI analysis is temporarily disabled due to a build issue. This is a placeholder transcript.",
+            summary: {
+                decisions: ["Decision 1: AI analysis is temporarily disabled."],
+                actionItems: ["Action Item 1: Resolve the build issue."],
+                deadlines: ["Deadline 1: ASAP."],
+            }
+        });
+      }, 1000);
+  });
 }

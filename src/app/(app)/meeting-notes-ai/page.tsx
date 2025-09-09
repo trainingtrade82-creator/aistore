@@ -110,7 +110,7 @@ export default function MeetingNotesAiPage() {
         toast({
             variant: 'destructive',
             title: 'Analysis Failed',
-            description: 'An error occurred while analyzing the file. Please check your API key and try again.',
+            description: 'An error occurred while analyzing the file. The feature is temporarily disabled. Please try again later.',
         });
     } finally {
         setIsProcessing(false);
