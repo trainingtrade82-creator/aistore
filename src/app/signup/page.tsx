@@ -61,16 +61,16 @@ export default function SignupPage() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      await updateProfile(user, { displayName: name });
       
-      if(auth.currentUser){
-          await sendEmailVerification(auth.currentUser);
-          toast({
-            title: 'Account Created',
-            description: 'A verification email has been sent to your inbox. Please verify to log in.',
-          });
-          router.push('/auth/verify-email');
-      }
+      // Update profile and send verification email using the returned user object
+      await updateProfile(user, { displayName: name });
+      await sendEmailVerification(user);
+      
+      toast({
+        title: 'Account Created',
+        description: 'A verification email has been sent to your inbox. Please verify to log in.',
+      });
+      router.push('/auth/verify-email');
 
     } catch (error: any) {
       console.error("Firebase Error:", error.code, error.message);
