@@ -3,15 +3,16 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { getAuth, sendSignInLinkToEmail } from 'firebase/auth';
+import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
-import { app } from '@/firebase/clientApp';
+import { app, googleProvider } from '@/firebase/clientApp';
 import { Separator } from '@/components/ui/separator';
+import { useRouter } from 'next/navigation';
 
 const GoogleIcon = () => (
     <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -38,7 +39,9 @@ const GoogleIcon = () => (
 
 export default function LoginPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const auth = getAuth(app);
 
@@ -46,21 +49,26 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    const actionCodeSettings = {
-        url: `${window.location.origin}/auth/action`,
-        handleCodeInApp: true,
-    };
-
     try {
-      await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-      window.localStorage.setItem('emailForSignIn', email);
-      toast({
-        title: 'Check your email',
-        description: `We've sent a login link to ${email}.`,
-      });
-      setEmail('');
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      if (user.emailVerified) {
+        toast({
+            title: 'Login Successful',
+            description: 'Welcome back!',
+        });
+        router.push('/dashboard');
+      } else {
+        toast({
+            variant: 'destructive',
+            title: 'Email Not Verified',
+            description: 'Please verify your email before logging in.',
+        });
+        router.push('/auth/verify-email');
+      }
     } catch (error: any) {
-      console.error('Firebase Error:', error.code, error.message);
+      console.error('Firebase Login Error:', error);
       toast({
         variant: 'destructive',
         title: 'Login Failed',
@@ -68,6 +76,27 @@ export default function LoginPage() {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsLoading(true);
+    try {
+        await signInWithPopup(auth, googleProvider);
+        toast({
+            title: 'Login Successful',
+            description: 'Welcome back!',
+        });
+        router.push('/dashboard');
+    } catch (error: any) {
+        console.error("Google Sign-In Error:", error);
+        toast({
+            variant: "destructive",
+            title: "Google Sign-In Failed",
+            description: "Could not sign in with Google. Please try again."
+        });
+    } finally {
+        setIsLoading(false);
     }
   };
 
@@ -79,7 +108,7 @@ export default function LoginPage() {
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Welcome Back</CardTitle>
             <CardDescription>
-              Sign in with a magic link.
+              Sign in to your account to continue.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -95,11 +124,27 @@ export default function LoginPage() {
                 disabled={isLoading}
               />
             </div>
+             <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Send Magic Link
+              Log In
+            </Button>
+            <Separator className="my-2" />
+            <Button variant="outline" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading}>
+                <GoogleIcon />
+                Sign in with Google
             </Button>
              <CardDescription>
                 Don't have an account?{' '}

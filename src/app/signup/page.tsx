@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { getAuth, sendSignInLinkToEmail } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -11,10 +11,14 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
 import { app } from '@/firebase/clientApp';
+import { useRouter } from 'next/navigation';
 
 export default function SignupPage() {
   const { toast } = useToast();
+  const router = useRouter();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const auth = getAuth(app);
 
@@ -22,21 +26,28 @@ export default function SignupPage() {
     e.preventDefault();
     setIsLoading(true);
 
-    const actionCodeSettings = {
-        url: `${window.location.origin}/auth/action`,
-        handleCodeInApp: true,
-    };
-
     try {
-        await sendSignInLinkToEmail(auth, email, actionCodeSettings);
-        window.localStorage.setItem('emailForSignIn', email);
-        toast({
-            title: 'Check your email',
-            description: `We've sent a sign-up link to ${email}. Click it to complete your registration.`,
-        });
-        setEmail('');
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Update the user's profile with their name
+      await updateProfile(user, { displayName: name });
+      console.log("Profile updated for user:", user.uid);
+
+      // Send verification email
+      await sendEmailVerification(user);
+      console.log("Verification email sent to:", user.email);
+
+      toast({
+        title: 'Account Created!',
+        description: "We've sent a verification link to your email. Please check your inbox.",
+      });
+
+      // Redirect to a dedicated verification page
+      router.push('/auth/verify-email');
+
     } catch (error: any) {
-        console.error("Firebase Signup Error:", error.code, error.message);
+        console.error("Firebase Signup Error:", error);
         toast({
             variant: 'destructive',
             title: 'Signup Failed',
@@ -54,10 +65,22 @@ export default function SignupPage() {
           <CardHeader className="text-center">
             <CardTitle className="text-2xl">Create an Account</CardTitle>
             <CardDescription>
-              Enter your email to get started with a magic link.
+              Enter your details to get started.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+             <div className="space-y-2">
+              <Label htmlFor="name">Name</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Your Name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                disabled={isLoading}
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
               <Input
@@ -70,11 +93,24 @@ export default function SignupPage() {
                 disabled={isLoading}
               />
             </div>
+             <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                minLength={6}
+                disabled={isLoading}
+              />
+            </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign Up with Email
+              Sign Up
             </Button>
             <CardDescription>
                 Already have an account?{' '}
