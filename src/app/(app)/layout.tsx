@@ -22,6 +22,7 @@ import {
     Save,
     Power,
     ClipboardList,
+    Mail,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -79,8 +80,8 @@ export default function AppLayout({
         <SidebarContent>
         <SidebarMenu>
             <SidebarMenuItem>
-                <SidebarMenuButton href="/dashboard" left={<LayoutGrid />}>
-                    Dashboard
+                <SidebarMenuButton href="/dashboard" left={<Mail />}>
+                    Email Writer
                 </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
@@ -90,7 +91,7 @@ export default function AppLayout({
             </SidebarMenuItem>
             <SidebarMenuItem>
                 <SidebarMenuButton href="/ai-tools" left={<Wand2 />}>
-                    AI Tools
+                    All AI Tools
                 </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>

@@ -97,7 +97,7 @@ export type AiTool = {
 export const aiTools: AiTool[] = [
   {
     id: 'email-writer',
-    name: 'Email Writer / Reply Generator',
+    name: 'Email Writer',
     icon: Mail,
     category: 'Writing',
     shortDescription: 'Draft, polish, and send professional emails in seconds.',
@@ -229,3 +229,8 @@ export const aiTools: AiTool[] = [
     ]
   }
 ];
+
+
+export function getToolById(id: string): AiTool | undefined {
+    return aiTools.find(tool => tool.id === id);
+}

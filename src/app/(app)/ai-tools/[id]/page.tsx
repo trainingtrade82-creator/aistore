@@ -8,13 +8,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { aiTools } from '@/lib/data';
 import { ChevronRight, Star, CheckCircle, Heart, Share2, Lock, Sparkles, Wand2 } from 'lucide-react';
+import { getToolById } from '@/lib/data';
 
 export default function ToolDetailPage({ params }: { params: { id: string } }) {
-  const tool = aiTools.find(t => t.id === params.id);
+  const tool = getToolById(params.id);
 
   if (!tool) {
     notFound();
   }
+  
+  const toolPagePath = tool.id === 'email-writer' ? '/dashboard' : 
+                     tool.id === 'meeting-notes-ai' ? '/meeting-notes-ai' : 
+                     `/ai-tools/${tool.id}`;
+
 
   return (
     <div className="flex-grow py-8 sm:py-12 bg-secondary/40">
@@ -99,7 +105,7 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
             <Card className="sticky top-24 p-6 shadow-lg">
               <div className="flex flex-col gap-4">
                   <Button size="lg" asChild className="w-full">
-                     <Link href="/dashboard">Start Writing</Link>
+                     <Link href={toolPagePath}>Use Tool</Link>
                   </Button>
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Button variant="outline" className="w-full flex-1">
