@@ -1,9 +1,9 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,52 +20,29 @@ export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isVerificationEmailSent, setIsVerificationEmailSent] = useState(false);
   const auth = getAuth(app);
-
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      // Send verification email only once after a user is created but not yet verified
-      if (user && !user.emailVerified && !isVerificationEmailSent) {
-        try {
-          await sendEmailVerification(user);
-          setIsVerificationEmailSent(true); // Mark as sent to prevent re-sending
-          toast({
-            title: 'Verification Email Sent',
-            description: 'A verification link has been sent to your email. Please check your inbox.',
-          });
-        } catch (error) {
-          console.error("Failed to send verification email:", error);
-          toast({
-            variant: 'destructive',
-            title: 'Verification Error',
-            description: 'Could not send verification email. Please try logging in and resending it.',
-          });
-        }
-      }
-    });
-    return () => unsubscribe();
-  }, [auth, toast, isVerificationEmailSent]);
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setIsVerificationEmailSent(false); // Reset on new signup attempt
 
     try {
+      // 1. Create the user
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Update the user's profile with their name
+      // 2. Update their profile with the name
       await updateProfile(user, { displayName: name });
       
+      // 3. Send the verification email
+      await sendEmailVerification(user);
+
       toast({
         title: 'Account Created!',
-        description: 'You will be sent a verification email shortly.',
+        description: 'A verification link has been sent to your email. Please check your inbox to activate your account.',
       });
 
-      // The useEffect will handle sending the verification email.
-      // Now, redirect to the verification page.
+      // 4. Redirect to the verification page
       router.push('/auth/verify-email');
 
     } catch (error: any) {
@@ -132,7 +109,7 @@ export default function SignupPage() {
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign Up
+              Create Account
             </Button>
             <CardDescription>
                 Already have an account?{' '}
