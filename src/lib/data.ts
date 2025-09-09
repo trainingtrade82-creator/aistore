@@ -48,61 +48,6 @@ export const categories: Category[] = [
     }
 ];
 
-export type PricingPlan = {
-  name: string;
-  price: string;
-  description: string;
-  features: string[];
-  isPopular: boolean;
-  cta: string;
-};
-
-export const pricingPlans: PricingPlan[] = [
-  {
-    name: 'Free',
-    price: '₹0',
-    description: 'For anyone to get started with AI.',
-    features: [
-      'Access to 30 basic AI tools',
-      '15 generations/month',
-      'Standard processing speed',
-      'Copy to clipboard only',
-    ],
-    isPopular: false,
-    cta: 'Start for Free',
-  },
-  {
-    name: 'Pro',
-    price: '₹500',
-    description: 'For professionals and power users.',
-    features: [
-      'Access to all 50+ AI tools',
-      '5,000 queries/month',
-      'Gmail/SMTP Integration',
-      'Save and export results',
-      'A/B test variations',
-      'Priority processing speed',
-    ],
-    isPopular: true,
-    cta: 'Upgrade to Pro',
-  },
-  {
-    name: 'Exclusive',
-    price: '₹700',
-    description: 'For businesses and teams.',
-    features: [
-      'Everything in Pro',
-      '20,000 queries/month',
-      'Bulk mail merge features',
-      'Advanced analytics',
-      'Custom AI agent builder',
-      'Premium support',
-    ],
-    isPopular: false,
-    cta: 'Go Exclusive',
-  },
-];
-
 export type Testimonial = {
   name: string;
   title: string;
@@ -141,7 +86,6 @@ export type AiTool = {
   id: string;
   name: string;
   icon: LucideIcon;
-  tier: 'Free' | 'Pro' | 'Exclusive';
   category: string;
   shortDescription: string;
   description: string;
@@ -155,7 +99,6 @@ export const aiTools: AiTool[] = [
     id: 'email-writer',
     name: 'Email Writer / Reply Generator',
     icon: Mail,
-    tier: 'Pro',
     category: 'Writing',
     shortDescription: 'Draft, polish, and send professional emails in seconds.',
     description: 'Write professional emails in seconds — create, polish, or auto-reply with one click. Save templates, schedule sends, and integrate with Gmail.',
@@ -178,7 +121,6 @@ export const aiTools: AiTool[] = [
     id: 'blog-writer',
     name: 'Blog Post Writer',
     icon: FileText,
-    tier: 'Pro',
     category: 'Writing',
     shortDescription: 'Generate long-form articles and blog posts from a simple prompt.',
     description: 'Create high-quality, SEO-friendly blog posts and articles in minutes. Just provide a topic and keywords, and let the AI handle the rest.',
@@ -197,7 +139,6 @@ export const aiTools: AiTool[] = [
     id: 'image-generator',
     name: 'Image Generator',
     icon: Image,
-    tier: 'Exclusive',
     category: 'Lifestyle',
     shortDescription: 'Create stunning visuals and art from text descriptions.',
     description: 'Turn your ideas into beautiful images. Describe what you want to see, and our AI will generate unique, high-resolution artwork for you.',
@@ -216,7 +157,6 @@ export const aiTools: AiTool[] = [
     id: 'resume-builder',
     name: 'Resume Builder',
     icon: Briefcase,
-    tier: 'Free',
     category: 'Productivity',
     shortDescription: 'Build a professional resume in minutes with AI assistance.',
     description: 'Create a job-winning resume effortlessly. Our AI helps you craft compelling bullet points and choose the right template for your industry.',
@@ -235,7 +175,6 @@ export const aiTools: AiTool[] = [
     id: 'podcast-script-writer',
     name: 'Podcast Script Writer',
     icon: Mic,
-    tier: 'Pro',
     category: 'Writing',
     shortDescription: 'Generate engaging scripts for your podcast episodes.',
     description: 'Never run out of ideas for your podcast. Generate complete scripts, talking points, and interview questions on any topic.',
@@ -254,7 +193,6 @@ export const aiTools: AiTool[] = [
     id: 'video-script-writer',
     name: 'Video Script Writer',
     icon: Film,
-    tier: 'Free',
     category: 'Writing',
     shortDescription: 'Create compelling scripts for YouTube, TikTok, and Reels.',
     description: 'Go viral with AI-powered video scripts. Get hooks, talking points, and calls-to-action tailored for short-form or long-form video content.',

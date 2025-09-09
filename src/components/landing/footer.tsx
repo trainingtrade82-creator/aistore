@@ -5,7 +5,6 @@ import { Aperture, Twitter, Github, Linkedin } from 'lucide-react';
 export default function Footer() {
   const navLinks = [
     { name: 'Features', href: '/features' },
-    { name: 'Pricing', href: '/pricing' },
     { name: 'Testimonials', href: '/testimonials' },
     { name: 'Success Stories', href: '/success-stories' },
     { name: 'Privacy Policy', href: '/privacy' },
@@ -37,7 +36,7 @@ export default function Footer() {
             <div>
               <h3 className="font-semibold mb-4">Platform</h3>
               <ul className="space-y-2">
-                {navLinks.slice(0, 4).map((link) => (
+                {navLinks.slice(0, 3).map((link) => (
                   <li key={link.name}>
                     <Link href={link.href} className="text-foreground/70 hover:text-primary transition-colors">
                       {link.name}
@@ -49,7 +48,7 @@ export default function Footer() {
             <div>
               <h3 className="font-semibold mb-4">Legal</h3>
               <ul className="space-y-2">
-                {navLinks.slice(4).map((link) => (
+                {navLinks.slice(3).map((link) => (
                   <li key={link.name}>
                     <Link href={link.href} className="text-foreground/70 hover:text-primary transition-colors">
                       {link.name}

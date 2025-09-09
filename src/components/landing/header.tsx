@@ -22,7 +22,6 @@ export default function Header() {
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'AI Tools', href: '/ai-tools' },
-    { name: 'Pricing', href: '/pricing' },
     { name: 'About Us', href: '/about' },
     { name: 'Resources', href: '/resources' },
     { name: 'Support', href: '/support' },

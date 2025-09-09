@@ -92,11 +92,6 @@ export default function AppLayout({
                     Saved Projects
                 </SidebarMenuButton>
             </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton href="/pricing" left={<Rocket />}>
-                    Upgrade Plan
-                </SidebarMenuButton>
-            </SidebarMenuItem>
         </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>

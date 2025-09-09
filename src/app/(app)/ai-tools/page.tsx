@@ -11,12 +11,6 @@ import { aiTools, categories } from '@/lib/data';
 import type { AiTool } from '@/lib/data';
 import { ArrowRight, Star } from 'lucide-react';
 
-const tierColorMap: { [key: string]: string } = {
-  Free: 'bg-green-600 hover:bg-green-700',
-  Pro: 'bg-blue-600 hover:bg-blue-700',
-  Exclusive: 'bg-purple-600 hover:bg-purple-700',
-};
-
 const ToolCard = ({ tool }: { tool: AiTool }) => (
     <Link href={`/ai-tools/${tool.id}`} className="block h-full">
         <Card className="group flex flex-col h-full overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
@@ -28,7 +22,6 @@ const ToolCard = ({ tool }: { tool: AiTool }) => (
                     <div className="flex-grow">
                          <CardTitle className="text-xl font-bold">{tool.name}</CardTitle>
                     </div>
-                     <Badge className={`text-sm text-white ${tierColorMap[tool.tier]}`}>{tool.tier}</Badge>
                 </div>
             </CardHeader>
             <CardContent className="flex flex-col flex-grow">

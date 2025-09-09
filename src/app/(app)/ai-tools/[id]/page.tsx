@@ -9,20 +9,12 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { aiTools } from '@/lib/data';
 import { ChevronRight, Star, CheckCircle, Heart, Share2, Lock, Sparkles, Wand2 } from 'lucide-react';
 
-const tierColorMap = {
-  Free: 'bg-green-600 hover:bg-green-700',
-  Pro: 'bg-blue-600 hover:bg-blue-700',
-  Exclusive: 'bg-purple-600 hover:bg-purple-700',
-};
-
 export default function ToolDetailPage({ params }: { params: { id: string } }) {
   const tool = aiTools.find(t => t.id === params.id);
 
   if (!tool) {
     notFound();
   }
-
-  const isLocked = tool.tier !== 'Free';
 
   return (
     <div className="flex-grow py-8 sm:py-12 bg-secondary/40">
@@ -47,7 +39,6 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
                   <h1 className="text-3xl sm:text-4xl font-bold font-headline">{tool.name}</h1>
                   <p className="text-lg text-foreground/80 mt-1">{tool.shortDescription}</p>
                    <div className="flex flex-wrap items-center gap-4 mt-3">
-                    <Badge className={`text-sm text-white ${tierColorMap[tool.tier]}`}>{tool.tier}</Badge>
                     <div className="flex items-center gap-1">
                       <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
                       <span className="font-semibold">{tool.rating}</span>
@@ -101,38 +92,15 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
               </ul>
             </Card>
 
-            {/* Plan Availability */}
-             <Card className="p-6">
-                <h2 className="text-2xl font-semibold mb-4 font-headline">Plan Availability</h2>
-                <ul className="space-y-2 text-lg">
-                    <li className="flex items-center gap-3"><CheckCircle className="w-5 h-5 text-green-500" /> Free - Limited use (basic generation only)</li>
-                    <li className="flex items-center gap-3"><CheckCircle className="w-5 h-5 text-green-500" /> Pro - Gmail integration, templates, variations</li>
-                    <li className="flex items-center gap-3"><CheckCircle className="w-5 h-5 text-green-500" /> Exclusive - Bulk mail merge, analytics</li>
-                </ul>
-            </Card>
-
           </div>
           
           {/* Right Column: Actions */}
           <div className="md:col-span-1">
             <Card className="sticky top-24 p-6 shadow-lg">
               <div className="flex flex-col gap-4">
-                {isLocked ? (
-                  <>
-                    <Button size="lg" asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                      <Link href="/pricing"><Lock className="mr-2 h-5 w-5" /> Upgrade to Use</Link>
-                    </Button>
-                    <div className="rounded-md bg-secondary/80 p-4 text-center">
-                      <p className="text-sm text-secondary-foreground">
-                        This tool requires a <Link href="/pricing" className="font-bold text-primary hover:underline">Pro or Exclusive</Link> membership.
-                      </p>
-                    </div>
-                  </>
-                ) : (
                   <Button size="lg" asChild className="w-full">
                      <Link href="/dashboard">Start Writing</Link>
                   </Button>
-                )}
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Button variant="outline" className="w-full flex-1">
                     <Heart className="mr-2 h-4 w-4" />
