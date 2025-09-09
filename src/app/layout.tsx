@@ -1,10 +1,15 @@
 import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
-import { Inter } from 'next/font/google';
+import { Roboto } from 'next/font/google';
 import { AuthContextProvider } from '@/context/AuthContext';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-sans' })
+const roboto = Roboto({
+  subsets: ['latin'],
+  display: 'swap',
+  weight: ['400', '500', '700'],
+  variable: '--font-sans',
+});
 
 
 export const metadata: Metadata = {
@@ -19,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${roboto.variable} antialiased font-sans`}>
         <AuthContextProvider>
           {children}
           <Toaster />

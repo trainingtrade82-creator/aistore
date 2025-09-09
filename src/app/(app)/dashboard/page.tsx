@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { Mail, PenSquare, Inbox, Sparkles, Wand2 } from 'lucide-react';
+import { Mail, PenSquare, Inbox, Sparkles, Wand2, Lock } from 'lucide-react';
 import React, { useState } from 'react';
 
 const tones = ['Formal', 'Friendly', 'Persuasive', 'Concise', 'Assertive'];
@@ -64,7 +64,7 @@ Founder, Innovate Corp`
             <Tabs defaultValue="compose" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 md:w-[400px]">
                     <TabsTrigger value="compose"><PenSquare className="mr-2" /> Write New Email</TabsTrigger>
-                    <TabsTrigger value="reply" disabled><Inbox className="mr-2" /> Reply to Email (Soon)</TabsTrigger>
+                    <TabsTrigger value="reply" disabled><Lock className="mr-2 h-4 w-4"/> Reply to Email (Soon)</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="compose">
@@ -80,7 +80,7 @@ Founder, Innovate Corp`
                                     <Textarea 
                                         id="context"
                                         placeholder="e.g., Write an email to my boss asking for a raise, mentioning my recent successful projects."
-                                        className="min-h-[150px]"
+                                        className="min-h-[150px] rounded-lg"
                                     />
                                 </div>
                                 <div className="space-y-6">
@@ -110,7 +110,7 @@ Founder, Innovate Corp`
                             </div>
                            
                             <div className="text-center">
-                                <Button size="lg" onClick={handleGenerate}>
+                                <Button size="lg" onClick={handleGenerate} className="bg-gradient-to-r from-primary to-accent text-primary-foreground hover:from-primary/90 hover:to-accent/90 shadow-lg rounded-full transform transition-transform hover:scale-105">
                                     <Sparkles className="mr-2" />
                                     Generate Email
                                 </Button>
@@ -122,7 +122,7 @@ Founder, Innovate Corp`
                                         <Wand2 className="text-primary" />
                                         Generated Email
                                     </h3>
-                                    <Card className="bg-background p-4">
+                                    <Card className="bg-background p-4 shadow-inner">
                                          <pre className="whitespace-pre-wrap font-sans text-sm">{generatedEmail}</pre>
                                     </Card>
                                     <div className="mt-4 flex gap-2">
