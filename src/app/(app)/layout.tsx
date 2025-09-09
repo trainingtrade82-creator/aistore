@@ -1,4 +1,5 @@
 
+
 'use client';
 import {
   SidebarProvider,
@@ -14,16 +15,14 @@ import {
 } from '@/components/ui/sidebar';
 import {
     LayoutGrid,
-    LogOut,
     Settings,
     User,
     Wand2,
     Aperture,
     Rocket,
-    Save
+    Save,
+    Power,
 } from 'lucide-react';
-import { useAuth } from '@/context/AuthContext';
-import { getAuth, signOut } from 'firebase/auth';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
@@ -34,12 +33,9 @@ export default function AppLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user } = useAuth();
   const router = useRouter();
-  const auth = getAuth();
 
-  const handleSignOut = async () => {
-    await signOut(auth);
+  const handleSignOut = () => {
     router.push('/');
   };
 
@@ -89,19 +85,19 @@ export default function AppLayout({
                     </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton onClick={handleSignOut} left={<LogOut />}>
-                        Logout
+                    <SidebarMenuButton onClick={handleSignOut} left={<Power />}>
+                        Exit to Home
                     </SidebarMenuButton>
                 </SidebarMenuItem>
             </SidebarMenu>
               <div className="flex items-center gap-3 p-2 mt-4 rounded-md transition-colors border">
                 <Avatar className="h-9 w-9">
-                    <AvatarImage src={user?.photoURL || undefined} />
-                    <AvatarFallback>{user?.displayName?.[0] || 'U'}</AvatarFallback>
+                    <AvatarImage src={'https://picsum.photos/100/100?random=42'} />
+                    <AvatarFallback>U</AvatarFallback>
                 </Avatar>
                 <div className="overflow-hidden">
-                    <p className="font-semibold text-sm truncate">{user?.displayName || 'User'}</p>
-                    <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
+                    <p className="font-semibold text-sm truncate">Guest User</p>
+                    <p className="text-xs text-muted-foreground truncate">guest@aistore.com</p>
                 </div>
             </div>
         </SidebarFooter>

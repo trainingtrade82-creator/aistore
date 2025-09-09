@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Toaster } from '@/components/ui/toaster';
-import { AuthContextProvider } from '@/context/AuthContext';
 import './globals.css';
 import { Inter } from 'next/font/google'
 
@@ -20,9 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className={`${inter.variable} antialiased`}>
-        <AuthContextProvider>
-          {children}
-        </AuthContextProvider>
+        {children}
         <Toaster />
       </body>
     </html>

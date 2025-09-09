@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import Link from 'next/link';
@@ -48,11 +49,8 @@ export default function Header() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2 md:space-x-4">
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" asChild>
-                <Link href="/login">Log in</Link>
-            </Button>
             <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                <Link href="/login">Try Free</Link>
+                <Link href="/dashboard">Go to App</Link>
             </Button>
           </div>
           <Sheet open={open} onOpenChange={setOpen}>
@@ -87,11 +85,8 @@ export default function Header() {
                   ))}
                 </nav>
                 <div className="mt-auto flex flex-col gap-4">
-                  <Button variant="outline" asChild>
-                    <Link href="/login">Log in</Link>
-                  </Button>
                   <Button className="bg-accent text-accent-foreground hover:bg-accent/90" asChild>
-                     <Link href="/login">Try Free</Link>
+                     <Link href="/dashboard">Go to App</Link>
                   </Button>
                 </div>
               </div>

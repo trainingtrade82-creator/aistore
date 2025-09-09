@@ -1,60 +1,19 @@
 
+
 'use client';
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/context/AuthContext';
+import React from 'react';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { aiTools, categories } from '@/lib/data';
 import Link from 'next/link';
-import { Loader2 } from 'lucide-react';
-
-function AuthProtection({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
-  const router = useRouter();
-  const [loading, setLoading] = React.useState(true);
-
-  useEffect(() => {
-    // This check runs after the initial render.
-    // If the auth state is still resolving, `user` will be `undefined`.
-    if (user === undefined) {
-      // We're still waiting for the auth state, so we show a loader.
-      return;
-    }
-
-    if (user === null) {
-      // If the user is not logged in, redirect them to the login page.
-      router.push('/login');
-    } else {
-      // If the user is logged in, stop loading and show the content.
-      setLoading(false);
-    }
-  }, [user, router]);
-
-  if (loading) {
-    return (
-        <div className="flex h-screen w-full items-center justify-center">
-            <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-    );
-  }
-
-  // Only render children if user is authenticated and loading is false
-  if (user) {
-    return <>{children}</>;
-  }
-
-  // Render nothing while redirecting or if the user is null.
-  return null;
-}
 
 function DashboardContent() {
   return (
     <div className="p-4 sm:p-6">
       <h1 className="text-2xl sm:text-3xl font-bold tracking-tight mb-4">Dashboard</h1>
       <p className="text-lg text-muted-foreground mb-8">
-        Welcome back! Explore your tools and continue creating.
+        Welcome! Explore your tools and continue creating.
       </p>
 
       <div className="grid gap-6">
@@ -120,8 +79,6 @@ function DashboardContent() {
 
 export default function DashboardPage() {
   return (
-    <AuthProtection>
       <DashboardContent />
-    </AuthProtection>
   )
 }
