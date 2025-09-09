@@ -7,8 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { Mail, PenSquare, Inbox, Sparkles, Wand2, Lock } from 'lucide-react';
+import { Mail, PenSquare, Inbox, Sparkles, Wand2, Lock, Loader2 } from 'lucide-react';
 import React, { useState } from 'react';
+import { signInWithPopup } from 'firebase/auth';
+import { auth, googleProvider } from '@/firebase/clientApp';
+import { useToast } from '@/hooks/use-toast';
+
 
 const tones = ['Formal', 'Friendly', 'Persuasive', 'Concise', 'Assertive'];
 
@@ -45,6 +49,9 @@ const GoogleIcon = () => (
 
 export default function EmailWriterPage() {
   const [generatedEmail, setGeneratedEmail] = useState('');
+  const { toast } = useToast();
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+
 
   const handleGenerate = () => {
     // Placeholder for AI generation logic
@@ -67,6 +74,29 @@ John Doe
 Founder, Innovate Corp`
     );
   };
+  
+    const handleGoogleConnect = async () => {
+        setIsGoogleLoading(true);
+        try {
+            await signInWithPopup(auth, googleProvider);
+            toast({
+                title: "Connected!",
+                description: "Your Google account has been successfully connected."
+            })
+            // Here you would typically store the user's new token securely
+            // and update the UI to show the connected state.
+        } catch (error: any) {
+            console.error("Google Connect Error:", error);
+            toast({
+                variant: "destructive",
+                title: "Connection Failed",
+                description: "Could not connect your Google account. Please try again."
+            });
+        } finally {
+            setIsGoogleLoading(false);
+        }
+    };
+
 
   return (
     <div className="flex-grow p-4 sm:p-6 md:p-8 bg-secondary/40">
@@ -169,8 +199,11 @@ Founder, Innovate Corp`
                              <Inbox className="mx-auto h-12 w-12 text-foreground/30" />
                              <p className="mt-4 text-foreground/60">Connect your Gmail or Outlook to start replying with AI.</p>
                              <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
-                                 <Button variant="outline"><GoogleIcon /> Connect Gmail</Button>
-                                 <Button variant="outline">Connect Outlook</Button>
+                                <Button variant="outline" onClick={handleGoogleConnect} disabled={isGoogleLoading}>
+                                    {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
+                                    Connect Gmail
+                                </Button>
+                                 <Button variant="outline" disabled>Connect Outlook</Button>
                              </div>
                         </CardContent>
                      </Card>
