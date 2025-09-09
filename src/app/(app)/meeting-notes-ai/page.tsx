@@ -103,30 +103,19 @@ export default function MeetingNotesAiPage() {
         // };
         // const result = await analyzeMedia(input);
         
-        // Placeholder result:
-        const result: MediaAnalysisOutput = {
-            pdfSummary: "AI analysis is temporarily unavailable. Please try again later.",
-            description: "AI analysis is temporarily unavailable. Please try again later.",
-            transcript: "AI analysis is temporarily unavailable. Please try again later.",
-            summary: {
-                decisions: [],
-                actionItems: [],
-                deadlines: [],
-            }
-        }
-        setAnalysisResult(result);
+        // setAnalysisResult(result);
         setIsProcessed(true);
         toast({
             variant: 'destructive',
-            title: 'Functionality Temporarily Disabled',
-            description: 'AI analysis is currently unavailable due to a build issue. We are working to resolve it.',
+            title: 'Feature Temporarily Disabled',
+            description: 'AI analysis is currently disabled due to build issues. We are working on a fix.',
         });
     } catch (error) {
         console.error('Analysis Error:', error);
         toast({
             variant: 'destructive',
             title: 'Analysis Failed',
-            description: 'An error occurred while analyzing the file. Please try again.',
+            description: 'An error occurred while analyzing the file. Please check your API key and try again.',
         });
     } finally {
         setIsProcessing(false);
@@ -167,7 +156,7 @@ export default function MeetingNotesAiPage() {
                                 <CardDescription>Key points and action items from your meeting.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
-                                {analysisResult.summary?.decisions.length > 0 && (
+                                {analysisResult.summary?.decisions && analysisResult.summary?.decisions.length > 0 && (
                                     <div>
                                         <h4 className="font-semibold flex items-center gap-2 mb-2"><Check className="text-green-500" /> Key Decisions</h4>
                                         <ul className="list-disc list-inside text-foreground/80 space-y-1">
@@ -175,7 +164,7 @@ export default function MeetingNotesAiPage() {
                                         </ul>
                                     </div>
                                 )}
-                                {analysisResult.summary?.actionItems.length > 0 && (
+                                {analysisResult.summary?.actionItems && analysisResult.summary?.actionItems.length > 0 && (
                                     <div>
                                         <h4 className="font-semibold flex items-center gap-2 mb-2"><Users className="text-blue-500" /> Action Items</h4>
                                         <ul className="list-disc list-inside text-foreground/80 space-y-1">
@@ -183,7 +172,7 @@ export default function MeetingNotesAiPage() {
                                         </ul>
                                     </div>
                                 )}
-                                {analysisResult.summary?.deadlines.length > 0 && (
+                                {analysisResult.summary?.deadlines && analysisResult.summary?.deadlines.length > 0 && (
                                     <div>
                                         <h4 className="font-semibold flex items-center gap-2 mb-2"><Calendar className="text-red-500" /> Deadlines</h4>
                                         <ul className="list-disc list-inside text-foreground/80 space-y-1">
@@ -321,14 +310,16 @@ export default function MeetingNotesAiPage() {
                                 className={`flex flex-col items-center justify-center w-full p-8 border-2 border-dashed rounded-lg transition-colors ${isDragging ? 'border-primary bg-primary/10' : 'border-border'}`}
                             >
                                 <UploadCloud className="w-16 h-16 text-muted-foreground mb-4"/>
-                               <p className="text-muted-foreground mb-2">Drag & drop a single file here, or</p>
                                {!file ? (
-                                   <Button asChild variant="outline">
-                                       <label htmlFor="file-upload">
-                                            Choose File
-                                            <input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept=".mp3,.wav,.mp4,.pdf,.png,.jpg,.jpeg"/>
-                                        </label>
-                                    </Button>
+                                    <>
+                                        <p className="text-muted-foreground mb-2">Drag & drop a single file here, or</p>
+                                        <Button asChild variant="outline">
+                                            <label htmlFor="file-upload">
+                                                    Choose File
+                                                    <input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept=".mp3,.wav,.mp4,.pdf,.png,.jpg,.jpeg"/>
+                                                </label>
+                                        </Button>
+                                    </>
                                ) : (
                                     <div className="mt-4 font-medium text-sm flex items-center gap-2">
                                         {fileType === 'image' && <ImageIcon className="h-5 w-5 text-muted-foreground" />}
