@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'firebase/auth';
+import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -102,9 +102,9 @@ export default function SignupPage() {
 
   const handleGoogleSignUp = async () => {
     setGoogleIsLoading(true);
-    const provider = new (await import('firebase/auth')).GoogleAuthProvider();
+    const provider = new GoogleAuthProvider();
     try {
-      await (await import('firebase/auth')).signInWithPopup(auth, provider);
+      await signInWithPopup(auth, provider);
       toast({
         title: 'Account Created',
         description: 'Welcome to AI Store!',
