@@ -11,25 +11,7 @@ import { UploadCloud, FileText, Video, Link as LinkIcon, Download, Mail, Clipboa
 import React, { useState, useCallback } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import Image from 'next/image';
-
-const mockTranscript = `
-[00:00:01] Sarah: Okay everyone, thanks for joining the Q3 planning session. Let's kick things off with the marketing update. Alex, over to you.
-
-[00:00:15] Alex: Thanks, Sarah. So, for marketing, our main goal is to increase lead generation by 20%. The plan is to launch the new ad campaign by the first week of July. We'll need the final creative assets from the design team by June 25th.
-
-[00:00:45] Ben: June 25th is a tight deadline for us, Alex. We're still working on the branding guide. Can we push it to the 30th?
-
-[00:01:02] Alex: The launch date is critical. If we delay, we miss the summer sales window. Let's make the 25th a hard deadline.
-
-[00:01:20] Sarah: I agree with Alex. Ben, let's sync up after this call to see how we can free up resources for you. Decision: The creative assets deadline is confirmed for June 25th.
-
-[00:01:45] Sarah: Next up, product roadmap. Maria, what's new?
-
-[00:02:00] Maria: Hi all. We're planning to roll out the new dashboard feature in August. The main action item for the engineering team is to complete the final round of testing by July 30th.
-`;
-
-const mockImageDescription = "This is a high-resolution photograph of a bustling city street at dusk. The sky is a gradient of deep orange and purple, with city lights beginning to twinkle. The architecture is a mix of modern skyscrapers with glass facades and older, ornate buildings. There are yellow taxis and red double-decker buses creating streaks of light due to a long exposure. Pedestrians are blurred, suggesting movement and the fast pace of city life.";
-const mockPdfSummary = "This document is a 12-page financial report for Q3 2023. Key findings include a 15% increase in revenue year-over-year, driven by strong performance in the North American market. However, profit margins have slightly decreased due to rising operational costs. The report recommends a strategic review of supply chain expenses to mitigate this trend.";
+import { analyzeMedia, MediaAnalysisInput, MediaAnalysisOutput } from '@/ai/flows/media-analysis-flow';
 
 
 type FileType = 'audio/video' | 'pdf' | 'image' | null;
@@ -41,6 +23,7 @@ export default function MeetingNotesAiPage() {
   const [fileType, setFileType] = useState<FileType>(null);
   const [filePreview, setFilePreview] = useState<string>('');
   const [isDragging, setIsDragging] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<MediaAnalysisOutput | null>(null);
   const { toast } = useToast();
   
   const handleFile = (selectedFile: File) => {
@@ -91,9 +74,19 @@ export default function MeetingNotesAiPage() {
     }
   };
 
+  const fileToDataUri = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
 
   const handleProcess = async () => {
-    if (!file) {
+    if (!file || !fileType) {
         toast({
             variant: 'destructive',
             title: 'No file selected',
@@ -102,9 +95,42 @@ export default function MeetingNotesAiPage() {
         return;
     }
     setIsProcessing(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsProcessing(false);
-    setIsProcessed(true);
+    try {
+        // const dataUri = await fileToDataUri(file);
+        // const input: MediaAnalysisInput = {
+        //     fileType,
+        //     dataUri,
+        // };
+        // const result = await analyzeMedia(input);
+        
+        // Placeholder result:
+        const result: MediaAnalysisOutput = {
+            pdfSummary: "AI analysis is temporarily unavailable. Please try again later.",
+            description: "AI analysis is temporarily unavailable. Please try again later.",
+            transcript: "AI analysis is temporarily unavailable. Please try again later.",
+            summary: {
+                decisions: [],
+                actionItems: [],
+                deadlines: [],
+            }
+        }
+        setAnalysisResult(result);
+        setIsProcessed(true);
+        toast({
+            variant: 'destructive',
+            title: 'Functionality Temporarily Disabled',
+            description: 'AI analysis is currently unavailable due to a build issue. We are working to resolve it.',
+        });
+    } catch (error) {
+        console.error('Analysis Error:', error);
+        toast({
+            variant: 'destructive',
+            title: 'Analysis Failed',
+            description: 'An error occurred while analyzing the file. Please try again.',
+        });
+    } finally {
+        setIsProcessing(false);
+    }
   };
   
   const handleReset = () => {
@@ -113,9 +139,12 @@ export default function MeetingNotesAiPage() {
       setFile(null);
       setFileType(null);
       setFilePreview('');
+      setAnalysisResult(null);
   }
 
   const renderResults = () => {
+    if (!analysisResult) return <p>Something went wrong. Please start over.</p>;
+
     switch (fileType) {
         case 'audio/video':
             return (
@@ -127,7 +156,7 @@ export default function MeetingNotesAiPage() {
                                 <CardDescription>{file?.name}</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <Textarea readOnly value={mockTranscript} className="h-[500px] bg-secondary/50 font-mono text-xs" />
+                                <Textarea readOnly value={analysisResult.transcript} className="h-[500px] bg-secondary/50 font-mono text-xs" />
                             </CardContent>
                         </Card>
                     </div>
@@ -138,28 +167,30 @@ export default function MeetingNotesAiPage() {
                                 <CardDescription>Key points and action items from your meeting.</CardDescription>
                             </CardHeader>
                             <CardContent className="space-y-6">
-                                <div>
-                                    <h4 className="font-semibold flex items-center gap-2 mb-2"><Check className="text-green-500" /> Key Decisions</h4>
-                                    <ul className="list-disc list-inside text-foreground/80 space-y-1">
-                                        <li>Creative assets deadline is confirmed for June 25th.</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold flex items-center gap-2 mb-2"><Users className="text-blue-500" /> Action Items</h4>
-                                    <ul className="list-disc list-inside text-foreground/80 space-y-1">
-                                        <li>**Alex:** Launch new ad campaign in the first week of July.</li>
-                                        <li>**Ben & Design Team:** Provide final creative assets by June 25th.</li>
-                                        <li>**Maria & Eng Team:** Complete final testing for dashboard feature by July 30th.</li>
-                                        <li>**Sarah & Ben:** Sync up after the call to discuss resources.</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h4 className="font-semibold flex items-center gap-2 mb-2"><Calendar className="text-red-500" /> Deadlines</h4>
-                                    <ul className="list-disc list-inside text-foreground/80 space-y-1">
-                                        <li>**June 25th:** Final creative assets due.</li>
-                                        <li>**July 30th:** Final testing for new dashboard complete.</li>
-                                    </ul>
-                                </div>
+                                {analysisResult.summary?.decisions.length > 0 && (
+                                    <div>
+                                        <h4 className="font-semibold flex items-center gap-2 mb-2"><Check className="text-green-500" /> Key Decisions</h4>
+                                        <ul className="list-disc list-inside text-foreground/80 space-y-1">
+                                            {analysisResult.summary.decisions.map((item, i) => <li key={i}>{item}</li>)}
+                                        </ul>
+                                    </div>
+                                )}
+                                {analysisResult.summary?.actionItems.length > 0 && (
+                                    <div>
+                                        <h4 className="font-semibold flex items-center gap-2 mb-2"><Users className="text-blue-500" /> Action Items</h4>
+                                        <ul className="list-disc list-inside text-foreground/80 space-y-1">
+                                             {analysisResult.summary.actionItems.map((item, i) => <li key={i}>{item}</li>)}
+                                        </ul>
+                                    </div>
+                                )}
+                                {analysisResult.summary?.deadlines.length > 0 && (
+                                    <div>
+                                        <h4 className="font-semibold flex items-center gap-2 mb-2"><Calendar className="text-red-500" /> Deadlines</h4>
+                                        <ul className="list-disc list-inside text-foreground/80 space-y-1">
+                                            {analysisResult.summary.deadlines.map((item, i) => <li key={i}>{item}</li>)}
+                                        </ul>
+                                    </div>
+                                )}
                                 <div className="flex flex-col gap-2">
                                     <Button><Download className="mr-2 h-4 w-4"/> Download Notes (PDF)</Button>
                                     <Button variant="outline"><Mail className="mr-2 h-4 w-4"/> Email Summary to Team</Button>
@@ -187,7 +218,7 @@ export default function MeetingNotesAiPage() {
                             <CardDescription>A detailed description of the uploaded image.</CardDescription>
                         </CardHeader>
                          <CardContent>
-                            <Textarea readOnly value={mockImageDescription} className="h-[400px] bg-secondary/50 text-base" />
+                            <Textarea readOnly value={analysisResult.description} className="h-[400px] bg-secondary/50 text-base" />
                              <div className="flex gap-2 mt-4">
                                 <Button><Download className="mr-2 h-4 w-4"/> Download Description</Button>
                              </div>
@@ -204,7 +235,7 @@ export default function MeetingNotesAiPage() {
                             <CardDescription>{file?.name}</CardDescription>
                         </CardHeader>
                          <CardContent className="flex-grow">
-                             <Textarea readOnly value={mockPdfSummary} className="h-[400px] bg-secondary/50 text-base" />
+                             <Textarea readOnly value={analysisResult.pdfSummary} className="h-[400px] bg-secondary/50 text-base" />
                          </CardContent>
                      </Card>
                      <Card className="flex flex-col">
@@ -291,13 +322,14 @@ export default function MeetingNotesAiPage() {
                             >
                                 <UploadCloud className="w-16 h-16 text-muted-foreground mb-4"/>
                                <p className="text-muted-foreground mb-2">Drag & drop a single file here, or</p>
-                                <Button asChild variant="outline">
-                                   <label htmlFor="file-upload">
-                                        Choose File
-                                        <input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept=".mp3,.wav,.mp4,.pdf,.png,.jpg,.jpeg"/>
-                                    </label>
-                                </Button>
-                                {file && (
+                               {!file ? (
+                                   <Button asChild variant="outline">
+                                       <label htmlFor="file-upload">
+                                            Choose File
+                                            <input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept=".mp3,.wav,.mp4,.pdf,.png,.jpg,.jpeg"/>
+                                        </label>
+                                    </Button>
+                               ) : (
                                     <div className="mt-4 font-medium text-sm flex items-center gap-2">
                                         {fileType === 'image' && <ImageIcon className="h-5 w-5 text-muted-foreground" />}
                                         {fileType === 'pdf' && <FileIcon className="h-5 w-5 text-muted-foreground" />}
@@ -361,5 +393,3 @@ export default function MeetingNotesAiPage() {
     </div>
   );
 }
-
-    
