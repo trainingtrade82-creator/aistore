@@ -26,7 +26,7 @@ const ToolCard = ({ tool }: { tool: AiTool }) => (
             </CardHeader>
             <CardContent className="flex flex-col flex-grow">
                 <CardDescription className="flex-grow">{tool.shortDescription}</CardDescription>
-                <div className="mt-4 flex flex-col sm:flex-row gap-2">
+                <div className="mt-4 flex flex-col md:flex-row gap-2 flex-wrap">
                      <Button variant="outline" className="w-full flex-1">Use <ArrowRight className="ml-2 h-4 w-4" /></Button>
                      <Button variant="secondary" className="w-full flex-1"><Star className="mr-2 h-4 w-4" /> Add to Dashboard</Button>
                 </div>
