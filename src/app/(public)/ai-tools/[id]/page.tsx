@@ -1,17 +1,18 @@
+
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { aiTools } from '@/lib/data';
-import { ChevronRight, Star, CheckCircle, Heart, Share2, Lock } from 'lucide-react';
+import { ChevronRight, Star, CheckCircle, Heart, Share2, Lock, Sparkles, Wand2 } from 'lucide-react';
 
 const tierColorMap = {
   Free: 'bg-green-600 hover:bg-green-700',
   Pro: 'bg-blue-600 hover:bg-blue-700',
-  Exclusive: 'bg-yellow-500 hover:bg-yellow-600 text-black',
+  Exclusive: 'bg-purple-600 hover:bg-purple-700',
 };
 
 export default function ToolDetailPage({ params }: { params: { id: string } }) {
@@ -24,7 +25,7 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
   const isLocked = tool.tier !== 'Free';
 
   return (
-    <div className="flex-grow py-8 sm:py-12">
+    <div className="flex-grow py-8 sm:py-12 bg-secondary/40">
       <div className="container px-4 md:px-6">
         {/* Breadcrumbs */}
         <div className="flex items-center text-sm text-foreground/70 mb-6">
@@ -37,12 +38,15 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
           {/* Left Column: Details */}
           <div className="md:col-span-2">
             {/* Header */}
-            <div className="flex flex-col sm:flex-row items-start justify-between mb-6">
-              <div className="flex items-center gap-4">
-                <tool.icon className="w-12 h-12 sm:w-16 sm:h-16 text-primary" />
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6">
+              <div className="flex items-start gap-4">
+                <div className="p-3 bg-primary/10 rounded-lg">
+                    <tool.icon className="w-12 h-12 text-primary" />
+                </div>
                 <div>
                   <h1 className="text-3xl sm:text-4xl font-bold font-headline">{tool.name}</h1>
-                  <div className="flex flex-wrap items-center gap-4 mt-2">
+                  <p className="text-lg text-foreground/80 mt-1">{tool.shortDescription}</p>
+                   <div className="flex flex-wrap items-center gap-4 mt-3">
                     <Badge className={`text-sm text-primary-foreground ${tierColorMap[tool.tier]}`}>{tool.tier}</Badge>
                     <div className="flex items-center gap-1">
                       <Star className="w-5 h-5 text-yellow-400 fill-yellow-400" />
@@ -54,13 +58,13 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
               </div>
             </div>
 
-            {/* Screenshot Carousel */}
+            {/* Preview Section */}
             <div className="mb-8">
               <Carousel className="w-full">
                 <CarouselContent>
                   {tool.images.map((src, index) => (
                     <CarouselItem key={index}>
-                      <Card className="overflow-hidden">
+                      <Card className="overflow-hidden border-2">
                         <Image
                           src={src}
                           alt={`${tool.name} screenshot ${index + 1}`}
@@ -78,15 +82,15 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
               </Carousel>
             </div>
 
-            {/* Description */}
-            <div className="bg-secondary/50 rounded-lg p-6 mb-8">
-              <h2 className="text-2xl font-semibold mb-4 font-headline">Description</h2>
+            {/* Description Section */}
+            <Card className="p-6 mb-8">
+              <h2 className="text-2xl font-semibold mb-4 font-headline flex items-center gap-2"><Sparkles className="w-6 h-6 text-primary" /> What this AI does</h2>
               <p className="text-lg text-foreground/90">{tool.description}</p>
-            </div>
+            </Card>
 
             {/* Key Features */}
-            <div>
-              <h2 className="text-2xl font-semibold mb-4 font-headline">Key Features</h2>
+            <Card className="p-6 mb-8">
+              <h2 className="text-2xl font-semibold mb-4 font-headline flex items-center gap-2"><Wand2 className="w-6 h-6 text-primary" /> Key Features</h2>
               <ul className="space-y-3">
                 {tool.features.map((feature, index) => (
                   <li key={index} className="flex items-start">
@@ -95,7 +99,18 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
                   </li>
                 ))}
               </ul>
-            </div>
+            </Card>
+
+            {/* Plan Availability */}
+             <Card className="p-6">
+                <h2 className="text-2xl font-semibold mb-4 font-headline">Plan Availability</h2>
+                <ul className="space-y-2 text-lg">
+                    <li className="flex items-center gap-3"><CheckCircle className="w-5 h-5 text-green-500" /> Free - Limited use (basic generation only)</li>
+                    <li className="flex items-center gap-3"><CheckCircle className="w-5 h-5 text-green-500" /> Pro - Gmail integration, templates, variations</li>
+                    <li className="flex items-center gap-3"><CheckCircle className="w-5 h-5 text-green-500" /> Exclusive - Bulk mail merge, analytics</li>
+                </ul>
+            </Card>
+
           </div>
           
           {/* Right Column: Actions */}
@@ -104,9 +119,8 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
               <div className="flex flex-col gap-4">
                 {isLocked ? (
                   <>
-                    <Button size="lg" className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
-                      <Lock className="mr-2 h-5 w-5" />
-                      Upgrade to Unlock
+                    <Button size="lg" asChild className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                      <Link href="/pricing"><Lock className="mr-2 h-5 w-5" /> Upgrade to Use</Link>
                     </Button>
                     <div className="rounded-md bg-secondary/80 p-4 text-center">
                       <p className="text-sm text-secondary-foreground">
@@ -115,20 +129,20 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
                     </div>
                   </>
                 ) : (
-                  <Button size="lg" className="w-full">
-                    Use Tool
+                  <Button size="lg" asChild className="w-full">
+                     <Link href="/dashboard">Start Writing</Link>
                   </Button>
                 )}
                 <div className="flex flex-col sm:flex-row gap-2">
                   <Button variant="outline" className="w-full flex-1">
                     <Heart className="mr-2 h-4 w-4" />
-                    Favorite
+                    Save to Favorites
                   </Button>
-                  <Button variant="outline" className="w-full flex-1">
+                </div>
+                 <Button variant="outline" className="w-full flex-1">
                     <Share2 className="mr-2 h-4 w-4" />
                     Share
                   </Button>
-                </div>
               </div>
             </Card>
           </div>
@@ -136,4 +150,10 @@ export default function ToolDetailPage({ params }: { params: { id: string } }) {
       </div>
     </div>
   );
+}
+
+export async function generateStaticParams() {
+    return aiTools.map((tool) => ({
+      id: tool.id,
+    }));
 }
