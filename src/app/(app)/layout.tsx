@@ -88,7 +88,7 @@ export default function AppLayout({
                 </SidebarMenuButton>
             </SidebarMenuItem>
             <SidebarMenuItem>
-                <SidebarMenuButton href="#" left={<Save />}>
+                <SidebarMenuButton href="/saved-projects" left={<Save />}>
                     Saved Projects
                 </SidebarMenuButton>
             </SidebarMenuItem>
@@ -107,7 +107,7 @@ export default function AppLayout({
                     </SidebarMenuButton>
                 </SidebarMenuItem>
                 <SidebarMenuItem>
-                    <SidebarMenuButton href="#" left={<User />}>
+                    <SidebarMenuButton href="/profile" left={<User />}>
                         Profile
                     </SidebarMenuButton>
                 </SidebarMenuItem>
