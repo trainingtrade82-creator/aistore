@@ -558,29 +558,25 @@ const SidebarMenuButton = React.forwardRef<
     ref
   ) => {
     // The component can be a button, a link, or a custom component.
-    const Comp = asChild ? Slot : href ? 'a' : "button"
+    const Comp = asChild ? Slot : href ? Link : "button"
     const { isMobile, state } = useSidebar()
-    
-    const buttonContent = (
-        <Comp
-          data-sidebar="menu-button"
-          data-size={size}
-          data-active={isActive}
-          className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
-          {...props}
-        />
-    )
 
-    const button = href ? (
-        <Link href={href} passHref legacyBehavior>
-            {buttonContent}
-        </Link>
-    ) : buttonContent;
+    const buttonContent = (
+      <Comp
+        data-sidebar="menu-button"
+        data-size={size}
+        data-active={isActive}
+        className={cn(sidebarMenuButtonVariants({ variant, size }), className)}
+        ref={ref}
+        href={href!}
+        {...props}
+      />
+    );
 
     if (!tooltip) {
-      return button
+      return buttonContent;
     }
-
+    
     if (typeof tooltip === "string") {
       tooltip = {
         children: tooltip,
@@ -589,7 +585,7 @@ const SidebarMenuButton = React.forwardRef<
 
     return (
       <Tooltip>
-        <TooltipTrigger asChild>{button}</TooltipTrigger>
+        <TooltipTrigger asChild>{buttonContent}</TooltipTrigger>
         <TooltipContent
           side="right"
           align="center"
