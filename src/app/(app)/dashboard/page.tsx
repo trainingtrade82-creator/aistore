@@ -40,7 +40,7 @@ import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 
 const pinnedTools = [
-  { name: 'Email Writer', icon: Mail, href: '/dashboard/email-writer-placeholder' },
+  { name: 'Email Writer', icon: Mail, href: '/dashboard' },
   { name: 'Meeting Notes AI', icon: ClipboardList, href: '/meeting-notes-ai' },
   { name: 'Resume Builder', icon: Users, href: '#' },
 ];
@@ -243,3 +243,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+    
