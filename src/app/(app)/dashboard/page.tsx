@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { Mail, PenSquare, Inbox, Sparkles, Wand2, Loader2, RefreshCw, CornerDownLeft, Send } from 'lucide-react';
+import { Mail, PenSquare, Inbox, Sparkles, Wand2, Loader2, RefreshCw, CornerDownLeft, Send, Lock } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { signInWithPopup, User } from 'firebase/auth';
 import { auth, googleProvider } from '@/firebase/clientApp';
@@ -98,7 +98,7 @@ const GoogleIcon = () => (
 type Email = typeof mockEmails[0];
 
 const EmailList = ({ emails, onSelectEmail, selectedEmailId }: { emails: Email[], onSelectEmail: (email: Email) => void, selectedEmailId: string | null }) => (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full bg-background">
          <div className="p-4 border-b">
             <h2 className="text-xl font-semibold">Inbox</h2>
         </div>
@@ -110,13 +110,13 @@ const EmailList = ({ emails, onSelectEmail, selectedEmailId }: { emails: Email[]
                     className={`flex items-start gap-4 p-4 cursor-pointer border-l-4 ${selectedEmailId === email.id ? 'border-primary bg-primary/10' : 'border-transparent hover:bg-secondary/50'}`}
                 >
                     <Avatar>
-                        <AvatarImage src={email.avatar} />
+                        <AvatarImage src={email.avatar} data-ai-hint="person avatar" />
                         <AvatarFallback>{email.sender.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div className="overflow-hidden">
                         <div className="flex justify-between items-baseline">
                             <p className="font-semibold truncate">{email.sender}</p>
-                            <p className="text-xs text-muted-foreground ml-2">{email.date}</p>
+                            <p className="text-xs text-muted-foreground ml-2 flex-shrink-0">{email.date}</p>
                         </div>
                         <p className="text-sm font-medium truncate">{email.subject}</p>
                         <p className="text-sm text-muted-foreground truncate">{email.snippet}</p>
@@ -128,22 +128,22 @@ const EmailList = ({ emails, onSelectEmail, selectedEmailId }: { emails: Email[]
 );
 
 
-const EmailView = ({ email, onGenerateReply }: { email: Email | null; onGenerateReply: () => void }) => {
+const EmailView = ({ email, onGenerateReply, isGenerating }: { email: Email | null; onGenerateReply: () => void; isGenerating: boolean }) => {
     if (!email) {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
+            <div className="flex flex-col items-center justify-center h-full text-muted-foreground bg-secondary/40">
                 <Inbox className="w-16 h-16 mb-4" />
                 <p>Select an email to read</p>
             </div>
         );
     }
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full bg-background">
             <div className="p-4 border-b">
                 <h2 className="text-xl font-bold">{email.subject}</h2>
                 <div className="flex items-center gap-3 mt-2">
                     <Avatar className="w-8 h-8">
-                        <AvatarImage src={email.avatar} />
+                        <AvatarImage src={email.avatar} data-ai-hint="person avatar" />
                         <AvatarFallback>{email.sender.charAt(0)}</AvatarFallback>
                     </Avatar>
                     <div>
@@ -156,10 +156,13 @@ const EmailView = ({ email, onGenerateReply }: { email: Email | null; onGenerate
             <div className="p-4 border-t bg-background">
                 <div className="flex flex-col gap-4">
                     <Textarea placeholder={`Reply to ${email.sender}...`} />
-                    <div className="flex justify-between">
+                    <div className="flex justify-between items-center">
                          <div className="flex gap-2">
-                           <Button onClick={onGenerateReply}><Sparkles className="mr-2 h-4 w-4" /> Generate Reply</Button>
-                           <Button variant="ghost"><RefreshCw className="mr-2 h-4 w-4" /> Regenerate</Button>
+                           <Button onClick={onGenerateReply} disabled={isGenerating}>
+                             {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                             Generate Reply
+                           </Button>
+                           <Button variant="ghost" disabled={isGenerating}><RefreshCw className="mr-2 h-4 w-4" /> Regenerate</Button>
                         </div>
                         <div className="flex gap-2">
                             <Button variant="outline"><CornerDownLeft className="mr-2 h-4 w-4" /> Reply</Button>
@@ -173,9 +176,9 @@ const EmailView = ({ email, onGenerateReply }: { email: Email | null; onGenerate
 }
 
 
-
 export default function EmailWriterPage() {
   const [generatedEmail, setGeneratedEmail] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
   const { toast } = useToast();
   const { user } = useAuth();
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -183,19 +186,26 @@ export default function EmailWriterPage() {
   const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
 
   useEffect(() => {
+    // We check if the user object exists to determine if we should "fetch" emails.
     if (user) {
-      // User is connected, fetch emails
-      // In a real app, you would make an API call here using the user's token
+      // In a real app, you would make an API call here to fetch emails.
+      // For now, we'll use mock data.
       setEmails(mockEmails);
       if (mockEmails.length > 0) {
           setSelectedEmail(mockEmails[0]);
       }
+    } else {
+        // If the user logs out or was never logged in, clear the emails.
+        setEmails([]);
+        setSelectedEmail(null);
     }
   }, [user]);
 
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
+    setIsGenerating(true);
     // Placeholder for AI generation logic
+    await new Promise(resolve => setTimeout(resolve, 1000));
     setGeneratedEmail(
 `Subject: Meeting Request: Exploring a Potential Collaboration
 
@@ -214,6 +224,7 @@ Best regards,
 John Doe
 Founder, Innovate Corp`
     );
+    setIsGenerating(false);
   };
   
     const handleGoogleConnect = async () => {
@@ -238,8 +249,8 @@ Founder, Innovate Corp`
 
 
   return (
-    <div className="flex-grow p-4 sm:p-6 md:p-8 bg-secondary/40">
-        <div className="max-w-7xl mx-auto">
+    <div className="flex-grow bg-secondary/40">
+        <div className="container mx-auto p-4 sm:p-6 lg:p-8">
             <header className="mb-8">
                 <div className="flex items-center gap-4">
                     <div className="p-3 bg-primary/10 rounded-lg">
@@ -254,11 +265,11 @@ Founder, Innovate Corp`
 
             <Tabs defaultValue="compose" className="w-full">
                 <TabsList className="grid w-full grid-cols-2 md:w-[400px]">
-                    <TabsTrigger value="compose"><PenSquare className="mr-2" /> Write New Email</TabsTrigger>
+                    <TabsTrigger value="compose"><PenSquare className="mr-2 h-4 w-4" /> Write New Email</TabsTrigger>
                     <TabsTrigger value="reply"><Inbox className="mr-2 h-4 w-4"/> Reply to Email</TabsTrigger>
                 </TabsList>
                 
-                <TabsContent value="compose">
+                <TabsContent value="compose" className="mt-6">
                     <Card>
                         <CardHeader>
                             <CardTitle>Compose a New Email</CardTitle>
@@ -271,7 +282,7 @@ Founder, Innovate Corp`
                                     <Textarea 
                                         id="context"
                                         placeholder="e.g., Write an email to my boss asking for a raise, mentioning my recent successful projects."
-                                        className="min-h-[150px] rounded-lg"
+                                        className="min-h-[150px]"
                                     />
                                 </div>
                                 <div className="space-y-6">
@@ -301,8 +312,8 @@ Founder, Innovate Corp`
                             </div>
                            
                             <div className="text-center">
-                                <Button size="lg" onClick={handleGenerate} className="bg-gradient-to-r from-primary to-accent text-primary-foreground hover:from-primary/90 hover:to-accent/90 shadow-lg rounded-full transform transition-transform hover:scale-105">
-                                    <Sparkles className="mr-2" />
+                                <Button size="lg" onClick={handleGenerate} disabled={isGenerating} className="shadow-lg">
+                                    {isGenerating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
                                     Generate Email
                                 </Button>
                             </div>
@@ -313,13 +324,12 @@ Founder, Innovate Corp`
                                         <Wand2 className="text-primary" />
                                         Generated Email
                                     </h3>
-                                    <Card className="bg-background p-4 shadow-inner">
+                                    <Card className="bg-secondary/50 p-4 shadow-inner">
                                          <pre className="whitespace-pre-wrap font-sans text-sm">{generatedEmail}</pre>
                                     </Card>
                                     <div className="mt-4 flex gap-2">
                                         <Button variant="outline">Copy</Button>
                                         <Button variant="secondary">Save Draft</Button>
-                                        <Button disabled>Send via Gmail (Connect)</Button>
                                     </div>
                                 </div>
                             )}
@@ -328,21 +338,22 @@ Founder, Innovate Corp`
                     </Card>
                 </TabsContent>
 
-                <TabsContent value="reply">
+                <TabsContent value="reply" className="mt-6">
                     {user ? (
                         <Card className="min-h-[600px] h-[70vh] overflow-hidden">
                            <div className="grid grid-cols-1 md:grid-cols-3 h-full">
-                                <div className="md:col-span-1 border-r h-full overflow-hidden">
+                                <div className="md:col-span-1 border-r h-full overflow-hidden flex flex-col">
                                     <EmailList 
                                         emails={emails} 
                                         onSelectEmail={setSelectedEmail}
                                         selectedEmailId={selectedEmail?.id ?? null}
                                     />
                                 </div>
-                                <div className="md:col-span-2 h-full overflow-hidden">
+                                <div className="md:col-span-2 h-full overflow-hidden flex flex-col">
                                      <EmailView 
                                         email={selectedEmail}
                                         onGenerateReply={() => { /* Placeholder */ }}
+                                        isGenerating={isGenerating}
                                      />
                                 </div>
                            </div>
@@ -355,13 +366,16 @@ Founder, Innovate Corp`
                             </CardHeader>
                             <CardContent className="text-center p-12">
                                 <Inbox className="mx-auto h-12 w-12 text-foreground/30" />
-                                <p className="mt-4 text-foreground/60">Connect your Gmail or Outlook to start replying with AI.</p>
+                                <p className="mt-4 text-foreground/60">Connect your Gmail account to start replying with AI.</p>
                                 <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center">
                                     <Button variant="outline" onClick={handleGoogleConnect} disabled={isGoogleLoading}>
                                         {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
                                         Connect Gmail
                                     </Button>
-                                    <Button variant="outline" disabled>Connect Outlook</Button>
+                                    <Button variant="outline" disabled>
+                                        <Lock className="mr-2 h-4 w-4" />
+                                        Connect Outlook (Soon)
+                                    </Button>
                                 </div>
                             </CardContent>
                          </Card>
