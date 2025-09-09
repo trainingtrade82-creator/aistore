@@ -169,7 +169,7 @@ export default function MeetingNotesAiPage() {
                                         Choose File
                                         <input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept=".mp3,.wav,.mp4"/>
                                     </label>
-                               </Button>
+                                </Button>
                                {fileName && <p className="mt-4 font-medium text-sm">Selected: {fileName}</p>}
                            </div>
                            <div className="space-y-2">
