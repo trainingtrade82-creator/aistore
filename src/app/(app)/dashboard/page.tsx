@@ -386,5 +386,3 @@ Founder, Innovate Corp`
     </div>
   );
 }
-
-    
