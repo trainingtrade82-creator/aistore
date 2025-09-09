@@ -83,10 +83,6 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
         await signInWithPopup(auth, googleProvider);
-        toast({
-            title: 'Login Successful',
-            description: 'Welcome back!',
-        });
         router.push('/dashboard');
     } catch (error: any) {
         console.error("Google Sign-In Error:", error);
