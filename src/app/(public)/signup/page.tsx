@@ -52,9 +52,11 @@ export default function SignupPage() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       
-      await updateProfile(userCredential.user, {
-        displayName: name,
-      });
+      if (auth.currentUser) {
+        await updateProfile(auth.currentUser, {
+          displayName: name,
+        });
+      }
 
       toast({
         title: 'Account Created',
@@ -147,7 +149,7 @@ export default function SignupPage() {
               Sign Up
             </Button>
             <Separator className="my-2" />
-            <Button variant="outline" type="button" className="w-full" onClick={handleGoogleSignIn} disabled={isGoogleLoading}>
+            <Button variant="outline" type="button" className="w-full" onClick={handleGoogleSignIn} disabled={isLoading || isGoogleLoading}>
               {isGoogleLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
               Continue with Google
             </Button>
