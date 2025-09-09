@@ -32,11 +32,9 @@ export default function SignupPage() {
 
       // Update the user's profile with their name
       await updateProfile(user, { displayName: name });
-      console.log("Profile updated for user:", user.uid);
-
+      
       // Send verification email
       await sendEmailVerification(user);
-      console.log("Verification email sent to:", user.email);
 
       toast({
         title: 'Account Created!',
@@ -110,7 +108,7 @@ export default function SignupPage() {
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Sign Up
+              Sign Up &amp; Send Verification Email
             </Button>
             <CardDescription>
                 Already have an account?{' '}
