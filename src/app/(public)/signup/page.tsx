@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -117,7 +118,7 @@ export default function SignupPage() {
                 type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.g.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
                 disabled={isLoading}

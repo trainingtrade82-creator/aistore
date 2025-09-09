@@ -2,8 +2,6 @@
 'use client';
 
 import Image from 'next/image';
-import Header from '@/components/landing/header';
-import Footer from '@/components/landing/footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Zap, HandHeart, Globe, Target, Eye, Lightbulb, Users, Award } from 'lucide-react';
@@ -41,9 +39,7 @@ const teamMembers = [
 
 export default function AboutPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <Header />
-      <main className="flex-grow">
+    <>
         {/* Hero Section */}
         <section className="relative bg-secondary/30 py-20 md:py-24">
             <div className="absolute inset-0">
@@ -157,7 +153,6 @@ export default function AboutPage() {
             </div>
         </section>
         
-      </main>
       <style jsx>{`
         @keyframes fade-in {
           from {
@@ -177,7 +172,6 @@ export default function AboutPage() {
           animation-delay: 0.2s;
         }
       `}</style>
-      <Footer />
-    </div>
+    </>
   );
 }
