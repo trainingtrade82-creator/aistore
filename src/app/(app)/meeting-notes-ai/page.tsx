@@ -149,7 +149,7 @@ export default function MeetingNotesAiPage() {
 
             <Tabs defaultValue="upload" className="w-full">
                 <TabsList className="grid w-full grid-cols-3 md:w-[600px]">
-                    <TabsTrigger value="upload"><UploadCloud className="mr-2 h-4 w-4" /> Upload Recording</TabsTrigger>
+                    <TabsTrigger value="upload"><UploadCloud className="mr-2 h-4 w-4" /> Upload File</TabsTrigger>
                     <TabsTrigger value="connect"><LinkIcon className="mr-2 h-4 w-4" /> Connect to Meeting</TabsTrigger>
                     <TabsTrigger value="live" disabled><Lock className="mr-2 h-4 w-4" /> Live Transcription (Exclusive)</TabsTrigger>
                 </TabsList>
@@ -157,8 +157,8 @@ export default function MeetingNotesAiPage() {
                 <TabsContent value="upload" className="mt-6">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Upload Recording</CardTitle>
-                            <CardDescription>Upload an audio or video file to get started. Supports MP3, WAV, and MP4 formats.</CardDescription>
+                            <CardTitle>Upload File</CardTitle>
+                            <CardDescription>Upload an audio, video, PDF, or image file to get started. Supports MP3, WAV, MP4, PDF, PNG, and JPG formats.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6 pt-6">
                            <div className="flex flex-col items-center justify-center w-full p-8 border-2 border-dashed rounded-lg">
@@ -167,7 +167,7 @@ export default function MeetingNotesAiPage() {
                                 <Button asChild variant="outline">
                                    <label htmlFor="file-upload">
                                         Choose File
-                                        <input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept=".mp3,.wav,.mp4"/>
+                                        <input id="file-upload" type="file" className="sr-only" onChange={handleFileChange} accept=".mp3,.wav,.mp4,.pdf,.png,.jpg,.jpeg"/>
                                     </label>
                                 </Button>
                                {fileName && <p className="mt-4 font-medium text-sm">Selected: {fileName}</p>}
