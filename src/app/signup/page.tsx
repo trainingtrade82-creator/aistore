@@ -33,16 +33,19 @@ export default function SignupPage() {
 
       // 2. Update their profile with the name
       await updateProfile(user, { displayName: name });
-      
+
       // 3. Send the verification email
       await sendEmailVerification(user);
+      
+      // 4. Reload the user to ensure their profile is updated client-side
+      await user.reload();
 
       toast({
         title: 'Account Created!',
         description: 'A verification link has been sent to your email. Please check your inbox to activate your account.',
       });
 
-      // 4. Redirect to the verification page
+      // 5. Redirect to the verification page
       router.push('/auth/verify-email');
 
     } catch (error: any) {
@@ -109,7 +112,7 @@ export default function SignupPage() {
           <CardFooter className="flex flex-col gap-4">
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Create Account
+              Send Verification Email
             </Button>
             <CardDescription>
                 Already have an account?{' '}

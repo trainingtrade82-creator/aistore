@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { getAuth, sendEmailVerification } from 'firebase/auth';
@@ -19,37 +19,45 @@ export default function VerifyEmailPage() {
     const [status, setStatus] = useState<'loading' | 'verified' | 'unverified'>('loading');
     const [isResending, setIsResending] = useState(false);
 
+    const handleVerification = useCallback(() => {
+        if (user) {
+            if (user.emailVerified) {
+                setStatus('verified');
+                toast({
+                    title: 'Email Verified!',
+                    description: 'Your email has been successfully verified. Redirecting you to the dashboard.',
+                });
+                setTimeout(() => router.push('/dashboard'), 2000);
+                return true; // Verification complete
+            } else {
+                setStatus('unverified');
+            }
+        } else if (user === null) {
+            // If there's no user, they shouldn't be here
+            router.push('/login');
+        }
+        return false; // Verification not complete
+    }, [user, router, toast]);
+
     useEffect(() => {
+        // Run initial check
+        if (handleVerification()) {
+            return;
+        }
+
+        // Set up interval to check for verification
         const interval = setInterval(async () => {
-            if (user) {
-                await user.reload();
-                if (user.emailVerified) {
+            if (auth.currentUser) {
+                await auth.currentUser.reload();
+                if (auth.currentUser.emailVerified) {
                     clearInterval(interval);
-                    setStatus('verified');
-                    toast({
-                        title: 'Email Verified!',
-                        description: 'Your email has been successfully verified. Redirecting you to the dashboard.',
-                    });
-                    setTimeout(() => router.push('/dashboard'), 2000);
+                    handleVerification();
                 }
             }
         }, 3000); // Check every 3 seconds
 
-        // Initial check
-        if (user) {
-            if (user.emailVerified) {
-                clearInterval(interval);
-                setStatus('verified');
-            } else {
-                setStatus('unverified');
-            }
-        } else if(user === null) {
-            // If there's no user, they shouldn't be here
-            router.push('/login');
-        }
-
         return () => clearInterval(interval);
-    }, [user, router, toast]);
+    }, [user, auth, handleVerification]);
 
     const handleResendVerificationEmail = async () => {
         setIsResending(true);
@@ -79,7 +87,6 @@ export default function VerifyEmailPage() {
             setIsResending(false);
         }
     };
-
 
     if (status === 'loading') {
         return (
@@ -129,4 +136,3 @@ export default function VerifyEmailPage() {
         </div>
     );
 }
-
