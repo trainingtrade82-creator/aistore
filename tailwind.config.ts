@@ -12,8 +12,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        body: ['Roboto', 'sans-serif'],
-        headline: ['Roboto', 'sans-serif'],
+        sans: ['var(--font-sans)'],
         code: ['monospace'],
       },
       colors: {

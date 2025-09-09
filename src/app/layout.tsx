@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth" suppressHydrationWarning>
-      <body className={`font-sans ${inter.variable} antialiased`}>
+      <body className={`${inter.variable} antialiased`}>
         <AuthContextProvider>
           {children}
         </AuthContextProvider>
